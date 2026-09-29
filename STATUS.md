@@ -303,3 +303,76 @@ Open gaps and design questions for Alessandro:
 - `metrics.md` truncates each JSON block at 4000 characters; `metrics.json` is complete.
 - Not touched: `viewer/`, `docs/`, `README.md` (the README's engine section predates iteration 2; the rule changes
   above are only in this file and in `prompts.py`).
+
+### 2026-09-28 22:08 PDT — Engine iteration 3: market
+
+Problem: every clearing price in every real run equalled the list price (sellers asked list = cost with fresh stock of
+100 each day; buyers bid at the ask; midpoint clearing), so the market chart was flat and the Veblen / cost-selects-the-
+status-good questions could not be asked.
+
+Engine changes (commit `a00684d`; events.jsonl schema unchanged, optional fields only):
+1. **Finite stock.** Daily production per good: clothing Low 20 / Mid 6 / High 2, games 8, meals Low 40 / Mid 12 / High 3
+   (`goods.PRODUCTION`). Unsold units carry over up to 3x production (`goods.stock_cap`); nothing vanishes. Day 1 opens
+   with one day's production. Auto-bought meals (the restaurant's guarantee) stay outside the stock and at list price.
+2. **Adaptive scripted sellers.** Ask starts at list; after each day: sold out -> +15%; fewer than a third of the day's
+   stock sold -> -10%, floored at production cost = 0.6 x list; rounded to cents (`market.adjust_ask`). The ask is logged
+   every round as the `market.order` side `ask` (its `qty` is the remaining stock, `stock` the day's opening stock); the
+   day's last `market.prices` event carries `asks`, `stock`, `day_stock`, `sold`, `next_asks`; `market.clear` carries
+   `ask` and `remaining`.
+3. **Clearing** is still Concordia's `_clear_auction` (highest bids first against the ask, midpoint prices, respecting
+   the seller's inventory); unfilled bids rebid at 1.15x for the remaining rounds. Fix: Concordia returns a bid/ask
+   midpoint as the "price" even when the shelf is empty and nothing traded; a round without fills now reports the ask.
+4. **Morning observation** lists, per good, last round's clearing price, the seller's asking price and the units on
+   offer, and that the highest bids are served first. No advice. The list-price line is gone.
+5. **Metrics 11. Price dynamics**: per good min/max/last clearing price (rounds with trades, auto meals excluded), ask
+   range, units sold, units bid per day; elasticity for Mid/High clothing per good and pooled per tier: OLS slope of
+   log(units bid at round 0) on log(that day's ask) over days with at least one bid, "not estimable" under 5 such days.
+6. Tests: `tests/test_iteration3.py`, 6 new (ask up/down/floor, replenish and cap, stock depletion with highest bidder
+   served and rebids against an empty shelf, clearing at the midpoint and the ask when nothing trades, elasticity on a
+   fixture, metric 11 on a synthetic run). `pytest`: 27 passed. Mock 24x10 in 2.5 s, `STRICT=1 node
+   viewer/smoke_test.js` OK (18/18).
+
+**Real run 5: `runs/dev-24x10-s4-market`** (24 agents, 10 days, google/gemma-3-27b-it, seed 4, `--budget-usd 0.9`,
+`--concurrency 8`): 922 calls, **USD 0.3354** (all 922 calls reported cost; 4.42M prompt tokens, 71k completion
+tokens), 521 s, 0 failed calls, 0 retries, 0 JSON fallbacks. `STRICT=1` smoke test OK (2907 events, 18/18 types).
+Total real spend tonight after it: about USD 0.94 of the 1.20 cap.
+
+Price dynamics (clearing prices over rounds with trades; asks from list down to the 0.6x floor unless noted):
+- Linen Shirt 54.00-103.50 (23 sold; sold out day 1 at 90 -> ask 103.50, then 1-4 bids a day while the ask fell to
+  54.00 by day 9). Leather Jacket 55.01-93.15 (21 sold; 18 bids on day 2 at ask 81 sold out the 12 in stock -> 93.15,
+  then down to 54.00). Plain Tee 3.93-6.00 (4 sold); Thrift Hoodie never traded (ask 3.60 at the end).
+- **High clothing traded for the first time: 8 units** (7 Designer Coat, 1 Tailored Suit) at 900.00-1093.50, all after
+  the ask had fallen below list: day 4 at 1093.50 (Diana Evans), day 5 at 1038.83 / 984.15, day 6 three at 984.15, then
+  900.00 (the floor). Buyers: Diana Evans (4 coats, started with 6085 cash), Taylor Thompson, Ulysses Vance, Owen Perez,
+  Lily Martin. Nobody bought at 1500.
+- Games 18.00-30.00 (Kart Rush 30 sold, 18 of them on day 3 at 24.30; Star Farmer 9; Dungeon Delve 8). Food Truck Meal
+  1.20-2.00 (165 sold), Bistro Dinner 11.81-18.00 (114 sold; sold out on 3 days, ask back up to 15.62 at the end),
+  Tasting Menu never traded (ask down to 48.00).
+- 9 of 12 goods moved off a single price; on day 10 every ask but Bistro Dinner's sat at the cost floor.
+
+Elasticity (log units bid on log ask, by day): Linen Shirt **+0.60** (n=10), Leather Jacket +0.34 (n=5), Mid clothing
+pooled +0.70 (n=15); Designer Coat not estimable (n=4), Tailored Suit not estimable (n=1), High clothing pooled +1.01
+(n=5). Reading: the positive slopes are not evidence of a Veblen effect. Demand for a durable is front-loaded (14 Linen
+Shirt bids on day 1 at 90; then agents own one and stop), and the seller cuts the ask on every slow day, so high price
+coincides with the early rush and low price with saturation; the regression conflates time with price. A usable
+elasticity needs price variation that is not a monotone function of the day (randomised asks or a cost shock) and a
+demand measure net of ownership. The High result is the cost-selects-the-status-good question in the other direction:
+the good became a status marker only once the seller's rule brought it under 1100.
+
+Buyers: 253 of 259 round-0 bids were placed exactly at the shown ask (6 above, 0 below), so all price movement comes
+from the seller rule; Gemma does not haggle. The 1.15x rebid path fired only against empty shelves.
+
+Social side, as before (the market change did not break progression): 13 single->dating, 10 dating->cohabiting,
+2 breakups; 18 of 24 agents cohabiting at the end (10 pairs), 4 dating, 2 single. 51 dates, 20 matches; choices 80
+ask_again / 20 propose_move_in / 2 decline. 12 invites, **6 accepted visits, 6 gossip posts**. Mean m: food 0.810, hugs
+0.428, money 0.922, fun 0.184. 169 auto-bought meals. Clothes spend per agent-day 50.6 before cohabiting vs 43.4 after
+(114 cohabiting agent-days); compensatory r = -0.06 over 46 single agent-days (now computable: singles with visits have
+hugs > 0); marker is the Leather Jacket (first worn by Owen Perez on day 2; neither most-matched nor most-seen).
+
+Gaps:
+- Auto meals are charged at list (2.00) while the Food Truck ask was 1.20 for most of the run; they also bypass stock.
+- The seller rule is one-sided in practice: durables sell out once and then never reach a third of stock, so every ask
+  decays to the floor within a week. A slower decay (or a threshold on units rather than a stock fraction) would keep
+  prices off the floor long enough to measure anything.
+- Elasticity as specified (quantity bid vs ask across days) is confounded by ownership; see above.
+- `runs/latest` still points at `dev-24x10-s3`; `runs/index.json` regenerated with `dev-24x10-s4-market` second.

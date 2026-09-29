@@ -1,0 +1,998 @@
+{
+ "agents": 24,
+ "days": 10,
+ "1. Clothes spend before vs after cohabiting": {
+  "agent_days_not_cohabiting": 126,
+  "agent_days_cohabiting": 114,
+  "spend_per_agent_day_before": 50.6129,
+  "spend_per_agent_day_after": 43.3619,
+  "sentence": "Clothes spend per agent-day is 50.6129 before cohabiting and 43.3619 after (114 cohabiting agent-days)."
+ },
+ "2. Marker convergence": {
+  "share_by_day": {
+   "1": {
+    "item": "Linen Shirt",
+    "share": 0.25
+   },
+   "2": {
+    "item": "Leather Jacket",
+    "share": 0.25
+   },
+   "3": {
+    "item": "Leather Jacket",
+    "share": 0.5
+   },
+   "4": {
+    "item": "Leather Jacket",
+    "share": 0.75
+   },
+   "5": {
+    "item": "Leather Jacket",
+    "share": 0.75
+   },
+   "6": {
+    "item": "Leather Jacket",
+    "share": 0.75
+   },
+   "7": {
+    "item": "Leather Jacket",
+    "share": 0.667
+   },
+   "8": {
+    "item": "Leather Jacket",
+    "share": 0.5
+   },
+   "9": {
+    "item": "Linen Shirt",
+    "share": 0.5
+   },
+   "10": {
+    "item": "Leather Jacket",
+    "share": 1.0
+   }
+  },
+  "most_matched": "Xander Zhang",
+  "most_seen": "Felix Garcia",
+  "marker": "Leather Jacket",
+  "first_worn_by": "Owen Perez",
+  "first_worn_day": 2,
+  "first_wearer_is_most_matched": false,
+  "first_wearer_is_most_seen": false,
+  "sentence": "The most-worn Mid/High item on app pictures is Leather Jacket, first worn by Owen Perez on day 2; most-matched agent Xander Zhang, most-seen Felix Garcia (prestige: False, conformity: False)."
+ },
+ "3. Compensatory consumption": {
+  "single_agent_days": 46,
+  "correlation": -0.0638,
+  "mean_unmet_hugs": 0.9293,
+  "mean_tier_bought": 0.4565,
+  "sentence": "Pearson r between unmet hugs and clothes tier bought (singles, 46 agent-days) is -0.0638."
+ },
+ "4. Profile text": {
+  "mean_length": 61.7429,
+  "per_day": {
+   "1": {
+    "profiles": 24,
+    "schedule": 4,
+    "work": 0,
+    "money": 0,
+    "looks": 1
+   },
+   "2": {
+    "profiles": 12,
+    "schedule": 2,
+    "work": 0,
+    "money": 0,
+    "looks": 0
+   },
+   "3": {
+    "profiles": 8,
+    "schedule": 1,
+    "work": 0,
+    "money": 0,
+    "looks": 0
+   },
+   "4": {
+    "profiles": 4,
+    "schedule": 0,
+    "work": 0,
+    "money": 0,
+    "looks": 0
+   },
+   "5": {
+    "profiles": 4,
+    "schedule": 1,
+    "work": 0,
+    "money": 0,
+    "looks": 0
+   },
+   "6": {
+    "profiles": 4,
+    "schedule": 1,
+    "work": 0,
+    "money": 0,
+    "looks": 0
+   },
+   "7": {
+    "profiles": 6,
+    "schedule": 1,
+    "work": 0,
+    "money": 0,
+    "looks": 0
+   },
+   "8": {
+    "profiles": 4,
+    "schedule": 1,
+    "work": 0,
+    "money": 0,
+    "looks": 0
+   },
+   "9": {
+    "profiles": 2,
+    "schedule": 0,
+    "work": 0,
+    "money": 0,
+    "looks": 0
+   },
+   "10": {
+    "profiles": 2,
+    "schedule": 0,
+    "work": 0,
+    "money": 0,
+    "looks": 0
+   }
+  },
+  "yes_rate_by_mention": {
+   "schedule": {
+    "mention": 0.6682,
+    "no_mention": 0.3865
+   },
+   "work": {
+    "mention": null,
+    "no_mention": 0.4308
+   },
+   "money": {
+    "mention": null,
+    "no_mention": 0.4308
+   },
+   "looks": {
+    "mention": 0.5714,
+    "no_mention": 0.4287
+   }
+  },
+  "sentence": "Profiles average 61.7429 characters; the yes-rate received by profiles that mention schedule: 0.6682 vs 0.3865, work: None vs 0.4308, money: None vs 0.4308, looks: 0.5714 vs 0.4287."
+ },
+ "5. Pairing by need distance": {
+  "random_pair_distance": 0.8974,
+  "matched_pair_distance": 0.9265,
+  "n_matches": 20,
+  "breakup_pair_distance": 1.0055,
+  "stayed_pair_distance": 0.8549,
+  "n_broke": 2,
+  "n_stayed": 11,
+  "cohabiting_pair_distance": 0.8269,
+  "n_cohabiting_pairs": 10,
+  "sentence": "Mean L1 need-weight distance: matched pairs 0.9265 (n=20) vs all pairs 0.8974; couples that broke up 1.0055 (n=2) vs stayed 0.8549 (n=11); pairs that reached cohabiting 0.8269 (n=10)."
+ },
+ "6. Gossip": {
+  "invites": 12,
+  "visits": 6,
+  "posts": 6,
+  "declines": 2,
+  "declines_citing_gossip": 0,
+  "examples": [],
+  "sentence": "12 invites, 6 visits, 6 gossip posts; 0 of 2 post-date declines cite gossip or a name on the board."
+ },
+ "7. Couples' division of labour": {
+  "couples": [
+   {
+    "pair": [
+     "Jasmine Kim",
+     "Ruby Smith"
+    ],
+    "cohabit_day": 3,
+    "Jasmine Kim": {
+     "work_before": 12.0,
+     "work_after": 7.25
+    },
+    "Ruby Smith": {
+     "work_before": 13.5,
+     "work_after": 8.25
+    }
+   },
+   {
+    "pair": [
+     "Taylor Thompson",
+     "Xenia Young"
+    ],
+    "cohabit_day": 3,
+    "Taylor Thompson": {
+     "work_before": 13.0,
+     "work_after": 11.0
+    },
+    "Xenia Young": {
+     "work_before": 13.5,
+     "work_after": 9.0
+    }
+   },
+   {
+    "pair": [
+     "Lily Martin",
+     "Ulysses Vance"
+    ],
+    "cohabit_day": 3,
+    "Lily Martin": {
+     "work_before": 11.0,
+     "work_after": 6.0
+    },
+    "Ulysses Vance": {
+     "work_before": 11.5,
+     "work_after": 7.125
+    }
+   },
+   {
+    "pair": [
+     "Quentin Ramirez",
+     "Zara Alvarez"
+    ],
+    "cohabit_day": 3,
+    "Quentin Ramirez": {
+     "work_before": 13.5,
+     "work_after": 8.875
+    },
+    "Zara Alvarez": {
+     "work_before": 12.0,
+     "work_after": 7.125
+    }
+   },
+   {
+    "pair": [
+     "Blake Rodriguez",
+     "Natalie Olson"
+    ],
+    "cohabit_day": 4,
+    "Blake Rodriguez": {
+     "work_before": 12.6667,
+     "work_after": 9.4286
+    },
+    "Natalie Olson": {
+     "work_before": 12.3333,
+     "work_after": 7.5714
+    }
+   },
+   {
+    "pair": [
+     "Mason Nguyen",
+     "Owen Perez"
+    ],
+    "cohabit_day": 4,
+    "Mason Nguyen": {
+     "work_before": 10.0,
+     "work_after": 7.0
+    },
+    "Owen Perez": {
+     "work_before": 14.0,
+     "work_after": 12.0
+    }
+   },
+   {
+    "pair": [
+     "Hannah Ito",
+     "Mia Nguyen"
+    ],
+    "cohabit_day": 5,
+    "Hannah Ito": {
+     "work_before": 8.0,
+     "work_after": 5.3333
+    },
+    "Mia Nguyen": {
+     "work_before": 9.25,
+     "work_after": 6.6667
+    }
+   },
+   {
+    "pair": [
+     "Peter Quinn",
+     "Xander Zhang"
+    ],
+    "cohabit_day": 7,
+    "Peter Quinn": {
+     "work_before": 13.5,
+     "work_after": 12.0
+    },
+    "Xander Zhang": {
+     "work_before": 8.1667,
+     "work_after": 6.0
+    }
+   },
+   {
+    "pair": [
+     "Ethan Flores",
+     "Henry Ito"
+    ],
+    "cohabit_day": 8,
+    "Ethan Flores": {
+     "work_before": 6.7143,
+     "work_after": 5.0
+    },
+    "Henry Ito": {
+     "work_before": 8.0,
+     "work_after": 6.6667
+    }
+   },
+   {
+    "pair": [
+     "Mason Nguyen",
+     "Yusuf Zhang"
+    ],
+    "cohabit_day": 9,
+    "Mason Nguyen": {
+     "work_before": 8.25,
+     "work_after": 6.0
+    },
+    "Yusuf Zhang": {
+     "work_before": 10.75,
+     "work_after": 7.0
+    }
+   }
+  ],
+  "cash_transfers": 0,
+  "sentence": "10 cohabiting couples; work hours before/after per partner are listed. Cash transfers: none (v1 has no gifts or shared cash)."
+ },
+ "8. Fun and the gamer trap": {
+  "game_hours_by_day": {
+   "1": 10,
+   "2": 21,
+   "3": 42,
+   "4": 66,
+   "5": 67,
+   "6": 64,
+   "7": 59,
+   "8": 60,
+   "9": 64,
+   "10": 56
+  },
+  "fun_dominant": [
+   "Zara Alvarez",
+   "Jasmine Kim",
+   "Diana Evans",
+   "Ruby Smith",
+   "Victoria Walker",
+   "Henry Ito",
+   "William Wright"
+  ],
+  "fun_dominant_never_dated": [],
+  "sentence": "Game hours by day: {1: 10, 2: 21, 3: 42, 4: 66, 5: 67, 6: 64, 7: 59, 8: 60, 9: 64, 10: 56}; 7 fun-dominant agents, 0 of them never went on a date."
+ },
+ "9. Self-knowledge": {
+  "agents": {
+   "Ulysses Vance": {
+    "shadow": "money",
+    "shadow_bias": 0.085,
+    "first_therapy_day": null,
+    "first_meditation_day": 1,
+    "mean_m_shadow": 0.9125,
+    "population_mean_m_shadow": 0.9219,
+    "serves_shadow": "under"
+   },
+   "Zara Alvarez": {
+    "shadow": "fun",
+    "shadow_bias": -0.115,
+    "first_therapy_day": null,
+    "first_meditation_day": 2,
+    "mean_m_shadow": 0.1907,
+    "population_mean_m_shadow": 0.1836,
+    "serves_shadow": "over"
+   },
+   "Felix Garcia": {
+    "shadow": "hugs",
+    "shadow_bias": 0.272,
+    "first_therapy_day": null,
+    "first_meditation_day": 1,
+    "mean_m_shadow": 0.225,
+    "population_mean_m_shadow": 0.4281,
+    "serves_shadow": "under"
+   },
+   "Jasmine Kim": {
+    "shadow": "fun",
+    "shadow_bias": -0.279,
+    "first_therapy_day": null,
+    "first_meditation_day": 3,
+    "mean_m_shadow": 0.228,
+    "population_mean_m_shadow": 0.1836,
+    "serves_shadow": "over"
+   },
+   "Taylor Thompson": {
+    "shadow": "fun",
+    "shadow_bias": -0.083,
+    "first_therapy_day": null,
+    "first_meditation_day": 5,
+    "mean_m_shadow": 0.1215,
+    "population_mean_m_shadow": 0.1836,
+    "serves_shadow": "under"
+   },
+   "Diana Evans": {
+    "shadow": "fun",
+    "shadow_bias": 0.271,
+    "first_therapy_day": null,
+    "first_meditation_day": null,
+    "mean_m_shadow": 0.0,
+    "population_mean_m_shadow": 0.1836,
+    "serves_shadow": "under"
+   },
+   "Yusuf Zhang": {
+    "shadow": "money",
+    "shadow_bias": 0.061,
+    "first_therapy_day": null,
+    "first_meditation_day": 3,
+    "mean_m_shadow": 0.975,
+    "population_mean_m_shadow": 0.9219,
+    "serves_shadow": "over"
+   },
+   "Mia Nguyen": {
+    "shadow": "food",
+    "shadow_bias": -0.413,
+    "first_therapy_day": null,
+    "first_meditation_day": 1,
+    "mean_m_shadow": 0.95,
+    "population_mean_m_shadow": 0.8104,
+    "serves_shadow": "over"
+   },
+   "Peter Quinn": {
+    "shadow": "money",
+    "shadow_bias": 0.279,
+    "first_therapy_day": null,
+    "first_meditation_day": null,
+    "mean_m_shadow": 1.0,
+    "population_mean_m_shadow": 0.9219,
+    "serves_shadow": "over"
+   },
+   "Owen Perez": {
+    "shadow": "money",
+    "shadow_bias": -0.418,
+    "first_therapy_day": null,
+    "first_meditation_day": 7,
+    "mean_m_shadow": 1.0,
+    "population_mean_m_shadow": 0.9219,
+    "serves_shadow": "over"
+   },
+   "Natalie Olson": {
+    "shadow": "money",
+    "shadow_bias": -0.032,
+    "first_therapy_day": null,
+    "first_meditation_day": 3,
+    "mean_m_shadow": 0.9625,
+    "population_mean_m_shadow": 0.9219,
+    "serves_shadow": "over"
+   },
+   "Blake Rodriguez": {
+    "shadow": "fun",
+    "shadow_bias": 0.472,
+    "first_therapy_day": null,
+    "first_meditation_day": null,
+    "mean_m_shadow": 0.194,
+    "population_mean_m_shadow": 0.1836,
+    "serves_shadow": "over"
+   },
+   "Mason Nguyen": {
+    "shadow": "food",
+    "shadow_bias": -0.597,
+    "first_therapy_day": null,
+    "first_meditation_day": 6,
+    "mean_m_shadow": 0.9,
+    "population_mean_m_shadow": 0.8104,
+    "serves_shadow": "over"
+   },
+   "Ruby Smith": {
+    "shadow": "hugs",
+    "shadow_bias": 0.589,
+    "first_therapy_day": null,
+    "first_meditation_day": 3,
+    "mean_m_shadow": 0.5,
+    "population_mean_m_shadow": 0.4281,
+    "serves_shadow": "over"
+   },
+   "Lily Martin": {
+    "shadow": "food",
+    "shadow_bias": 0.469,
+    "first_therapy_day": null,
+    "first_meditation_day": 1,
+    "mean_m_shadow": 1.0,
+    "population_mean_m_shadow": 0.8104,
+    "serves_shadow": "over"
+   },
+   "Hannah Ito": {
+    "shadow": "money",
+    "shadow_bias": 0.214,
+    "first_therapy_day": null,
+    "first_meditation_day": 1,
+    "mean_m_shadow": 0.75,
+    "population_mean_m_shadow": 0.9219,
+    "serves_shadow": "under"
+   },
+   "Quentin Ramirez": {
+    "shadow": "food",
+    "shadow_bias": -0.193,
+    "first_therapy_day": null,
+    "first_meditation_day": 3,
+    "mean_m_shadow": 0.95,
+    "population_mean_m_shadow": 0.8104,
+    "serves_shadow": "over"
+   },
+   "Xenia Young": {
+    "shadow": "hugs",
+    "shadow_bias": 0.583,
+    "first_therapy_day": null,
+    "first_meditation_day": 3,
+    "mean_m_shadow": 0.5,
+    "population_mean_m_shadow": 0.4281,
+    "serves_shadow": "over"
+   },
+   "Ethan Flores": {
+    "shadow": "hugs",
+    "shadow_bias": 0.059,
+    "first_therapy_day": null,
+    "first_meditation_day": 1,
+    "mean_m_shadow": 0.575,
+    "population_mean_m_shadow": 0.4281,
+    "serves_shadow": "over"
+   },
+   "Xander Zhang": {
+    "shadow": "hugs",
+    "shadow_bias": 0.079,
+    "first_therapy_day": null,
+    "first_meditation_day": 1,
+    "mean_m_shadow": 0.35,
+    "population_mean_m_shadow": 0.4281,
+    "serves_shadow": "under"
+   },
+   "Victoria Walker": {
+    "shadow": "hugs",
+    "shadow_bias": -0.016,
+    "first_therapy_day": null,
+    "first_meditation_day": 4,
+    "mean_m_shadow": 0.3,
+    "population_mean_m_shadow": 0.4281,
+    "serves_shadow": "under"
+   },
+   "Henry Ito": {
+    "shadow": "fun",
+    "shadow_bias": -0.478,
+    "first_therapy_day": null,
+    "first_meditation_day": 6,
+    "mean_m_shadow": 0.2518,
+    "population_mean_m_shadow": 0.1836,
+    "serves_shadow": "over"
+   },
+   "Kevin Lee": {
+    "shadow": "hugs",
+    "shadow_bias": 0.215,
+    "first_therapy_day": null,
+    "first_meditation_day": 7,
+    "mean_m_shadow": 0.1,
+    "population_mean_m_shadow": 0.4281,
+    "serves_shadow": "under"
+   },
+   "William Wright": {
+    "shadow": "money",
+    "shadow_bias": 0.002,
+    "first_therapy_day": null,
+    "first_meditation_day": null,
+    "mean_m_shadow": 1.0,
+    "population_mean_m_shadow": 0.9219,
+    "serves_shadow": "over"
+   }
+  },
+  "n_therapy": 0,
+  "n_meditation": 20,
+  "sentence": "0 agents tried therapy and 20 meditation; per agent, the shadow need and whether they serve it under or over the population mean are listed (a positive shadow bias makes that need feel more met than it is)."
+ },
+ "10. Love residual": {
+  "cohabiting_agent_days": 114,
+  "days_stayed_with_better_fit_available": {
+   "Quentin Ramirez": 8,
+   "Mason Nguyen": 3,
+   "Peter Quinn": 1,
+   "Xander Zhang": 4
+  },
+  "examples": [
+   {
+    "name": "Quentin Ramirez",
+    "day": 3,
+    "partner": "Zara Alvarez",
+    "partner_distance": 0.936,
+    "better_fit": [
+     {
+      "name": "Felix Garcia",
+      "distance": 0.2
+     }
+    ]
+   },
+   {
+    "name": "Mason Nguyen",
+    "day": 4,
+    "partner": "Owen Perez",
+    "partner_distance": 0.887,
+    "better_fit": [
+     {
+      "name": "Yusuf Zhang",
+      "distance": 0.324
+     }
+    ]
+   },
+   {
+    "name": "Quentin Ramirez",
+    "day": 4,
+    "partner": "Zara Alvarez",
+    "partner_distance": 0.936,
+    "better_fit": [
+     {
+      "name": "Felix Garcia",
+      "distance": 0.2
+     }
+    ]
+   },
+   {
+    "name": "Mason Nguyen",
+    "day": 5,
+    "partner": "Owen Perez",
+    "partner_distance": 0.887,
+    "better_fit": [
+     {
+      "name": "Yusuf Zhang",
+      "distance": 0.324
+     }
+    ]
+   },
+   {
+    "name": "Quentin Ramirez",
+    "day": 5,
+    "partner": "Zara Alvarez",
+    "partner_distance": 0.936,
+    "better_fit": [
+     {
+      "name": "Felix Garcia",
+      "distance": 0.2
+     }
+    ]
+   }
+  ],
+  "sentence": "Over 114 cohabiting agent-days, a better-fit willing single (lower need distance than the partner, swiped yes on the agent at some point) existed and the agent stayed on 16 agent-days."
+ },
+ "11. Price dynamics": {
+  "goods": {
+   "Thrift Hoodie": {
+    "tier": "Low",
+    "list_price": 6.0,
+    "units_sold": 0,
+    "rounds_with_trades": 0,
+    "clearing_min": null,
+    "clearing_max": null,
+    "clearing_last": null,
+    "ask_min": 3.6,
+    "ask_max": 6.0,
+    "ask_last": 3.6,
+    "bid_units_by_day": {
+     "1": 0,
+     "2": 0,
+     "3": 0,
+     "4": 0,
+     "5": 0,
+     "6": 0,
+     "7": 0,
+     "8": 0,
+     "9": 0,
+     "10": 0
+    }
+   },
+   "Plain Tee": {
+    "tier": "Low",
+    "list_price": 6.0,
+    "units_sold": 4,
+    "rounds_with_trades": 3,
+    "clearing_min": 3.93,
+    "clearing_max": 6.0,
+    "clearing_last": 3.93,
+    "ask_min": 3.6,
+    "ask_max": 6.0,
+    "ask_last": 3.6,
+    "bid_units_by_day": {
+     "1": 1,
+     "2": 0,
+     "3": 0,
+     "4": 2,
+     "5": 1,
+     "6": 0,
+     "7": 0,
+     "8": 0,
+     "9": 0,
+     "10": 0
+    }
+   },
+   "Linen Shirt": {
+    "tier": "Mid",
+    "list_price": 90.0,
+    "units_sold": 23,
+    "rounds_with_trades": 10,
+    "clearing_min": 54.0,
+    "clearing_max": 103.5,
+    "clearing_last": 54.0,
+    "ask_min": 54.0,
+    "ask_max": 103.5,
+    "ask_last": 54.0,
+    "bid_units_by_day": {
+     "1": 14,
+     "2": 1,
+     "3": 1,
+     "4": 2,
+     "5": 4,
+     "6": 3,
+     "7": 1,
+     "8": 2,
+     "9": 1,
+     "10": 2
+    }
+   },
+   "Leather Jacket": {
+    "tier": "Mid",
+    "list_price": 90.0,
+    "units_sold": 21,
+    "rounds_with_trades": 5,
+    "clearing_min": 55.01,
+    "clearing_max": 93.15,
+    "clearing_last": 55.01,
+    "ask_min": 54.0,
+    "ask_max": 93.15,
+    "ask_last": 54.0,
+    "bid_units_by_day": {
+     "1": 0,
+     "2": 18,
+     "3": 2,
+     "4": 2,
+     "5": 0,
+     "6": 3,
+     "7": 0,
+     "8": 0,
+     "9": 2,
+     "10": 0
+    }
+   },
+   "Designer Coat": {
+    "tier": "High",
+    "list_price": 1500.0,
+    "units_sold": 7,
+    "rounds_with_trades": 4,
+    "clearing_min": 900.0,
+    "clearing_max": 1093.5,
+    "clearing_last": 900.0,
+    "ask_min": 900.0,
+    "ask_max": 1500.0,
+    "ask_last": 900.0,
+    "bid_units_by_day": {
+     "1": 0,
+     "2": 0,
+     "3": 0,
+     "4": 1,
+     "5": 2,
+     "6": 3,
+     "7": 0,
+     "8": 1,
+     "9": 0,
+     "10": 0
+    }
+   },
+   "Tailored Suit": {
+    "tier": "High",
+    "list_price": 1500.0,
+    "units_sold": 1,
+    "rounds_with_trades": 1,
+    "clearing_min": 900.0,
+    "clearing_max": 900.0,
+    "clearing_last": 900.0,
+    "ask_min": 900.0,
+    "ask_max": 1500.0,
+    "ask_last": 900.0,
+    "bid_units_by_day": {
+     "1": 0,
+     "2": 0,
+     "3": 0,
+     "4": 0,
+     "5": 0,
+     "6": 1,
+     "7": 0,
+     "8": 0,
+     "9": 0,
+     "10": 0
+    }
+   },
+   "Star Farmer": {
+    "tier": "Standard",
+    "list_price": 30.0,
+    "units_sold": 9,
+    "rounds_with_trades": 4,
+    "clearing_min": 18.0,
+    "clearing_max": 30.0,
+    "clearing_last": 18.0,
+    "ask_min": 18.0,
+    "ask_max": 30.0,
+    "ask_last": 18.0,
+    "bid_units_by_day": {
+     "1": 1,
+     "2": 6,
+     "3": 0,
+     "4": 0,
+     "5": 1,
+     "6": 0,
+     "7": 0,
+     "8": 1,
+     "9": 0,
+     "10": 0
+    }
+   },
+   "Kart Rush": {
+    "tier": "Standard",
+    "list_price": 30.0,
+    "units_sold": 30,
+    "rounds_with_trades": 8,
+    "clearing_min": 18.0,
+    "clearing_max": 30.0,
+    "clearing_last": 18.0,
+    "ask_min": 18.0,
+    "ask_max": 30.0,
+    "ask_last": 18.0,
+    "bid_units_by_day": {
+     "1": 1,
+     "2": 2,
+     "3": 18,
+     "4": 2,
+     "5": 1,
+     "6": 2,
+     "7": 1,
+     "8": 3,
+     "9": 0,
+     "10": 0
+    }
+   },
+   "Dungeon Delve": {
+    "tier": "Standard",
+    "list_price": 30.0,
+    "units_sold": 8,
+    "rounds_with_trades": 4,
+    "clearing_min": 19.68,
+    "clearing_max": 27.0,
+    "clearing_last": 19.68,
+    "ask_min": 18.0,
+    "ask_max": 30.0,
+    "ask_last": 18.0,
+    "bid_units_by_day": {
+     "1": 0,
+     "2": 1,
+     "3": 1,
+     "4": 3,
+     "5": 3,
+     "6": 0,
+     "7": 0,
+     "8": 0,
+     "9": 0,
+     "10": 0
+    }
+   },
+   "Food Truck Meal": {
+    "tier": "Low",
+    "list_price": 2.0,
+    "units_sold": 165,
+    "rounds_with_trades": 7,
+    "clearing_min": 1.2,
+    "clearing_max": 2.0,
+    "clearing_last": 1.2,
+    "ask_min": 1.2,
+    "ask_max": 2.0,
+    "ask_last": 1.2,
+    "bid_units_by_day": {
+     "1": 9,
+     "2": 29,
+     "3": 0,
+     "4": 38,
+     "5": 14,
+     "6": 36,
+     "7": 35,
+     "8": 0,
+     "9": 4,
+     "10": 0
+    }
+   },
+   "Bistro Dinner": {
+    "tier": "Mid",
+    "list_price": 18.0,
+    "units_sold": 114,
+    "rounds_with_trades": 9,
+    "clearing_min": 11.81,
+    "clearing_max": 18.0,
+    "clearing_last": 15.62,
+    "ask_min": 11.81,
+    "ask_max": 18.0,
+    "ask_last": 15.62,
+    "bid_units_by_day": {
+     "1": 2,
+     "2": 0,
+     "3": 12,
+     "4": 4,
+     "5": 18,
+     "6": 6,
+     "7": 29,
+     "8": 41,
+     "9": 45,
+     "10": 56
+    }
+   },
+   "Tasting Menu": {
+    "tier": "High",
+    "list_price": 80.0,
+    "units_sold": 0,
+    "rounds_with_trades": 0,
+    "clearing_min": null,
+    "clearing_max": null,
+    "clearing_last": null,
+    "ask_min": 48.0,
+    "ask_max": 80.0,
+    "ask_last": 48.0,
+    "bid_units_by_day": {
+     "1": 0,
+     "2": 0,
+     "3": 0,
+     "4": 0,
+     "5": 0,
+     "6": 0,
+     "7": 0,
+     "8": 0,
+     "9": 0,
+     "10": 0
+    }
+   }
+  },
+  "elasticity": {
+   "Linen Shirt": {
+    "slope": 0.6033,
+    "n": 10,
+    "status": "ok"
+   },
+   "Leather Jacket": {
+    "slope": 0.3418,
+    "n": 5,
+    "status": "ok"
+   },
+   "Mid clothing (pooled)": {
+    "slope": 0.7038,
+    "n": 15,
+    "status": "ok"
+   },
+   "Designer Coat": {
+    "slope": null,
+    "n": 4,
+    "status": "not estimable"
+   },
+   "Tailored Suit": {
+    "slope": null,
+    "n": 1,
+    "status": "not estimable"
+   },
+   "High clothing (pooled)": {
+    "slope": 1.0117,
+    "n": 5,
+    "status": "ok"
+   }
+  },
+  "high_clothing_units_sold": 8,
+  "goods_with_price_movement": [
+   "Plain Tee",
+   "Linen Shirt",
+   "Leather Jacket",
+   "Designer Coat",
+   "Star Farmer",
+   "Kart Rush",
+   "Dungeon Delve",
+   "Food Truck Meal",
+   "Bistro Dinner"
+  ],
+  "sentence": "Clearing prices (rounds with trades): Plain Tee 3.93-6.0 (last 3.93, 4 sold); Linen Shirt 54.0-103.5 (last 54.0, 23 sold); Leather Jacket 55.01-93.15 (last 55.01, 21 sold); Designer Coat 900.0-1093.5 (last 900.0, 7 sold); Tailored Suit 900.0-900.0 (last 900.0, 1 sold); Star Farmer 18.0-30.0 (last 18.0, 9 sold); Kart Rush 18.0-30.0 (last 18.0, 30 sold); Dungeon Delve 19.68-27.0 (last 19.68, 8 sold); Food Truck Meal 1.2-2.0 (last 1.2, 165 sold); Bistro Dinner 11.81-18.0 (last 15.62, 114 sold). 9 goods moved off a single price. Elasticity (log units bid on log ask, by day): Linen Shirt: slope 0.6033 (n=10); Leather Jacket: slope 0.3418 (n=5); Mid clothing (pooled): slope 0.7038 (n=15); Designer Coat: not estimable (n=4); Tailored Suit: not estimable (n=1); High clothing (pooled): slope 1.0117 (n=5). High clothing units sold: 8."
+ }
+}
