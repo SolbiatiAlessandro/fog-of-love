@@ -3,6 +3,7 @@
  *
  *   node tools/polyworld_viewer_smoke.js --stub            # HUD + bridge against polyworld_viewer/stub_scene.js
  *   node tools/polyworld_viewer_smoke.js --dir docs/replay3d  # a built bundle (wasm); WebGL may be unavailable headless
+ *   node tools/polyworld_viewer_smoke.js --url https://solbiatialessandro.github.io/fog-of-love/replay3d/   # a live page
  *   options: --run <name> --t <seconds> --shot <png> --chrome <path> --seconds <wait>
  *
  * Needs puppeteer-core (npm install --no-save puppeteer-core) and a Chrome binary. Exit 1 on failure.
@@ -31,8 +32,9 @@ if (stub) {
   const shell = fs.readFileSync(path.join(viewer, 'web_shell.html'), 'utf8');
   fs.writeFileSync(path.join(dir, 'index.html'), shell.replace('{{{ SCRIPT }}}', '<script src="stub_scene.js"></script>'));
 }
-if (!dir) { console.error('need --stub or --dir'); process.exit(2); }
-dir = path.resolve(dir);
+const liveUrl = opt('--url', null);
+if (!dir && !liveUrl) { console.error('need --stub, --dir or --url'); process.exit(2); }
+dir = dir ? path.resolve(dir) : null;
 
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.wasm': 'application/wasm', '.data': 'application/octet-stream', '.png': 'image/png' };
 const server = http.createServer((req, res) => {
@@ -45,8 +47,8 @@ const server = http.createServer((req, res) => {
 (async () => {
   let puppeteer;
   try { puppeteer = require('puppeteer-core'); } catch (e) { console.error('npm install --no-save puppeteer-core'); process.exit(2); }
-  await new Promise((r) => server.listen(0, '127.0.0.1', r));
-  const url = `http://127.0.0.1:${server.address().port}/index.html?run=${run}&t=${t}&auto=0`;
+  if (dir) await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  const url = (dir ? `http://127.0.0.1:${server.address().port}/index.html` : liveUrl.replace(/\/?$/, '/')) + `?run=${run}&t=${t}&auto=0`;
   const browser = await puppeteer.launch({ executablePath: chrome, headless: true, args: ['--no-sandbox', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--window-size=1400,1100'] });
   const page = await browser.newPage();
   await page.setViewport({ width: 1400, height: 1100 });
@@ -75,7 +77,7 @@ const server = http.createServer((req, res) => {
   });
   if (shot) { await page.screenshot({ path: shot, fullPage: false }); result.screenshot = shot; }
   await browser.close();
-  server.close();
+  if (dir) server.close();
   const failures = [];
   if (result.cards < 1) failures.push('no dating-app cards');
   if (result.runs < 1) failures.push('run picker empty');
@@ -87,5 +89,5 @@ const server = http.createServer((req, res) => {
   if (errors.length) failures.push(`console errors: ${errors.slice(0, 3).join(' | ')}`);
   console.log(JSON.stringify(result, null, 1));
   if (failures.length) { console.error('FAIL: ' + failures.join('; ')); console.error(logs.slice(-10).join('\n')); process.exit(1); }
-  console.log(`OK (${stub ? 'stub scene' : dir})`);
+  console.log(`OK (${stub ? 'stub scene' : dir || liveUrl})`);
 })().catch((e) => { console.error(e); process.exit(1); });
