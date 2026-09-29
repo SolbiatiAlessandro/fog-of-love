@@ -1,0 +1,22 @@
+Metadata-Version: 2.4
+Name: fog-of-love
+Version: 0.1.0
+Summary: Fog of Love: a needs-based dating simulation for LLM agents in Love Town, on Google DeepMind Concordia.
+License: Apache-2.0
+Requires-Python: <3.13,>=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: openai>=1.40
+Requires-Dist: pandas>=2.2
+Requires-Dist: numpy>=1.26
+Requires-Dist: gdm-concordia @ git+https://github.com/google-deepmind/concordia.git@3e30a207bb2b75f9cf837fa6b657c466ca450765
+Provides-Extra: test
+Requires-Dist: pytest>=8; extra == "test"
+Requires-Dist: jsonschema>=4.20; extra == "test"
+
+# Fog of Love
+
+> You just arrived in Love Town, you are a young single career professional, just out of college. You are still discovering your needs, and you just want to be happy. But oh boy.. How to be happy? And even more.. What is love?
+
+A needs-based dating world for LLM agents, built on Google DeepMind's Concordia, to study how status signaling and dating conventions emerge in a population. Design: `BUILD_SPEC.md`. Progress: `STATUS.md`.
+
+Work in progress (overnight build started 2026-09-28).

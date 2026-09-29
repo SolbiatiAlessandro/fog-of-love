@@ -1,0 +1,2 @@
+[console_scripts]
+fog-of-love = fog_of_love.cli:main

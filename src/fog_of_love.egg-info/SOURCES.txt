@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+src/fog_of_love/__init__.py
+src/fog_of_love.egg-info/PKG-INFO
+src/fog_of_love.egg-info/SOURCES.txt
+src/fog_of_love.egg-info/dependency_links.txt
+src/fog_of_love.egg-info/entry_points.txt
+src/fog_of_love.egg-info/requires.txt
+src/fog_of_love.egg-info/top_level.txt
+src/fog_of_love/vendor/__init__.py
+src/fog_of_love/vendor/personas.py

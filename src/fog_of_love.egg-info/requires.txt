@@ -1,0 +1,8 @@
+openai>=1.40
+pandas>=2.2
+numpy>=1.26
+gdm-concordia @ git+https://github.com/google-deepmind/concordia.git@3e30a207bb2b75f9cf837fa6b657c466ca450765
+
+[test]
+pytest>=8
+jsonschema>=4.20
