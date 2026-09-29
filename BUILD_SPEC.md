@@ -17,7 +17,7 @@ Premise (verbatim, goes in the README and in every agent's context):
 
 ## Model access
 
-`OPENROUTER_API_KEY` lives in `~/.openclaw/.secrets/openrouter-alignment-research.env` (line `OPENROUTER_API_KEY=...`). Source it into the environment for real runs. **Never print, log, commit, or echo the key.** Reuse the OpenRouter client from `~/Projects/coworld-concordia/src/concordia_coworld/llm.py` (ModelHub, cost tracking, call log). `mock` model must run the whole loop with canned outputs for tests and certification.
+`OPENROUTER_API_KEY` is read from the environment for real runs (keep it in a local env file outside the repo). **Never print, log, commit, or echo the key.** Reuse the OpenRouter client from `~/Projects/coworld-concordia/src/concordia_coworld/llm.py` (ModelHub, cost tracking, call log). `mock` model must run the whole loop with canned outputs for tests and certification.
 
 ## Engine
 

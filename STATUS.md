@@ -133,7 +133,7 @@ uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -e '.[te
 .venv/bin/pytest -q                                                   # 15 passed
 .venv/bin/fog-of-love run --out runs/mock-12x7 --model mock --num-agents 12 --num-days 7 --seed 1   # ~5 s
 STRICT=1 node viewer/smoke_test.js runs/mock-12x7/events.jsonl        # OK, 18 event types
-set -a; . ~/.openclaw/.secrets/openrouter-alignment-research.env; set +a   # only in the shell that runs a real episode
+export OPENROUTER_API_KEY=...   # only in the shell that runs a real episode; keep the key outside the repo
 .venv/bin/fog-of-love run --out runs/dev-12x7-s1 --model google/gemma-3-27b-it --num-agents 12 --num-days 7 --seed 1 --budget-usd 4.0
 .venv/bin/fog-of-love metrics runs/dev-12x7-s1 ; .venv/bin/fog-of-love standings runs/dev-12x7-s1
 ```
@@ -277,7 +277,7 @@ Commands (unchanged apart from the run names):
 cd ~/Projects/fog-of-love && git pull
 .venv/bin/pytest -q                                                          # 21 passed
 .venv/bin/fog-of-love run --out /tmp/mock --model mock --num-agents 12 --num-days 14 --seed 1 && STRICT=1 node viewer/smoke_test.js /tmp/mock/events.jsonl
-set -a; . ~/.openclaw/.secrets/openrouter-alignment-research.env; set +a     # only in the shell that runs a real episode
+export OPENROUTER_API_KEY=...   # only in the shell that runs a real episode; keep the key outside the repo
 .venv/bin/fog-of-love run --out runs/<name> --model google/gemma-3-27b-it --num-agents 12 --num-days 14 --seed 4 --budget-usd 0.8 --concurrency 8
 .venv/bin/fog-of-love metrics runs/<name>; .venv/bin/fog-of-love standings runs/<name>
 ```
