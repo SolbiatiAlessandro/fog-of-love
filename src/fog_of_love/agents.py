@@ -42,6 +42,7 @@ class AgentState:
     games: dict[str, float] = dataclasses.field(default_factory=dict)  # game id -> current yield
     status: str = "single"  # single | dating | cohabiting
     partner: str | None = None
+    partner_since: int | None = None  # day the current relationship started (dating), kept through cohabiting
     exes: dict[str, int] = dataclasses.field(default_factory=dict)  # name -> day of breakup
     profile_text: str = ""
     pending_invites: list[str] = dataclasses.field(default_factory=list)  # inviters, resolved next morning
@@ -53,6 +54,7 @@ class AgentState:
     therapy: bool = False
     meditation: bool = False
     visit_with: str | None = None  # the other party of today's home visit
+    home_hours_adjusted: bool = False  # home hours raised to cover an accepted visit
     date_tonight: str | None = None
 
     @property

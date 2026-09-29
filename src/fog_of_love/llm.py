@@ -323,12 +323,13 @@ class MockModel(language_model.LanguageModel):
             accept = inv.group(1).strip()
         breakup = "cohabiting with" in prompt and _h(name, day, "breakup") % 8 == 0
         accept_move_in = bool(_MOVE_IN_RE.search(prompt)) and _h(name, day, "movein") % 2 == 0
+        propose_move_in = "You are dating" in prompt and _h(name, day, "propose") % 3 == 0
         profile = MOCK_PROFILES[h % len(MOCK_PROFILES)] if day == 1 or _h(name, day, "prof") % 4 == 0 else None
         out = {
             "hours": {"work": work, "games": games, "home": home, "eat": eat},
             "shopping": shopping, "wear": None, "therapy": therapy, "meditation": meditation,
             "invite": invite, "accept_invite": accept, "breakup": breakup, "accept_move_in": accept_move_in,
-            "profile_text": profile,
+            "propose_move_in": propose_move_in, "profile_text": profile,
         }
         return json.dumps(out)
 

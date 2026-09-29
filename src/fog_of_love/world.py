@@ -27,8 +27,34 @@ DEFAULT_HOURS = {"work": 8, "games": 2, "home": 4, "eat": 2}
 DEFAULT_SHOPPING = [{"good": "Food Truck Meal", "price": 2.5, "qty": 2}]
 
 
+MIN_VISIT_HOME_HOURS = 2
+
+
 class BudgetExceeded(RuntimeError):
     pass
+
+
+def ensure_home_hours(hours: dict[str, int], minimum: int) -> dict[str, int]:
+    """At least `minimum` home hours, taken from work first, then games (eat and the total are unchanged)."""
+    h = dict(hours)
+    need = minimum - h.get("home", 0)
+    for k in ("work", "games"):
+        if need <= 0:
+            break
+        take = min(need, h.get(k, 0))
+        h[k] -= take
+        h["home"] = h.get("home", 0) + take
+        need -= take
+    return h
+
+
+def play_shared_games(mine: dict[str, float], partners: dict[str, float], hours: int) -> float:
+    """Cohabiting: play the best game of the shared collection each hour; yields decay on the owner's copy."""
+    combined = {**partners, **mine}
+    points = play_games(combined, hours)
+    for g, y in combined.items():
+        (mine if g in mine else partners)[g] = y
+    return points
 
 
 def normalize_hours(raw: Any, budget: int) -> dict[str, int]:
@@ -144,12 +170,25 @@ class World:
         games = ", ".join(f"{g} (fun yield {y:.2f})" for g, y in a.games.items()) or "none"
         parts = [
             f"Day {day} morning. Cash: {a.cash:.0f}. Wearing: {a.wearing} ({goods.tier(a.wearing)} tier). "
-            f"Inventory: {inv}. Meals in stock: {a.meals} (each eating hour consumes one meal; meals are bought "
-            f"at the restaurant through shopping and are the only food). Games owned: {games}. "
+            f"Inventory: {inv}. Meals in stock: {a.meals} (each eating hour consumes one meal; meals are bought at "
+            f"the restaurant through shopping and are the only food; if you schedule more eating hours than meals "
+            f"you own, the restaurant charges you for the cheapest meal, {goods.cheapest_meal()} at "
+            f"{goods.list_price(goods.cheapest_meal()):.0f}, for each missing one). Games owned: {games}. "
             f"Status: {a.status_line()}.",
-            a.last_sentence or "This is your first day in Love Town.",
-            self.gossip.render(day),
         ]
+        if a.status == "dating" and a.partner:
+            parts.append(f"You are dating {a.partner}. Hours you both spend at home are spent together. You have a "
+                         f"standing date with {a.partner} tonight. You do not see the dating app while dating; set "
+                         f"breakup to true to end it and see the app again. Set propose_move_in to true to propose "
+                         f"living together (you would share a home, meals and videogames).")
+        elif a.status == "cohabiting" and a.partner:
+            pa = self.agents[a.partner]
+            pgames = ", ".join(f"{g} (fun yield {y:.2f})" for g, y in pa.games.items()) or "none"
+            parts.append(f"You live with {a.partner}. Hours you both spend at home are spent together. You share "
+                         f"meals and videogames: {a.partner} has {pa.meals} meals and these games: {pgames}. "
+                         f"Set breakup to true to end it.")
+        parts.append(a.last_sentence or "This is your first day in Love Town.")
+        parts.append(self.gossip.render(day))
         inbox = []
         for inviter in a.pending_invites:
             inbox.append(f"{inviter} invited you to their home today (set accept_invite to \"{inviter}\" to go).")
@@ -158,6 +197,10 @@ class World:
         parts.append("Inbox: " + (" ".join(inbox) if inbox else "empty."))
         if a.status == "single":
             singles = [o.name for o in self.agents.values() if o.name != a.name and o.status == "single"]
+            parts.append("Visits: you can invite another single home (set invite to their name; they decide tomorrow "
+                         "morning). If you accept an invite you spend your home hours at their place tonight and get "
+                         "hug time (at least 2 hours of your day are moved to home); every non-partner visit is "
+                         "posted on the public gossip board.")
             if singles:
                 parts.append("Singles you could invite home: " + ", ".join(singles) + ".")
         parts.append("Market list prices: " + goods.price_summary() + ".")
@@ -175,6 +218,7 @@ class World:
         order = list(self.agents.values())
         results = list(self.pool.map(lambda a: self.decide(day, a), order))
         decisions: dict[str, dict[str, Any]] = {}
+        pending_log: list[tuple[AgentState, dict[str, Any]]] = []
         for a, res in zip(order, results):
             obj = res["obj"]
             a.therapy = bool(obj.get("therapy")) and a.cash >= THERAPY_COST
@@ -210,16 +254,41 @@ class World:
                     bids.append({"good": gid, "price": round(price, 2), "qty": min(qty, 10)})
             a.visit_with = None
             a.date_tonight = None
+            a.home_hours_adjusted = False
             decisions[a.name] = {"obj": obj, "bids": bids, "raw": res["raw"], "fallback": res["fallback"]}
+        # An accepted visit needs home hours on both sides: move at least 2 hours to home before logging.
+        for name, d in decisions.items():
+            a = self.agents[name]
+            accepted = _name_or_none(d["obj"].get("accept_invite"))
+            for inviter in a.pending_invites:
+                host = self.agents.get(inviter)
+                if self._visit_ok(a, host, accepted):
+                    for x in (a, host):
+                        if x.hours["home"] < MIN_VISIT_HOME_HOURS:
+                            x.hours = ensure_home_hours(x.hours, MIN_VISIT_HOME_HOURS)
+                            x.home_hours_adjusted = True
+        for name, d in decisions.items():
+            a, obj = self.agents[name], d["obj"]
             self.log.emit("morning", "morning.allocation", day, name=a.name, hours=a.hours, therapy=a.therapy,
                           meditation=a.meditation, invite=_name_or_none(obj.get("invite")), breakup=bool(obj.get("breakup")),
                           accept_invite=_name_or_none(obj.get("accept_invite")), accept_move_in=bool(obj.get("accept_move_in")),
-                          shopping=bids, wear=a.wearing, profile_text=a.profile_text, raw=str(res["raw"])[:600],
-                          fallback=res["fallback"])
+                          propose_move_in=bool(obj.get("propose_move_in")), home_hours_adjusted=a.home_hours_adjusted,
+                          shopping=d["bids"], wear=a.wearing, profile_text=a.profile_text, raw=str(d["raw"])[:600],
+                          fallback=d["fallback"])
+            if a.home_hours_adjusted:
+                self.entities[a.name].observe(f"[morning] Because of tonight's visit, {a.name}'s day now includes "
+                                              f"{a.hours['home']} home hours (work {a.hours['work']}h, games {a.hours['games']}h).")
         self.resolve_breakups(day, decisions)
         self.resolve_move_ins(day, decisions)
+        self.resolve_proposals(day, decisions)
         self.resolve_visits(day, decisions)
         self._bids = {n: d["bids"] for n, d in decisions.items()}
+        self._eat_hours = {n: self.agents[n].hours["eat"] for n in decisions}
+
+    @staticmethod
+    def _visit_ok(guest: AgentState, host: AgentState | None, accepted: str | None) -> bool:
+        return (host is not None and accepted is not None and _same(accepted, host.name) and guest.status == "single"
+                and host.status == "single" and guest.visit_with is None and host.visit_with is None)
 
     def resolve_breakups(self, day: int, decisions: dict[str, dict[str, Any]]) -> None:
         for name, d in decisions.items():
@@ -234,10 +303,26 @@ class World:
             a.pending_move_in = None
             if not proposer or a.partner != proposer or a.status != "dating":
                 continue
-            if d["obj"].get("accept_move_in"):
+            if d["obj"].get("accept_move_in") or d["obj"].get("propose_move_in"):
                 self.set_relationship(day, a, self.agents[proposer], "cohabiting", "morning")
             else:
                 self.entities[proposer].observe(f"[morning] {a.name} did not accept moving in together, for now.")
+
+    def resolve_proposals(self, day: int, decisions: dict[str, dict[str, Any]]) -> None:
+        """`propose_move_in: true` in the morning JSON of a dating agent: both propose the same morning ->
+        cohabiting now; otherwise the partner gets it in tomorrow's inbox (the pending_move_in path)."""
+        for name, d in decisions.items():
+            a = self.agents[name]
+            if not d["obj"].get("propose_move_in") or a.status != "dating" or not a.partner:
+                continue
+            b = self.agents[a.partner]
+            if decisions.get(b.name, {}).get("obj", {}).get("propose_move_in"):
+                self.set_relationship(day, a, b, "cohabiting", "morning")
+                continue
+            if b.pending_move_in != a.name:
+                b.pending_move_in = a.name
+                self.entities[b.name].observe(f"[morning] {a.name} proposed that you move in together; you can accept tomorrow morning.")
+                self.entities[a.name].observe(f"[morning] You proposed to {b.name} that you move in together; {b.name} answers tomorrow morning.")
 
     def resolve_visits(self, day: int, decisions: dict[str, dict[str, Any]]) -> None:
         for name, d in decisions.items():
@@ -245,8 +330,7 @@ class World:
             accepted = _name_or_none(d["obj"].get("accept_invite"))
             for inviter in a.pending_invites:
                 host = self.agents.get(inviter)
-                ok = (host is not None and accepted is not None and _same(accepted, inviter) and a.status == "single"
-                      and host.status == "single" and a.visit_with is None and host.visit_with is None)
+                ok = self._visit_ok(a, host, accepted)
                 self.log.emit("visit", "visit.invite", day, name=inviter, target=a.name, accepted=bool(ok))
                 if ok:
                     a.visit_with, host.visit_with = host.name, a.name
@@ -269,8 +353,9 @@ class World:
 
     def set_relationship(self, day: int, a: AgentState, b: AgentState, to: str, phase: str) -> None:
         frm = a.status if a.partner == b.name else "single"
+        since = a.partner_since if (a.partner == b.name and a.partner_since is not None) else day
         for x in (a, b):
-            x.status, x.partner = to, (b.name if x is a else a.name)
+            x.status, x.partner, x.partner_since = to, (b.name if x is a else a.name), since
         self.log.emit(phase, "relationship.change", day, a=a.name, b=b.name, **{"from": frm, "to": to})
         msg = "are now dating" if to == "dating" else "are now living together"
         for x in (a, b):
@@ -279,7 +364,7 @@ class World:
     def end_relationship(self, day: int, a: AgentState, b: AgentState, phase: str) -> None:
         frm = a.status
         for x in (a, b):
-            x.status, x.partner = "single", None
+            x.status, x.partner, x.partner_since = "single", None, None
         a.exes[b.name] = day
         b.exes[a.name] = day
         self.log.emit(phase, "relationship.change", day, a=a.name, b=b.name, **{"from": frm, "to": "single"})
@@ -318,7 +403,7 @@ class World:
     # ---- phases ---------------------------------------------------------------------------------
 
     def market_phase(self, day: int) -> None:
-        messages = self.market.run_day(day, self.agents, self._bids, self.log)
+        messages = self.market.run_day(day, self.agents, self._bids, self.log, getattr(self, "_eat_hours", None))
         for name, msgs in messages.items():
             if msgs:
                 self.entities[name].observe(f"[market, day {day}] " + " ".join(msgs))
@@ -350,15 +435,21 @@ class World:
 
     def night(self, day: int) -> None:
         for a in self.agents.values():
+            partner = self.agents[a.partner] if a.partner else None
             meals = a.eat(a.hours["eat"])
+            if a.status == "cohabiting" and partner is not None and meals < a.hours["eat"]:
+                meals += partner.eat(a.hours["eat"] - meals)  # shared inventory: eat from the partner's stock
             hug_hours = 0.0
-            if a.status == "cohabiting" and a.partner:
-                hug_hours = float(min(a.hours["home"], self.agents[a.partner].hours["home"]))
+            if a.status in ("dating", "cohabiting") and partner is not None:
+                hug_hours = float(min(a.hours["home"], partner.hours["home"]))  # overlapping home hours together
             elif a.visit_with:
                 hug_hours = float(min(a.hours["home"], self.agents[a.visit_with].hours["home"]))
             earned = a.hours["work"] * WAGE
             a.cash += earned
-            fun = play_games(a.games, a.hours["games"])
+            if a.status == "cohabiting" and partner is not None and partner.games:
+                fun = play_shared_games(a.games, partner.games, a.hours["games"])
+            else:
+                fun = play_games(a.games, a.hours["games"])
             m = met_fractions(meals_eaten=meals, hug_hours=hug_hours, cash_earned=earned, fun_points=fun)
             u = a.needs.true_utility(m)
             j = a.needs.draw_jitter(self.nrng)

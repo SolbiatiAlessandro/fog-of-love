@@ -181,10 +181,14 @@ def m5_pairing(d: Data) -> dict[str, Any]:
     pairs_formed = {tuple(sorted((e["a"], e["b"]))) for e in d.by_type["relationship.change"] if e["to"] != "single"}
     for pair in pairs_formed:
         (broke if pair in pairs_ended else stayed).append(_need_distance(d.w[pair[0]], d.w[pair[1]]))
+    cohab_pairs = {tuple(sorted((e["a"], e["b"]))) for e in d.by_type["relationship.change"] if e["to"] == "cohabiting"}
+    cohab = [_need_distance(d.w[a], d.w[b]) for a, b in cohab_pairs]
     return {"random_pair_distance": _mean(all_pairs), "matched_pair_distance": _mean(matched), "n_matches": len(matched),
             "breakup_pair_distance": _mean(broke), "stayed_pair_distance": _mean(stayed), "n_broke": len(broke), "n_stayed": len(stayed),
+            "cohabiting_pair_distance": _mean(cohab), "n_cohabiting_pairs": len(cohab),
             "sentence": f"Mean L1 need-weight distance: matched pairs {_mean(matched)} (n={len(matched)}) vs all pairs "
-                        f"{_mean(all_pairs)}; couples that broke up {_mean(broke)} (n={len(broke)}) vs stayed {_mean(stayed)} (n={len(stayed)})."}
+                        f"{_mean(all_pairs)}; couples that broke up {_mean(broke)} (n={len(broke)}) vs stayed {_mean(stayed)} "
+                        f"(n={len(stayed)}); pairs that reached cohabiting {_mean(cohab)} (n={len(cohab)})."}
 
 
 def m6_gossip(d: Data) -> dict[str, Any]:
@@ -263,12 +267,15 @@ def m9_self_knowledge(d: Data) -> dict[str, Any]:
 
 
 def m10_love_residual(d: Data) -> dict[str, Any]:
-    willing = defaultdict(set)
+    """A "better-fit willing single" for agent n on a day: a single (that night) whose need distance to n is lower
+    than n's partner's, and who swiped yes on n at some point in the run."""
+    swiped_yes_on = defaultdict(set)  # target -> names who ever swiped yes on them
     for e in d.by_type["app.swipe"]:
         if e["yes"]:
-            willing[e["day"]].add(e["name"])
+            swiped_yes_on[e["target"]].add(e["name"])
     breakups = {(e["day"], n) for e in d.by_type["relationship.change"] if e["to"] == "single" for n in (e["a"], e["b"])}
     rows = defaultdict(int)
+    examples = []
     stayed_days = 0
     for (n, day), e in d.night.items():
         if e["status"] != "cohabiting" or not e["partner"]:
@@ -276,12 +283,16 @@ def m10_love_residual(d: Data) -> dict[str, Any]:
         stayed_days += 1
         dist_partner = _need_distance(d.w[n], d.w[e["partner"]])
         better = [o for o in d.names if o != n and o != e["partner"] and d.status.get((o, day)) == "single"
-                  and o in willing[day] and _need_distance(d.w[n], d.w[o]) < dist_partner]
+                  and o in swiped_yes_on[n] and _need_distance(d.w[n], d.w[o]) < dist_partner]
         if better and (day, n) not in breakups:
             rows[n] += 1
-    return {"cohabiting_agent_days": stayed_days, "days_stayed_with_better_fit_available": dict(rows),
-            "sentence": (f"Over {stayed_days} cohabiting agent-days, a better-fit willing single (lower need distance, swiped yes "
-                         f"that day) existed and the agent stayed on {sum(rows.values())} agent-days." if stayed_days else
+            if len(examples) < 5:
+                examples.append({"name": n, "day": day, "partner": e["partner"], "partner_distance": round(dist_partner, 3),
+                                 "better_fit": [{"name": o, "distance": round(_need_distance(d.w[n], d.w[o]), 3)} for o in better]})
+    return {"cohabiting_agent_days": stayed_days, "days_stayed_with_better_fit_available": dict(rows), "examples": examples,
+            "sentence": (f"Over {stayed_days} cohabiting agent-days, a better-fit willing single (lower need distance than the "
+                         f"partner, swiped yes on the agent at some point) existed and the agent stayed on "
+                         f"{sum(rows.values())} agent-days." if stayed_days else
                          "No cohabiting agent-days; the love residual is not computable.")}
 
 

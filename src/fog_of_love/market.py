@@ -40,8 +40,10 @@ class Market:
         self.round_counter = 0
 
     def run_day(self, day: int, agents: dict[str, AgentState], bids: dict[str, list[dict[str, Any]]],
-                log: EventLog) -> dict[str, list[str]]:
-        """Runs ROUNDS clearing rounds; mutates agents' cash/inventory; returns per-agent outcome messages."""
+                log: EventLog, eat_hours: dict[str, int] | None = None) -> dict[str, list[str]]:
+        """Runs ROUNDS clearing rounds; mutates agents' cash/inventory; returns per-agent outcome messages.
+        Then, for every agent whose scheduled eating hours exceed the meals it owns, auto-buys the cheapest meal
+        at list price for the shortfall (as far as cash allows), logged as an `auto` bid and fill."""
         mp = self.mp
         for name, a in agents.items():
             m = mp._agents[name]
@@ -102,4 +104,28 @@ class Market:
                 for b in bl:
                     if b["qty"] > 0:
                         b["price"] = round(b["price"] * REBID_FACTOR, 2)
+        for name, a in agents.items():
+            msg = self.auto_buy_meals(day, a, int((eat_hours or {}).get(name, 0)), log)
+            if msg:
+                messages[name].append(msg)
         return messages
+
+    @staticmethod
+    def auto_buy_meals(day: int, a: AgentState, eat_hours: int, log: EventLog) -> str | None:
+        """The world buys the cheapest meal at list price for (eat hours - meals owned), from the agent's cash."""
+        shortfall = max(0, eat_hours - a.meals)
+        if shortfall <= 0:
+            return None
+        gid = goods.cheapest_meal()
+        price = goods.list_price(gid)
+        qty = min(shortfall, int(a.cash // price)) if price > 0 else shortfall
+        if qty <= 0:
+            return f"You scheduled {eat_hours}h of eating but own {a.meals} meals and cannot afford more."
+        a.cash = round(a.cash - qty * price, 2)
+        a.add_item(gid, qty)
+        log.emit("market", "market.order", day, name=a.name, side="bid", good=gid, price=float(price), qty=qty,
+                 round=ROUNDS, auto=True)
+        log.emit("market", "market.clear", day, good=gid, price=float(price), round=ROUNDS, auto=True,
+                 filled=[{"buyer": a.name, "seller": seller_name(gid), "qty": qty, "price": float(price)}])
+        return (f"You scheduled {eat_hours}h of eating with only {a.meals - qty} meals in stock, so the restaurant "
+                f"charged you for {qty} {gid} ({price:.0f} each) automatically.")

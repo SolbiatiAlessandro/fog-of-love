@@ -73,8 +73,9 @@ def run_date(day: int, a: AgentState, b: AgentState, entities: dict[str, Any]) -
         events.append({"type": "date.turn", "a": a.name, "b": b.name, "speaker": speaker.name, "text": line})
         entities[speaker.name].observe(f"[date] {speaker.name} said to {listener.name}: \"{line}\"")
         entities[listener.name].observe(f"[date] {speaker.name} said to {listener.name}: \"{line}\"")
+    days_dating = (day - (a.partner_since or day)) if a.partner == b.name else None
     for me, other in order:
-        obj, raw = ask_json(entities[me.name], prompts.post_date_call(other.name))
+        obj, raw = ask_json(entities[me.name], prompts.post_date_call(other.name, days_dating))
         rating, choice, reason, fallback = parse_outcome(obj)
         events.append({"type": "date.outcome", "name": me.name, "partner": other.name, "rating": rating,
                        "choice": choice, "reason": reason, "raw": raw[:500], "fallback": fallback})

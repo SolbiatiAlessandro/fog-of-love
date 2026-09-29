@@ -14,7 +14,7 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--out", required=True)
     r.add_argument("--model", default="mock", help="OpenRouter slug or 'mock'")
     r.add_argument("--num-agents", type=int, default=12)
-    r.add_argument("--num-days", type=int, default=7)
+    r.add_argument("--num-days", type=int, default=7, help="default 7; dev runs from iteration 2 use 14")
     r.add_argument("--seed", type=int, default=1)
     r.add_argument("--budget-usd", type=float, default=None)
     r.add_argument("--concurrency", type=int, default=8)

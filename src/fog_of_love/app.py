@@ -15,7 +15,8 @@ EX_COOLDOWN_DAYS = 2
 
 
 def eligible(a: AgentState) -> bool:
-    return a.status in ("single", "dating")
+    """Only singles use the app: dating agents must `breakup` in the morning to see it again."""
+    return a.status == "single"
 
 
 def can_see(viewer: AgentState, other: AgentState, day: int) -> bool:

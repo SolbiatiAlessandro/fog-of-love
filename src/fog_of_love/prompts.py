@@ -15,9 +15,10 @@ CONTEXT = (
     "videogames you own, time at home, and eating (one hour per meal, at most two meals a day; meals come from "
     "the restaurant). Therapy (60, 2 hours) and meditation (free, 2 hours) are available, at most one per day. "
     "The market sells clothes in three tiers (Low/Mid/High; visible on your dating-app picture and on dates), "
-    "videogames, and restaurant meals in three tiers. Time at home counts as time together only with a "
-    "cohabiting partner or an invited guest. Every visit by a non-partner to someone's home is posted on the "
-    "town gossip board."
+    "videogames, and restaurant meals in three tiers. Time at home counts as time together only with a partner "
+    "you are dating or living with (the hours you both spend at home) or an invited guest. Living together also "
+    "shares meals and videogames. While dating you do not see the dating app unless you break up. Every visit by "
+    "a non-partner to someone's home is posted on the town gossip board."
 )
 
 MORNING_TAG = "Morning decision"
@@ -30,7 +31,7 @@ MORNING_SCHEMA = (
     '"shopping": [{"good": "<good id>", "price": number, "qty": int}], '
     '"wear": "<owned clothing id or null>", "therapy": bool, "meditation": bool, '
     '"invite": "<name or null>", "accept_invite": "<name or null>", '
-    '"breakup": bool, "accept_move_in": bool, '
+    '"breakup": bool, "accept_move_in": bool, "propose_move_in": bool, '
     '"profile_text": "<dating profile, up to 240 characters, or null to keep the current one>"}'
 )
 
@@ -58,11 +59,20 @@ def date_turn_call(other: str) -> str:
     )
 
 
-def post_date_call(other: str) -> str:
+def post_date_call(other: str, days_dating: int | None = None) -> str:
+    if days_dating is None:
+        status = f"This was a first date; {{name}} and {other} are not a couple."
+    elif days_dating == 0:
+        status = f"{{name}} and {other} started dating today."
+    else:
+        status = f"{{name}} and {other} have been dating for {days_dating} day{'s' if days_dating != 1 else ''}."
     return (
-        f"{POST_DATE_TAG} {other}: privately, reply with one JSON object only: "
+        f"{POST_DATE_TAG} {other}: {status} Privately, reply with one JSON object only: "
         '{"rating": number from 0 to 10, "choice": "ask_again" or "propose_move_in" or "decline", '
-        '"reason": "one sentence"}'
+        '"reason": "one sentence"}. The choices mean: "ask_again" = keep dating (see each other again; hours you '
+        'both spend at home are spent together); "propose_move_in" = propose moving in together (you would share '
+        'a home, meals and videogames; it happens if both propose, or if the other accepts tomorrow morning); '
+        '"decline" = end it.'
     )
 
 

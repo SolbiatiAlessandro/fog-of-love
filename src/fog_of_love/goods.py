@@ -52,5 +52,9 @@ def resolve_good(text: str) -> str | None:
     return hits[0] if len(hits) == 1 else None
 
 
+def cheapest_meal() -> str:
+    return min((g["id"] for g in GOODS if g["category"] == "Food"), key=list_price)
+
+
 def price_summary() -> str:
     return "; ".join(f"{g['id']} ({g['category']} {g['tier']}) {g['list_price']:.0f}" for g in GOODS)
