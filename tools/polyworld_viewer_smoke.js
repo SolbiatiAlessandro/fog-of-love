@@ -81,7 +81,7 @@ const server = http.createServer((req, res) => {
   if (result.runs < 1) failures.push('run picker empty');
   if (!result.bridge && !result.noScene) failures.push('Module.lovetownState never written');
   if (result.noScene && result.transcriptColumn < 1) failures.push('no-scene bundle must show the transcript column');
-  else if (result.bridge.hasSx && result.labelsVisible < 1) failures.push('no positioned agent labels');
+  else if (result.bridge && result.bridge.hasSx && result.labelsVisible < 1) failures.push('no positioned agent labels');
   if (result.bridge && result.bridge.hasSx && result.bubbles < 1 && result.bridge.phase === 'date') failures.push('no speech bubble during a date');
   if (result.pendingCommands > 5) failures.push(`commands not drained (${result.pendingCommands})`);
   if (errors.length) failures.push(`console errors: ${errors.slice(0, 3).join(' | ')}`);
