@@ -164,7 +164,7 @@ What did not / known gaps:
 - The shared checkout `~/Projects/fog-of-love` may still be on the viewer agent's state; the engine lives in the
   same `main` (pushed from the `engine` worktree). `git pull` there.
 
-### 2026-09-28 23:30 PDT — Engine iteration 2: dating hugs, app exclusivity, honest invites, auto meals
+### 2026-09-28 21:44 PDT — Engine iteration 2: dating hugs, app exclusivity, honest invites, auto meals
 
 Diagnosis of `dev-12x7-s1`: hugs 0.0 for every agent every day (only cohabiting or a visit gave hug hours, and neither
 happened), 0 cohabiting, 42 ask_again / 8 decline / 0 propose_move_in, 6 invites all from one agent and 0 accepted,
@@ -264,10 +264,10 @@ Counts:
 real run with gossip posts, so the viewer's strict check passes); `viewer/` resolves `../runs/latest/events.jsonl`
 through it under `python3 -m http.server`. On a checkout without symlink support, copy the directory instead.
 
-### 2026-09-29 00:20 PDT — Engine iteration 2 handoff
+### 2026-09-28 21:52 PDT — Engine iteration 2 handoff
 
 Commits (engine worktree `../fog-of-love-engine`, branch `engine`, pushed to `origin/main`): `0396da1` engine
-iteration 2, `af14951` run dev-12x14-s2, `2d58111` visit timing fix, `39ce7c2` STATUS, then run dev-24x10-s3 +
+iteration 2, `af14951` run dev-12x14-s2, `2d58111` visit timing fix, `39ce7c2` STATUS, `c55f8f4` run dev-24x10-s3 +
 `runs/latest` and this section.
 
 Commands (unchanged apart from the run names):
