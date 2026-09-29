@@ -18,7 +18,16 @@ GOODS: list[dict] = [
 ]
 
 BY_ID: dict[str, dict] = {g["id"]: g for g in GOODS}
-SELLER_STOCK = 100  # per good per day; sellers restock every morning
+
+# Daily production per good (units added to the seller's stock each morning). Unsold units carry over up to
+# STOCK_CAP_DAYS x production. The seller's ask never falls below COST_FRACTION x list price (production cost).
+PRODUCTION: dict[tuple[str, str], int] = {
+    ("Clothing", "Low"): 20, ("Clothing", "Mid"): 6, ("Clothing", "High"): 2,
+    ("Games", "Standard"): 8,
+    ("Food", "Low"): 40, ("Food", "Mid"): 12, ("Food", "High"): 3,
+}
+STOCK_CAP_DAYS = 3
+COST_FRACTION = 0.6
 
 
 def category(good_id: str) -> str:
@@ -31,6 +40,19 @@ def tier(good_id: str) -> str:
 
 def list_price(good_id: str) -> float:
     return BY_ID[good_id]["list_price"]
+
+
+def production(good_id: str) -> int:
+    g = BY_ID[good_id]
+    return PRODUCTION[(g["category"], g["tier"])]
+
+
+def stock_cap(good_id: str) -> int:
+    return STOCK_CAP_DAYS * production(good_id)
+
+
+def production_cost(good_id: str) -> float:
+    return round(COST_FRACTION * list_price(good_id), 2)
 
 
 def clothing_ids(tier_name: str | None = None) -> list[str]:

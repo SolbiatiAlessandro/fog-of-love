@@ -296,6 +296,81 @@ def m10_love_residual(d: Data) -> dict[str, Any]:
                          "No cohabiting agent-days; the love residual is not computable.")}
 
 
+def log_log_slope(prices: list[float], quantities: list[float]) -> dict[str, Any]:
+    """OLS slope of log(quantity) on log(price): the price elasticity estimate. Points with a non-positive
+    price or quantity are dropped; "not estimable" with fewer than MIN_ELASTICITY_DAYS points or no price
+    variation."""
+    pts = [(math.log(p), math.log(q)) for p, q in zip(prices, quantities) if p > 0 and q > 0]
+    n = len(pts)
+    if n < MIN_ELASTICITY_DAYS:
+        return {"slope": None, "n": n, "status": "not estimable"}
+    xs, ys = [x for x, _ in pts], [y for _, y in pts]
+    mx, my = statistics.fmean(xs), statistics.fmean(ys)
+    sxx = sum((x - mx) ** 2 for x in xs)
+    if sxx < 1e-12:
+        return {"slope": None, "n": n, "status": "not estimable (no price variation)"}
+    slope = sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / sxx
+    return {"slope": round(slope, 4), "n": n, "status": "ok"}
+
+
+MIN_ELASTICITY_DAYS = 5
+
+
+def m11_price_dynamics(d: Data) -> dict[str, Any]:
+    """Per good: the min/max/last clearing price over rounds with trades (auto meal purchases excluded), the
+    ask range, units sold; for Mid/High clothing the elasticity: log(units bid at round 0 that day) on
+    log(that day's ask), across days with at least one bid."""
+    traded_prices: dict[str, list[float]] = defaultdict(list)
+    sold: Counter = Counter()
+    for e in d.by_type["market.clear"]:
+        if e.get("auto") or not e["filled"]:
+            continue
+        traded_prices[e["good"]].append(float(e["price"]))
+        sold[e["good"]] += sum(int(f["qty"]) for f in e["filled"])
+    asks: dict[str, dict[int, float]] = defaultdict(dict)  # good -> day -> round-0 ask
+    for e in d.by_type["market.order"]:
+        if e["side"] == "ask" and e.get("round", 0) == 0:
+            asks[e["good"]].setdefault(e["day"], float(e["price"]))
+    bid_qty: dict[str, Counter] = defaultdict(Counter)  # good -> day -> units bid at round 0
+    for e in d.by_type["market.order"]:
+        if e["side"] == "bid" and not e.get("auto") and e.get("round", 0) == 0:
+            bid_qty[e["good"]][e["day"]] += int(e["qty"])
+    goods_out: dict[str, Any] = {}
+    for gid, g in d.goods.items():
+        ps = traded_prices.get(gid, [])
+        a = asks.get(gid, {})
+        goods_out[gid] = {"tier": g["tier"], "list_price": g["list_price"], "units_sold": sold.get(gid, 0),
+                          "rounds_with_trades": len(ps),
+                          "clearing_min": round(min(ps), 2) if ps else None, "clearing_max": round(max(ps), 2) if ps else None,
+                          "clearing_last": round(ps[-1], 2) if ps else None,
+                          "ask_min": round(min(a.values()), 2) if a else None, "ask_max": round(max(a.values()), 2) if a else None,
+                          "ask_last": round(a[max(a)], 2) if a else None,
+                          "bid_units_by_day": {day: bid_qty[gid].get(day, 0) for day in sorted(a)}}
+    elasticity: dict[str, Any] = {}
+    for tier in ("Mid", "High"):
+        ids = [gid for gid, g in d.goods.items() if g["category"] == "Clothing" and g["tier"] == tier]
+        pooled_p, pooled_q = [], []
+        for gid in ids:
+            days = [day for day in sorted(asks.get(gid, {})) if bid_qty[gid].get(day, 0) > 0]
+            p = [asks[gid][day] for day in days]
+            q = [float(bid_qty[gid][day]) for day in days]
+            elasticity[gid] = log_log_slope(p, q)
+            pooled_p += p
+            pooled_q += q
+        elasticity[f"{tier} clothing (pooled)"] = log_log_slope(pooled_p, pooled_q)
+    high_traded = sum(v["units_sold"] for gid, v in goods_out.items()
+                      if d.goods[gid]["category"] == "Clothing" and d.goods[gid]["tier"] == "High")
+    moved = [gid for gid, v in goods_out.items() if v["clearing_min"] is not None and v["clearing_min"] != v["clearing_max"]]
+    ranges = "; ".join(f"{gid} {v['clearing_min']}-{v['clearing_max']} (last {v['clearing_last']}, {v['units_sold']} sold)"
+                       for gid, v in goods_out.items() if v["clearing_min"] is not None)
+    el = "; ".join(f"{k}: " + (f"slope {v['slope']} (n={v['n']})" if v["slope"] is not None else f"{v['status']} (n={v['n']})")
+                   for k, v in elasticity.items())
+    return {"goods": goods_out, "elasticity": elasticity, "high_clothing_units_sold": high_traded,
+            "goods_with_price_movement": moved,
+            "sentence": (f"Clearing prices (rounds with trades): {ranges or 'no trades'}. {len(moved)} goods moved off a single "
+                         f"price. Elasticity (log units bid on log ask, by day): {el}. High clothing units sold: {high_traded}.")}
+
+
 METRICS = [
     ("1. Clothes spend before vs after cohabiting", m1_clothes_spend),
     ("2. Marker convergence", m2_marker),
@@ -307,6 +382,7 @@ METRICS = [
     ("8. Fun and the gamer trap", m8_fun),
     ("9. Self-knowledge", m9_self_knowledge),
     ("10. Love residual", m10_love_residual),
+    ("11. Price dynamics", m11_price_dynamics),
 ]
 
 

@@ -205,7 +205,8 @@ class World:
                          "posted on the public gossip board.")
             if singles:
                 parts.append("Singles you could invite home: " + ", ".join(singles) + ".")
-        parts.append("Market list prices: " + goods.price_summary() + ".")
+        parts.append("Market today (last round's clearing price, the seller's asking price, units on offer; the "
+                     "highest bids are served first): " + self.market.summary() + ".")
         return "\n".join(parts)
 
     def decide(self, day: int, a: AgentState) -> dict[str, Any]:

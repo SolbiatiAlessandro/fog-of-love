@@ -82,11 +82,11 @@ def test_budget_guard_aborts_cleanly(tmp_path):
         w.check_budget(1, 0)
 
 
-def test_metrics_have_ten_sections(mock_run):
+def test_metrics_have_all_sections(mock_run):
     out, _ = mock_run
     m = metrics.write(out)
     titles = [t for t, _ in metrics.METRICS]
-    assert len(titles) == 10
+    assert len(titles) == 11  # the ten of BUILD_SPEC.md plus 11. Price dynamics
     for t in titles:
         assert "sentence" in m[t] and m[t]["sentence"]
     data = json.loads((out / "metrics.json").read_text())
