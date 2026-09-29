@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fog of Love — Love Town 3D replay</title>
+  <link rel="stylesheet" href="replay_ui.css?v=lovetown-1">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><h1>Fog of Love</h1><span class="sub">Love Town · 3D replay</span></div>
+    <div class="controls" role="group" aria-label="Playback">
+      <button id="play" aria-pressed="true" disabled>Pause</button>
+      <span class="speeds">
+        <button data-speed="1" class="active">1×</button>
+        <button data-speed="4">4×</button>
+        <button data-speed="16">16×</button>
+      </span>
+      <span id="clock" class="clock">—</span>
+      <input id="seek" type="range" min="0" max="60" step="0.25" value="0" aria-label="Seek">
+      <span id="days" class="days"></span>
+      <button id="auto" aria-pressed="true">Auto camera: on</button>
+      <button id="reveal" aria-pressed="false" class="reveal-btn">Reveal: off</button>
+    </div>
+    <div class="loader">
+      <label class="small muted">Run <select id="runs" aria-label="Pick a run"></select></label>
+      <span id="load-status" class="status">Loading…</span>
+      <a class="small muted" href="../replay/" title="2D fallback viewer">2D viewer</a>
+    </div>
+  </header>
+
+  <main class="layout">
+    <div class="col">
+      <div id="world" class="world">
+        <canvas id="canvas" tabindex="0" aria-label="Love Town 3D scene; click an agent to follow" oncontextmenu="event.preventDefault()"></canvas>
+        <div id="world-labels" class="world-labels"></div>
+        <div id="scene-caption" class="scene-caption">Love Town</div>
+        <div id="status" role="status">Loading the replay…</div>
+      </div>
+      <section id="transcript-col" class="panel transcript-col" aria-label="Live dates">
+        <h2>Tonight's dates <span class="muted small">live transcript</span></h2>
+        <div id="date-live" class="date-live"></div>
+      </section>
+      <section class="panel agent-panel" aria-label="Followed agent">
+        <h2>Following <select id="agent-pick" aria-label="Pick an agent"></select></h2>
+        <div id="agent" class="agent"></div>
+      </section>
+      <section class="panel market-panel" aria-label="Market">
+        <h2>Market <span class="muted small">clearing prices by round · dot area = units sold · hover for values</span></h2>
+        <div class="market-wrap"><canvas id="market"></canvas></div>
+        <div id="orders" class="orders"></div>
+      </section>
+    </div>
+    <div class="col">
+      <section class="panel app-panel" aria-label="Dating app">
+        <h2><span class="heart">♥</span> Dating app <span id="app-day" class="muted small"></span></h2>
+        <div class="app-cols">
+          <div id="cards" class="cards"></div>
+          <aside class="app-side">
+            <h3>Swipes</h3>
+            <ul id="swipes" class="swipes"></ul>
+            <h3>Matches · tonight's dates</h3>
+            <ul id="matches" class="matches"></ul>
+          </aside>
+        </div>
+      </section>
+      <section class="panel gossip-panel" aria-label="Gossip board">
+        <h2>Gossip board <span class="muted small">newest first</span></h2>
+        <ul id="gossip" class="gossip"></ul>
+      </section>
+      <section class="panel standings-panel" id="standings-section" aria-label="Standings" hidden>
+        <h2>Standings <span class="muted small">author-level Σ U</span></h2>
+        <div id="standings"></div>
+        <p id="standings-note" class="muted small"></p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot">
+    Keys: space play/pause · ← → seek 5 s · r reveal. URL: <code>?run=&lt;name&gt;</code>, optional <code>day</code>, <code>t</code>, <code>speed</code>, <code>follow</code>, <code>reveal=1</code>, <code>play=0</code>, <code>auto=0</code>.
+    Recorded decisions; movement in the town is staged for presentation.
+    <span id="run-label"></span>
+  </footer>
+
+  <script src="replay_state.js?v=lovetown-1"></script>
+  <script src="replay_ui.js?v=lovetown-1"></script>
+  <script>window.LOVETOWN_NO_SCENE = true;</script>
+</body>
+</html>

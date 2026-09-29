@@ -44,28 +44,29 @@ Consistent across runs: matched pairs are closer in hidden need weights than ran
 
 ## Watch a replay
 
-**Live:** https://solbiatialessandro.github.io/fog-of-love/replay/ (GitHub Pages from `docs/`; pick a run in the header, default is the 24-agent adaptive-market run).
+**Live (3D, primary):** https://solbiatialessandro.github.io/fog-of-love/replay3d/ — Love Town rendered with the
+Polyworld engine in WebAssembly: houses along streets, the workspace, the restaurant with two tables, the therapy
+office and the meditation garden, dressed agents whose garment changes with what they wear, a camera that follows
+one agent and switches every 30 s (toggle, or click an agent), speech bubbles over the date tables, and the HUD:
+dating app (profile cards, swipes, matches, tonight's dates), the followed agent's card with the live date
+transcript, the market chart with volume, the gossip board, and a Reveal toggle for the hidden weights, U vs Û and
+standings. Pick a run in the header (default `dev-24x10-s4-market`); `?run=<name>`, `day`, `t`, `speed`,
+`follow=<agent id>`, `reveal=1`, `play=0`, `auto=0` work in the URL. Build, convert and verify:
+`docs/POLYWORLD_BUILD.md`; data contract: `docs/POLYWORLD_REPLAY.md`.
 
-
-The viewer (`viewer/`, vanilla HTML/JS, no build) replays an `events.jsonl`: town map with the agents moving
-between work, restaurant, garden and home, the dating app with swipes and matches, the market with clearing
-prices and volume, the gossip board, an agent card with the date transcript, and a Reveal toggle for the hidden
-need weights and standings. From the repo root:
+**Fallback (2D):** https://solbiatialessandro.github.io/fog-of-love/replay/ — the vanilla HTML/JS viewer
+(`viewer/`, no build) with the same panels over a 2D town map. Locally, from the repo root:
 
 ```
 python3 -m http.server 8000
 ```
 
-then open <http://localhost:8000/viewer/?events=../runs/dev-12x7-s1/events.jsonl> (the first 7-day run), or just
-<http://localhost:8000/viewer/>, which opens the largest checked-in run (`dev-12x14-s2`, 14 days, five couples move
-in together) and lets you pick another from the **Run** menu in the header (it reads `runs/index.json`;
-regenerate that with `python3 viewer/make_runs_index.py` after a new run). Useful URL parameters: `day`, `t`,
-`follow=<agent name>`, `reveal=1`, `play=0`. Details, screenshots and the smoke test: `docs/VIEWER.md`.
+then open <http://localhost:8000/viewer/> (picks from `runs/index.json`; regenerate with
+`python3 viewer/make_runs_index.py` after a new run) or
+<http://localhost:8000/viewer/?events=../runs/dev-12x7-s1/events.jsonl>. Details, screenshots and the smoke test:
+`docs/VIEWER.md`; `sh viewer/publish_docs.sh` refreshes `docs/replay/`.
 
 ![Day 7 of dev-12x7-s1: market, standings and Reveal](docs/viewer-real-day7-market-standings.png)
-
-GitHub Pages is refused on this plan for a private repo (HTTP 422), so there is no hosted copy; `docs/replay/`
-is the static bundle that would serve there (`sh viewer/publish_docs.sh` refreshes it).
 
 Layout: `src/fog_of_love/{needs,world,agents,market,app,dates,gossip,events,metrics,standings,llm,prompts,goods,cli}.py`,
 `vendor/personas.py` (the 50 Concordia signaling personas, Apache header kept), `tests/`.

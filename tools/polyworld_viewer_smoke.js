@@ -70,6 +70,7 @@ const server = http.createServer((req, res) => {
       runs: q('#runs option'), gossip: q('#gossip li'), orders: q('#orders tr'), marketCanvas: (document.getElementById('market') || {}).width || 0,
       bridge: state ? { t: state.t, day: state.day, phase: state.phase, followed: state.followed, agents: (state.agents || []).length, hasSx: !!(state.agents || [])[0] && typeof state.agents[0].sx === 'number' } : null,
       ready: M.lovetownReady === true || typeof M.lovetownReady === 'function', pendingCommands: (M.lovetownCommand || []).length, webgl,
+      noScene: !!window.LOVETOWN_NO_SCENE, transcriptColumn: q('#transcript-col.show'), liveDates: q('#date-live article'),
     };
   });
   if (shot) { await page.screenshot({ path: shot, fullPage: false }); result.screenshot = shot; }
@@ -78,7 +79,8 @@ const server = http.createServer((req, res) => {
   const failures = [];
   if (result.cards < 1) failures.push('no dating-app cards');
   if (result.runs < 1) failures.push('run picker empty');
-  if (!result.bridge) failures.push('Module.lovetownState never written');
+  if (!result.bridge && !result.noScene) failures.push('Module.lovetownState never written');
+  if (result.noScene && result.transcriptColumn < 1) failures.push('no-scene bundle must show the transcript column');
   else if (result.bridge.hasSx && result.labelsVisible < 1) failures.push('no positioned agent labels');
   if (result.bridge && result.bridge.hasSx && result.bubbles < 1 && result.bridge.phase === 'date') failures.push('no speech bubble during a date');
   if (result.pendingCommands > 5) failures.push(`commands not drained (${result.pendingCommands})`);

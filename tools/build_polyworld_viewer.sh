@@ -9,6 +9,7 @@
 #   POLYWORLD_ENGINE   Metta-AI/polyworld checkout      (default: ../concordia-polyworld-engine)
 #   POLYWORLD_DEPS     pinned engine dependencies        (default: $POLYWORLD_ENGINE/tmp/coworld/deps)
 #   POLYWORLD_EMSDK    Emscripten SDK directory, used when emcc is not on PATH
+#   POLYWORLD_VIEWER_DIR   directory holding main.nim/config.nims (default: polyworld_viewer/)
 #   POLYWORLD_SKIP_WASM=1  publish: assemble the HTML layer and replays without compiling the scene
 #                      (the page then runs the HUD on its own clock and says the 3D scene is pending)
 #
@@ -31,7 +32,7 @@ usage() {
 
 export POLYWORLD_ENGINE="${POLYWORLD_ENGINE:-$(dirname "$repo_dir")/concordia-polyworld-engine}"
 export POLYWORLD_DEPS="${POLYWORLD_DEPS:-$POLYWORLD_ENGINE/tmp/coworld/deps}"
-viewer_dir="$repo_dir/polyworld_viewer"
+viewer_dir="${POLYWORLD_VIEWER_DIR:-$repo_dir/polyworld_viewer}"   # override only to validate the pipeline against another main.nim
 html_assets=(replay_ui.js replay_state.js replay_ui.css)
 
 # ------------------------------------------------------------------ replays for publish
