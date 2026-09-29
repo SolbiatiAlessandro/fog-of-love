@@ -35,6 +35,7 @@ if (stub) {
 const liveUrl = opt('--url', null);
 if (!dir && !liveUrl) { console.error('need --stub, --dir or --url'); process.exit(2); }
 dir = dir ? path.resolve(dir) : null;
+if (dir && !fs.existsSync(path.join(dir, 'index.html'))) { console.error(`no index.html in ${dir} (build it first)`); process.exit(2); }
 
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.wasm': 'application/wasm', '.data': 'application/octet-stream', '.png': 'image/png' };
 const server = http.createServer((req, res) => {

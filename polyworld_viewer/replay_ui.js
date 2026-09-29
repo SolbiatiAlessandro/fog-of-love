@@ -331,26 +331,43 @@ Module.canvas.focus = function (options) { HTMLElement.prototype.focus.call(this
         label.innerHTML = `<span class="tier" style="background:${TIER_COLOR()[tier]}"></span>${esc(firstName(agent.name))}`;
       }
     }
-    // speech bubbles for the current turn of each active date
+    // speech bubbles: the scene's own date nodes when it publishes them (so the bubble matches
+    // the turn it is staging), else the current turn of each active date from the projection
     const wanted = new Set();
-    for (const d of s.dates) {
-      if (!d.active || d.turnsShown === 0 || d.stage === 'outcome') continue;
-      const turn = d.turns[d.turnsShown - 1];
-      const p = positions.get(turn.speaker);
+    const spoken = [];
+    if (state && Array.isArray(state.dates)) {
+      for (const d of state.dates) if (d && typeof d.speaker === 'string' && d.text) spoken.push({ key: `${s.clock.day}|scene|${d.index}|${d.turn}`, speaker: d.speaker, text: d.text });
+    } else {
+      for (const d of s.dates) {
+        if (!d.active || d.turnsShown === 0 || d.stage === 'outcome') continue;
+        const turn = d.turns[d.turnsShown - 1];
+        spoken.push({ key: `${d.day}|${d.index}|${d.turnsShown}`, speaker: turn.speaker, text: turn.text });
+      }
+    }
+    for (const line of spoken) {
+      const p = positions.get(line.speaker);
       if (!p || p.visible === false) continue;
-      const key = `${d.day}|${d.index}|${d.turnsShown}`;
-      wanted.add(key);
-      let b = ui.bubbles.get(key);
+      wanted.add(line.key);
+      let b = ui.bubbles.get(line.key);
       if (!b) {
-        b = document.createElement('div'); b.className = 'bubble fresh'; b.dataset.key = key;
-        b.innerHTML = `<b>${esc(firstName(agentName(turn.speaker)))}</b>${esc(turn.text)}`;
-        layer.append(b); ui.bubbles.set(key, b);
+        b = document.createElement('div'); b.className = 'bubble fresh'; b.dataset.key = line.key;
+        b.innerHTML = `<b>${esc(firstName(agentName(line.speaker)))}</b>${esc(line.text)}`;
+        layer.append(b); ui.bubbles.set(line.key, b);
       }
       b.style.left = `${p.sx * 100}%`; b.style.top = `${p.sy * 100 - 3}%`;
     }
     for (const [key, b] of ui.bubbles) if (!wanted.has(key)) { b.remove(); ui.bubbles.delete(key); }
-    // relationship effects
-    for (const c of s.changes) {
+    // effects published by the scene (heart / broken-heart), shown once per agent and kind per day
+    if (state && Array.isArray(state.effects)) for (const ef of state.effects) {
+      const key = `scene|${s.clock.day}|${ef.agent}|${ef.kind}`;
+      if (ui.shownChanges.has(key)) continue;
+      const p = positions.get(ef.agent); if (!p) continue;
+      ui.shownChanges.add(key);
+      const e = document.createElement('div'); e.className = 'effect'; e.textContent = ef.kind === 'broken-heart' ? '💔' : '♥';
+      e.style.left = `${p.sx * 100}%`; e.style.top = `${p.sy * 100}%`; layer.append(e); setTimeout(() => e.remove(), 1700);
+    }
+    // relationship effects from the projection (only when the scene does not publish its own)
+    for (const c of (state && Array.isArray(state.effects)) ? [] : s.changes) {
       if (c.day !== s.clock.day) continue;
       const key = `${c.day}|${c.a}|${c.b}|${c.to}`;
       if (ui.shownChanges.has(key)) continue;
