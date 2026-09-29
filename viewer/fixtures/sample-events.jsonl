@@ -1,0 +1,480 @@
+{"t": 0, "day": 0, "phase": "setup", "type": "setup.world", "agents": [{"name": "Mara Vell", "persona_summary": "Junior architect, sketches on napkins, secretly competitive about board games, thinks brunch is a personality.", "cash": 200, "wearing": "clothes_low_1"}, {"name": "Dev Okonkwo", "persona_summary": "Data analyst at the logistics firm, early riser, runs before work, believes a tidy calendar is a form of kindness.", "cash": 200, "wearing": "clothes_low_1"}, {"name": "Lina Sato", "persona_summary": "Copywriter, keeps a list of overheard sentences, allergic to small talk, plays rhythm games to think.", "cash": 200, "wearing": "clothes_low_1"}, {"name": "Theo Brandt", "persona_summary": "Trainee chef who moonlights as a line cook, cooks to relax, wears whatever is clean, tips too much.", "cash": 200, "wearing": "clothes_low_1"}, {"name": "Priya Nair", "persona_summary": "Paralegal studying for the bar at night, precise, dry humour, spends money like it is a rumour.", "cash": 200, "wearing": "clothes_low_1"}, {"name": "Jonas Kell", "persona_summary": "Sound engineer between gigs, collects old game cartridges, generous with time and short on cash.", "cash": 200, "wearing": "clothes_low_1"}], "goods": [{"id": "clothes_low_1", "label": "plain tee", "category": "clothing", "tier": "low", "list_price": 6, "_ask": 5.92}, {"id": "clothes_low_2", "label": "canvas jacket", "category": "clothing", "tier": "low", "list_price": 6, "_ask": 6.2}, {"id": "clothes_mid_1", "label": "linen shirt", "category": "clothing", "tier": "mid", "list_price": 90, "_ask": 93.84}, {"id": "clothes_mid_2", "label": "wool coat", "category": "clothing", "tier": "mid", "list_price": 90, "_ask": 94.66}, {"id": "clothes_high_1", "label": "silk suit", "category": "clothing", "tier": "high", "list_price": 1500, "_ask": 1488.53}, {"id": "clothes_high_2", "label": "velvet gown", "category": "clothing", "tier": "high", "list_price": 1500, "_ask": 1555.93}, {"id": "game_1", "label": "Orbit Drift", "category": "game", "tier": null, "list_price": 30, "_ask": 30.98}, {"id": "game_2", "label": "Harbour Tycoon", "category": "game", "tier": null, "list_price": 30, "_ask": 29.74}, {"id": "game_3", "label": "Beat Garden", "category": "game", "tier": null, "list_price": 30, "_ask": 31.52}, {"id": "food_low", "label": "noodle bar meal", "category": "food", "tier": "low", "list_price": 2, "_ask": 2.11}, {"id": "food_mid", "label": "bistro meal", "category": "food", "tier": "mid", "list_price": 18, "_ask": 17.96}, {"id": "food_high", "label": "tasting menu", "category": "food", "tier": "high", "list_price": 80, "_ask": 84.5}], "days": 3, "seed": 7}
+{"t": 1, "day": 0, "phase": "setup", "type": "setup.needs", "name": "Mara Vell", "w": {"food": 0.2, "hugs": 0.45, "money": 0.15, "fun": 0.2}, "shadow": "money"}
+{"t": 2, "day": 0, "phase": "setup", "type": "setup.needs", "name": "Dev Okonkwo", "w": {"food": 0.1, "hugs": 0.3, "money": 0.45, "fun": 0.15}, "shadow": "hugs"}
+{"t": 3, "day": 0, "phase": "setup", "type": "setup.needs", "name": "Lina Sato", "w": {"food": 0.15, "hugs": 0.2, "money": 0.1, "fun": 0.55}, "shadow": "fun"}
+{"t": 4, "day": 0, "phase": "setup", "type": "setup.needs", "name": "Theo Brandt", "w": {"food": 0.5, "hugs": 0.25, "money": 0.15, "fun": 0.1}, "shadow": "food"}
+{"t": 5, "day": 0, "phase": "setup", "type": "setup.needs", "name": "Priya Nair", "w": {"food": 0.1, "hugs": 0.35, "money": 0.4, "fun": 0.15}, "shadow": "hugs"}
+{"t": 6, "day": 0, "phase": "setup", "type": "setup.needs", "name": "Jonas Kell", "w": {"food": 0.2, "hugs": 0.15, "money": 0.25, "fun": 0.4}, "shadow": "money"}
+{"t": 7, "day": 1, "phase": "morning", "type": "morning.allocation", "name": "Mara Vell", "hours": {"work": 8, "games": 2, "home": 4, "eat": 2}, "therapy": false, "meditation": false, "invite": null, "breakup": false, "raw": "{\"work\": 8, \"games\": 2, \"home\": 4, \"eat\": 2, \"shop\": [\"clothes_mid_1\", \"food_mid\", \"food_mid\"], \"therapy\": false, \"meditation\": false, \"invite\": null, \"breakup\": false}"}
+{"t": 8, "day": 1, "phase": "morning", "type": "morning.allocation", "name": "Dev Okonkwo", "hours": {"work": 11, "games": 0, "home": 3, "eat": 2}, "therapy": false, "meditation": false, "invite": null, "breakup": false, "raw": "{\"work\": 11, \"games\": 0, \"home\": 3, \"eat\": 2, \"shop\": [\"food_low\", \"food_low\"], \"therapy\": false, \"meditation\": false, \"invite\": null, \"breakup\": false}"}
+{"t": 9, "day": 1, "phase": "morning", "type": "morning.allocation", "name": "Lina Sato", "hours": {"work": 5, "games": 7, "home": 2, "eat": 2}, "therapy": false, "meditation": false, "invite": null, "breakup": false, "raw": "{\"work\": 5, \"games\": 7, \"home\": 2, \"eat\": 2, \"shop\": [\"game_3\", \"food_low\", \"food_low\"], \"therapy\": false, \"meditation\": false, \"invite\": null, \"breakup\": false}"}
+{"t": 10, "day": 1, "phase": "morning", "type": "morning.allocation", "name": "Theo Brandt", "hours": {"work": 9, "games": 1, "home": 4, "eat": 2}, "therapy": false, "meditation": false, "invite": null, "breakup": false, "raw": "{\"work\": 9, \"games\": 1, \"home\": 4, \"eat\": 2, \"shop\": [\"food_high\", \"food_mid\"], \"therapy\": false, \"meditation\": false, \"invite\": null, \"breakup\": false}"}
+{"t": 11, "day": 1, "phase": "morning", "type": "morning.allocation", "name": "Priya Nair", "hours": {"work": 10, "games": 0, "home": 5, "eat": 1}, "therapy": false, "meditation": false, "invite": "Jonas Kell", "breakup": false, "raw": "{\"work\": 10, \"games\": 0, \"home\": 5, \"eat\": 1, \"shop\": [\"clothes_mid_2\", \"food_mid\"], \"therapy\": false, \"meditation\": false, \"invite\": \"Jonas Kell\", \"breakup\": false}"}
+{"t": 12, "day": 1, "phase": "morning", "type": "morning.allocation", "name": "Jonas Kell", "hours": {"work": 4, "games": 6, "home": 4, "eat": 2}, "therapy": false, "meditation": false, "invite": null, "breakup": false, "raw": "{\"work\": 4, \"games\": 6, \"home\": 4, \"eat\": 2, \"shop\": [\"game_1\", \"food_low\", \"food_low\"], \"therapy\": false, \"meditation\": false, \"invite\": null, \"breakup\": false}"}
+{"t": 13, "day": 1, "phase": "market", "type": "market.order", "name": "Mara Vell", "side": "bid", "good": "clothes_mid_1", "price": 88.05, "qty": 1}
+{"t": 14, "day": 1, "phase": "market", "type": "market.order", "name": "Mara Vell", "side": "bid", "good": "food_mid", "price": 17.05, "qty": 1}
+{"t": 15, "day": 1, "phase": "market", "type": "market.order", "name": "Mara Vell", "side": "bid", "good": "food_mid", "price": 18.67, "qty": 1}
+{"t": 16, "day": 1, "phase": "market", "type": "market.order", "name": "Dev Okonkwo", "side": "bid", "good": "food_low", "price": 1.87, "qty": 1}
+{"t": 17, "day": 1, "phase": "market", "type": "market.order", "name": "Dev Okonkwo", "side": "bid", "good": "food_low", "price": 2.03, "qty": 1}
+{"t": 18, "day": 1, "phase": "market", "type": "market.order", "name": "Lina Sato", "side": "bid", "good": "game_3", "price": 29.57, "qty": 1}
+{"t": 19, "day": 1, "phase": "market", "type": "market.order", "name": "Lina Sato", "side": "bid", "good": "food_low", "price": 1.86, "qty": 1}
+{"t": 20, "day": 1, "phase": "market", "type": "market.order", "name": "Lina Sato", "side": "bid", "good": "food_low", "price": 2.02, "qty": 1}
+{"t": 21, "day": 1, "phase": "market", "type": "market.order", "name": "Theo Brandt", "side": "bid", "good": "food_high", "price": 74.14, "qty": 1}
+{"t": 22, "day": 1, "phase": "market", "type": "market.order", "name": "Theo Brandt", "side": "bid", "good": "food_mid", "price": 17.97, "qty": 1}
+{"t": 23, "day": 1, "phase": "market", "type": "market.order", "name": "Priya Nair", "side": "bid", "good": "clothes_mid_2", "price": 83.93, "qty": 1}
+{"t": 24, "day": 1, "phase": "market", "type": "market.order", "name": "Priya Nair", "side": "bid", "good": "food_mid", "price": 16.85, "qty": 1}
+{"t": 25, "day": 1, "phase": "market", "type": "market.order", "name": "Jonas Kell", "side": "bid", "good": "game_1", "price": 29.89, "qty": 1}
+{"t": 26, "day": 1, "phase": "market", "type": "market.order", "name": "Jonas Kell", "side": "bid", "good": "food_low", "price": 2.14, "qty": 1}
+{"t": 27, "day": 1, "phase": "market", "type": "market.order", "name": "Jonas Kell", "side": "bid", "good": "food_low", "price": 1.88, "qty": 1}
+{"t": 28, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_low_1", "side": "ask", "good": "clothes_low_1", "price": 5.99, "qty": 3}
+{"t": 29, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_low_2", "side": "ask", "good": "clothes_low_2", "price": 6.18, "qty": 3}
+{"t": 30, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_1", "side": "ask", "good": "clothes_mid_1", "price": 95.02, "qty": 3}
+{"t": 31, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_2", "side": "ask", "good": "clothes_mid_2", "price": 92.36, "qty": 3}
+{"t": 32, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_high_1", "side": "ask", "good": "clothes_high_1", "price": 1517.6, "qty": 3}
+{"t": 33, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_high_2", "side": "ask", "good": "clothes_high_2", "price": 1587.15, "qty": 3}
+{"t": 34, "day": 1, "phase": "market", "type": "market.order", "name": "seller:game_1", "side": "ask", "good": "game_1", "price": 29.51, "qty": 3}
+{"t": 35, "day": 1, "phase": "market", "type": "market.order", "name": "seller:game_2", "side": "ask", "good": "game_2", "price": 31.46, "qty": 3}
+{"t": 36, "day": 1, "phase": "market", "type": "market.order", "name": "seller:game_3", "side": "ask", "good": "game_3", "price": 30.1, "qty": 3}
+{"t": 37, "day": 1, "phase": "market", "type": "market.order", "name": "seller:food_low", "side": "ask", "good": "food_low", "price": 1.98, "qty": 3}
+{"t": 38, "day": 1, "phase": "market", "type": "market.order", "name": "seller:food_mid", "side": "ask", "good": "food_mid", "price": 17.81, "qty": 3}
+{"t": 39, "day": 1, "phase": "market", "type": "market.order", "name": "seller:food_high", "side": "ask", "good": "food_high", "price": 80.37, "qty": 3}
+{"t": 40, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_low_1", "price": 6.4, "filled": []}
+{"t": 41, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_low_2", "price": 6.18, "filled": []}
+{"t": 42, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_mid_1", "price": 94.81, "filled": []}
+{"t": 43, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_mid_2", "price": 95.12, "filled": []}
+{"t": 44, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_high_1", "price": 1561.28, "filled": []}
+{"t": 45, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_high_2", "price": 1577.06, "filled": []}
+{"t": 46, "day": 1, "phase": "market", "type": "market.clear", "good": "game_1", "price": 30.67, "filled": [{"buyer": "Jonas Kell", "seller": "seller:game_1", "qty": 1}]}
+{"t": 47, "day": 1, "phase": "market", "type": "market.clear", "good": "game_2", "price": 30.66, "filled": []}
+{"t": 48, "day": 1, "phase": "market", "type": "market.clear", "good": "game_3", "price": 30.93, "filled": [{"buyer": "Lina Sato", "seller": "seller:game_3", "qty": 1}]}
+{"t": 49, "day": 1, "phase": "market", "type": "market.clear", "good": "food_low", "price": 2.12, "filled": [{"buyer": "Dev Okonkwo", "seller": "seller:food_low", "qty": 1}, {"buyer": "Lina Sato", "seller": "seller:food_low", "qty": 1}, {"buyer": "Jonas Kell", "seller": "seller:food_low", "qty": 1}]}
+{"t": 50, "day": 1, "phase": "market", "type": "market.clear", "good": "food_mid", "price": 18.79, "filled": [{"buyer": "Mara Vell", "seller": "seller:food_mid", "qty": 1}, {"buyer": "Theo Brandt", "seller": "seller:food_mid", "qty": 1}]}
+{"t": 51, "day": 1, "phase": "market", "type": "market.clear", "good": "food_high", "price": 82.99, "filled": []}
+{"t": 52, "day": 1, "phase": "market", "type": "market.prices", "round": 1, "prices": {"clothes_low_1": 6.4, "clothes_low_2": 6.18, "clothes_mid_1": 94.81, "clothes_mid_2": 95.12, "clothes_high_1": 1561.28, "clothes_high_2": 1577.06, "game_1": 30.67, "game_2": 30.66, "game_3": 30.93, "food_low": 2.12, "food_mid": 18.79, "food_high": 82.99}}
+{"t": 53, "day": 1, "phase": "market", "type": "market.order", "name": "Mara Vell", "side": "bid", "good": "clothes_mid_1", "price": 92.29, "qty": 1}
+{"t": 54, "day": 1, "phase": "market", "type": "market.order", "name": "Theo Brandt", "side": "bid", "good": "food_high", "price": 80.13, "qty": 1}
+{"t": 55, "day": 1, "phase": "market", "type": "market.order", "name": "Priya Nair", "side": "bid", "good": "clothes_mid_2", "price": 87.66, "qty": 1}
+{"t": 56, "day": 1, "phase": "market", "type": "market.order", "name": "Priya Nair", "side": "bid", "good": "food_mid", "price": 19.13, "qty": 1}
+{"t": 57, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_low_1", "side": "ask", "good": "clothes_low_1", "price": 6.22, "qty": 3}
+{"t": 58, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_low_2", "side": "ask", "good": "clothes_low_2", "price": 6.0, "qty": 3}
+{"t": 59, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_1", "side": "ask", "good": "clothes_mid_1", "price": 92.34, "qty": 3}
+{"t": 60, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_2", "side": "ask", "good": "clothes_mid_2", "price": 91.98, "qty": 3}
+{"t": 61, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_high_1", "side": "ask", "good": "clothes_high_1", "price": 1575.02, "qty": 3}
+{"t": 62, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_high_2", "side": "ask", "good": "clothes_high_2", "price": 1557.53, "qty": 3}
+{"t": 63, "day": 1, "phase": "market", "type": "market.order", "name": "seller:game_1", "side": "ask", "good": "game_1", "price": 30.09, "qty": 3}
+{"t": 64, "day": 1, "phase": "market", "type": "market.order", "name": "seller:game_2", "side": "ask", "good": "game_2", "price": 31.75, "qty": 3}
+{"t": 65, "day": 1, "phase": "market", "type": "market.order", "name": "seller:game_3", "side": "ask", "good": "game_3", "price": 29.68, "qty": 3}
+{"t": 66, "day": 1, "phase": "market", "type": "market.order", "name": "seller:food_low", "side": "ask", "good": "food_low", "price": 2.03, "qty": 3}
+{"t": 67, "day": 1, "phase": "market", "type": "market.order", "name": "seller:food_mid", "side": "ask", "good": "food_mid", "price": 18.73, "qty": 3}
+{"t": 68, "day": 1, "phase": "market", "type": "market.order", "name": "seller:food_high", "side": "ask", "good": "food_high", "price": 79.37, "qty": 3}
+{"t": 69, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_low_1", "price": 6.01, "filled": []}
+{"t": 70, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_low_2", "price": 5.85, "filled": []}
+{"t": 71, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_mid_1", "price": 91.13, "filled": [{"buyer": "Mara Vell", "seller": "seller:clothes_mid_1", "qty": 1}]}
+{"t": 72, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_mid_2", "price": 91.65, "filled": []}
+{"t": 73, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_high_1", "price": 1510.31, "filled": []}
+{"t": 74, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_high_2", "price": 1537.54, "filled": []}
+{"t": 75, "day": 1, "phase": "market", "type": "market.clear", "good": "game_1", "price": 29.74, "filled": []}
+{"t": 76, "day": 1, "phase": "market", "type": "market.clear", "good": "game_2", "price": 30.43, "filled": []}
+{"t": 77, "day": 1, "phase": "market", "type": "market.clear", "good": "game_3", "price": 30.24, "filled": []}
+{"t": 78, "day": 1, "phase": "market", "type": "market.clear", "good": "food_low", "price": 2.01, "filled": []}
+{"t": 79, "day": 1, "phase": "market", "type": "market.clear", "good": "food_mid", "price": 18.0, "filled": [{"buyer": "Priya Nair", "seller": "seller:food_mid", "qty": 1}]}
+{"t": 80, "day": 1, "phase": "market", "type": "market.clear", "good": "food_high", "price": 81.83, "filled": [{"buyer": "Theo Brandt", "seller": "seller:food_high", "qty": 1}]}
+{"t": 81, "day": 1, "phase": "market", "type": "market.prices", "round": 2, "prices": {"clothes_low_1": 6.01, "clothes_low_2": 5.85, "clothes_mid_1": 91.13, "clothes_mid_2": 91.65, "clothes_high_1": 1510.31, "clothes_high_2": 1537.54, "game_1": 29.74, "game_2": 30.43, "game_3": 30.24, "food_low": 2.01, "food_mid": 18.0, "food_high": 81.83}}
+{"t": 82, "day": 1, "phase": "market", "type": "market.order", "name": "Priya Nair", "side": "bid", "good": "clothes_mid_2", "price": 98.1, "qty": 1}
+{"t": 83, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_low_1", "side": "ask", "good": "clothes_low_1", "price": 6.11, "qty": 3}
+{"t": 84, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_low_2", "side": "ask", "good": "clothes_low_2", "price": 6.2, "qty": 3}
+{"t": 85, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_1", "side": "ask", "good": "clothes_mid_1", "price": 88.64, "qty": 3}
+{"t": 86, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_2", "side": "ask", "good": "clothes_mid_2", "price": 93.25, "qty": 3}
+{"t": 87, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_high_1", "side": "ask", "good": "clothes_high_1", "price": 1547.66, "qty": 3}
+{"t": 88, "day": 1, "phase": "market", "type": "market.order", "name": "seller:clothes_high_2", "side": "ask", "good": "clothes_high_2", "price": 1589.17, "qty": 3}
+{"t": 89, "day": 1, "phase": "market", "type": "market.order", "name": "seller:game_1", "side": "ask", "good": "game_1", "price": 31.37, "qty": 3}
+{"t": 90, "day": 1, "phase": "market", "type": "market.order", "name": "seller:game_2", "side": "ask", "good": "game_2", "price": 30.08, "qty": 3}
+{"t": 91, "day": 1, "phase": "market", "type": "market.order", "name": "seller:game_3", "side": "ask", "good": "game_3", "price": 30.33, "qty": 3}
+{"t": 92, "day": 1, "phase": "market", "type": "market.order", "name": "seller:food_low", "side": "ask", "good": "food_low", "price": 2.07, "qty": 3}
+{"t": 93, "day": 1, "phase": "market", "type": "market.order", "name": "seller:food_mid", "side": "ask", "good": "food_mid", "price": 17.67, "qty": 3}
+{"t": 94, "day": 1, "phase": "market", "type": "market.order", "name": "seller:food_high", "side": "ask", "good": "food_high", "price": 81.35, "qty": 3}
+{"t": 95, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_low_1", "price": 5.61, "filled": []}
+{"t": 96, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_low_2", "price": 5.59, "filled": []}
+{"t": 97, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_mid_1", "price": 83.53, "filled": []}
+{"t": 98, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_mid_2", "price": 87.36, "filled": [{"buyer": "Priya Nair", "seller": "seller:clothes_mid_2", "qty": 1}]}
+{"t": 99, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_high_1", "price": 1398.53, "filled": []}
+{"t": 100, "day": 1, "phase": "market", "type": "market.clear", "good": "clothes_high_2", "price": 1409.17, "filled": []}
+{"t": 101, "day": 1, "phase": "market", "type": "market.clear", "good": "game_1", "price": 28.44, "filled": []}
+{"t": 102, "day": 1, "phase": "market", "type": "market.clear", "good": "game_2", "price": 29.31, "filled": []}
+{"t": 103, "day": 1, "phase": "market", "type": "market.clear", "good": "game_3", "price": 27.88, "filled": []}
+{"t": 104, "day": 1, "phase": "market", "type": "market.clear", "good": "food_low", "price": 1.9, "filled": []}
+{"t": 105, "day": 1, "phase": "market", "type": "market.clear", "good": "food_mid", "price": 17.24, "filled": []}
+{"t": 106, "day": 1, "phase": "market", "type": "market.clear", "good": "food_high", "price": 78.21, "filled": []}
+{"t": 107, "day": 1, "phase": "market", "type": "market.prices", "round": 3, "prices": {"clothes_low_1": 5.61, "clothes_low_2": 5.59, "clothes_mid_1": 83.53, "clothes_mid_2": 87.36, "clothes_high_1": 1398.53, "clothes_high_2": 1409.17, "game_1": 28.44, "game_2": 29.31, "game_3": 27.88, "food_low": 1.9, "food_mid": 17.24, "food_high": 78.21}}
+{"t": 108, "day": 1, "phase": "app", "type": "app.profile", "name": "Mara Vell", "picture": {"item": "clothes_mid_1", "tier": "mid"}, "text": "Draws buildings by day, loses at board games by night. Looking for someone who argues about brunch spots with real conviction. Bonus points if you can read a floor plan."}
+{"t": 109, "day": 1, "phase": "app", "type": "app.profile", "name": "Dev Okonkwo", "picture": {"item": "clothes_low_1", "tier": "low"}, "text": "Analyst, 6am runner, calendar enthusiast. Work long hours and proud of it. Want someone who values a stable life and a well-planned weekend. Cheap dinners are fine, company matters more."}
+{"t": 110, "day": 1, "phase": "app", "type": "app.profile", "name": "Lina Sato", "picture": {"item": "clothes_low_1", "tier": "low"}, "text": "Copywriter. Rhythm games, overheard sentences, no small talk. I will ask what you think about at 2am. Wearing a plain tee because clothes are not the point."}
+{"t": 111, "day": 1, "phase": "app", "type": "app.profile", "name": "Theo Brandt", "picture": {"item": "clothes_low_1", "tier": "low"}, "text": "Line cook and trainee chef. I will cook for you and I will judge the restaurant. Long shifts but very present when I am home. Wearing whatever survived the wash."}
+{"t": 112, "day": 1, "phase": "app", "type": "app.profile", "name": "Priya Nair", "picture": {"item": "clothes_mid_2", "tier": "mid"}, "text": "Paralegal, studying for the bar. Precise and dry. I work a lot and I am honest about it. Want a partner who is actually around in the evenings and does not need me to be the fun one."}
+{"t": 113, "day": 1, "phase": "app", "type": "app.profile", "name": "Jonas Kell", "picture": {"item": "clothes_low_1", "tier": "low"}, "text": "Sound engineer between gigs. Old cartridges, new noodles. I have time and very little money and I am cheerful about both. Come play Orbit Drift and lose gracefully."}
+{"t": 114, "day": 1, "phase": "app", "type": "app.swipe", "name": "Mara Vell", "target": "Dev Okonkwo", "yes": true}
+{"t": 115, "day": 1, "phase": "app", "type": "app.swipe", "name": "Mara Vell", "target": "Theo Brandt", "yes": false}
+{"t": 116, "day": 1, "phase": "app", "type": "app.swipe", "name": "Mara Vell", "target": "Jonas Kell", "yes": false}
+{"t": 117, "day": 1, "phase": "app", "type": "app.swipe", "name": "Dev Okonkwo", "target": "Mara Vell", "yes": true}
+{"t": 118, "day": 1, "phase": "app", "type": "app.swipe", "name": "Dev Okonkwo", "target": "Priya Nair", "yes": true}
+{"t": 119, "day": 1, "phase": "app", "type": "app.swipe", "name": "Dev Okonkwo", "target": "Lina Sato", "yes": false}
+{"t": 120, "day": 1, "phase": "app", "type": "app.swipe", "name": "Lina Sato", "target": "Theo Brandt", "yes": true}
+{"t": 121, "day": 1, "phase": "app", "type": "app.swipe", "name": "Lina Sato", "target": "Jonas Kell", "yes": false}
+{"t": 122, "day": 1, "phase": "app", "type": "app.swipe", "name": "Lina Sato", "target": "Dev Okonkwo", "yes": false}
+{"t": 123, "day": 1, "phase": "app", "type": "app.swipe", "name": "Theo Brandt", "target": "Lina Sato", "yes": true}
+{"t": 124, "day": 1, "phase": "app", "type": "app.swipe", "name": "Theo Brandt", "target": "Priya Nair", "yes": true}
+{"t": 125, "day": 1, "phase": "app", "type": "app.swipe", "name": "Theo Brandt", "target": "Mara Vell", "yes": true}
+{"t": 126, "day": 1, "phase": "app", "type": "app.swipe", "name": "Priya Nair", "target": "Dev Okonkwo", "yes": false}
+{"t": 127, "day": 1, "phase": "app", "type": "app.swipe", "name": "Priya Nair", "target": "Theo Brandt", "yes": false}
+{"t": 128, "day": 1, "phase": "app", "type": "app.swipe", "name": "Priya Nair", "target": "Jonas Kell", "yes": false}
+{"t": 129, "day": 1, "phase": "app", "type": "app.swipe", "name": "Jonas Kell", "target": "Lina Sato", "yes": true}
+{"t": 130, "day": 1, "phase": "app", "type": "app.swipe", "name": "Jonas Kell", "target": "Priya Nair", "yes": true}
+{"t": 131, "day": 1, "phase": "app", "type": "app.swipe", "name": "Jonas Kell", "target": "Mara Vell", "yes": true}
+{"t": 132, "day": 1, "phase": "app", "type": "app.match", "a": "Mara Vell", "b": "Dev Okonkwo"}
+{"t": 133, "day": 1, "phase": "app", "type": "app.match", "a": "Lina Sato", "b": "Theo Brandt"}
+{"t": 134, "day": 1, "phase": "visit", "type": "visit.invite", "name": "Priya Nair", "target": "Jonas Kell", "accepted": true}
+{"t": 135, "day": 1, "phase": "visit", "type": "gossip.post", "text": "Jonas Kell was seen leaving Priya Nair's place late.", "about": ["Jonas Kell", "Priya Nair"]}
+{"t": 136, "day": 1, "phase": "date", "type": "date.scene", "a": "Mara Vell", "b": "Dev Okonkwo", "text": "The restaurant in Love Town, evening. Mara Vell arrives wearing a linen shirt (mid tier); Dev Okonkwo arrives wearing a plain tee (low tier). Mara Vell's stated day: work 8h, games 2h, home 4h, eat 2h. Dev Okonkwo's stated day: work 11h, games 0h, home 3h, eat 2h. They have ten turns."}
+{"t": 137, "day": 1, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Mara Vell", "text": "Dev, right? You look exactly like your calendar. I mean that as a compliment, mostly."}
+{"t": 138, "day": 1, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Dev Okonkwo", "text": "I will take it. You are Mara. Your profile said brunch is a personality and I want to know whose."}
+{"t": 139, "day": 1, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Mara Vell", "text": "Mine, obviously. Do you actually run at six or is that a thing people say on apps?"}
+{"t": 140, "day": 1, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Dev Okonkwo", "text": "Six sharp. Then eleven hours of work today, which is why I ordered the cheap noodles. I am saving."}
+{"t": 141, "day": 1, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Mara Vell", "text": "Saving for what? You cannot take a spreadsheet on holiday."}
+{"t": 142, "day": 1, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Dev Okonkwo", "text": "You can, actually, but I take your point. I want a place with a spare room. What are you saving for?"}
+{"t": 143, "day": 1, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Mara Vell", "text": "A linen shirt I already bought, apparently. I worked eight hours and spent two on a board game I lost."}
+{"t": 144, "day": 1, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Dev Okonkwo", "text": "You lost on purpose, I have decided. So I am not the only one with a plan."}
+{"t": 145, "day": 1, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Mara Vell", "text": "Careful, that sounded almost warm. Are you always this measured?"}
+{"t": 146, "day": 1, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Dev Okonkwo", "text": "Only until dessert. Ask me again after."}
+{"t": 147, "day": 1, "phase": "date", "type": "date.outcome", "name": "Mara Vell", "partner": "Dev Okonkwo", "rating": 8, "choice": "ask_again"}
+{"t": 148, "day": 1, "phase": "date", "type": "date.outcome", "name": "Dev Okonkwo", "partner": "Mara Vell", "rating": 7, "choice": "ask_again"}
+{"t": 149, "day": 1, "phase": "date", "type": "relationship.change", "a": "Mara Vell", "b": "Dev Okonkwo", "from": "single", "to": "dating"}
+{"t": 150, "day": 1, "phase": "date", "type": "date.scene", "a": "Lina Sato", "b": "Theo Brandt", "text": "The restaurant in Love Town, evening. Lina Sato arrives wearing a plain tee (low tier); Theo Brandt arrives wearing a plain tee (low tier). Lina Sato's stated day: work 5h, games 7h, home 2h, eat 2h. Theo Brandt's stated day: work 9h, games 1h, home 4h, eat 2h. They have ten turns."}
+{"t": 151, "day": 1, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Theo Brandt", "speaker": "Lina Sato", "text": "You judged the restaurant already, I can see it on your face."}
+{"t": 152, "day": 1, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Theo Brandt", "speaker": "Theo Brandt", "text": "The sauce is fine. The bread is a crime. You are Lina. You play seven hours of games a day?"}
+{"t": 153, "day": 1, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Theo Brandt", "speaker": "Lina Sato", "text": "Seven today. I wrote copy for five and then Beat Garden for the rest. It helps me think."}
+{"t": 154, "day": 1, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Theo Brandt", "speaker": "Theo Brandt", "text": "What do you think about, when you are thinking?"}
+{"t": 155, "day": 1, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Theo Brandt", "speaker": "Lina Sato", "text": "Sentences people say without noticing. Yours was 'the bread is a crime'. It is going in the list."}
+{"t": 156, "day": 1, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Theo Brandt", "speaker": "Theo Brandt", "text": "I am honoured. I mostly think about tomorrow's prep and whether I am too tired to cook for myself."}
+{"t": 157, "day": 1, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Theo Brandt", "speaker": "Lina Sato", "text": "Do you ever just stop? Sit at home and do nothing?"}
+{"t": 158, "day": 1, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Theo Brandt", "speaker": "Theo Brandt", "text": "Four hours a night, if the shift ends. I like being home. I would like someone there."}
+{"t": 159, "day": 1, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Theo Brandt", "speaker": "Lina Sato", "text": "I hear that. I am not sure I am the someone. I am mostly a person who needs a second controller."}
+{"t": 160, "day": 1, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Theo Brandt", "speaker": "Theo Brandt", "text": "That is fair. The bread is still a crime."}
+{"t": 161, "day": 1, "phase": "date", "type": "date.outcome", "name": "Lina Sato", "partner": "Theo Brandt", "rating": 5, "choice": "decline"}
+{"t": 162, "day": 1, "phase": "date", "type": "date.outcome", "name": "Theo Brandt", "partner": "Lina Sato", "rating": 7, "choice": "ask_again"}
+{"t": 163, "day": 1, "phase": "night", "type": "night.state", "name": "Mara Vell", "m": {"food": 1.0, "hugs": 0.0, "money": 1.0, "fun": 0.0}, "U": 0.35, "U_hat": 0.337, "sentence": "Last night you felt 34% content.", "cash": 186.08, "inventory": ["clothes_low_1", "clothes_mid_1"], "wearing": "clothes_mid_1", "partner": "Dev Okonkwo", "status": "dating"}
+{"t": 164, "day": 1, "phase": "night", "type": "night.state", "name": "Dev Okonkwo", "m": {"food": 1.0, "hugs": 0.0, "money": 1.0, "fun": 0.0}, "U": 0.55, "U_hat": 0.5503, "sentence": "Last night you felt 55% content.", "cash": 329.88, "inventory": ["clothes_low_1"], "wearing": "clothes_low_1", "partner": "Mara Vell", "status": "dating"}
+{"t": 165, "day": 1, "phase": "night", "type": "night.state", "name": "Lina Sato", "m": {"food": 1.0, "hugs": 0.0, "money": 0.625, "fun": 0.988}, "U": 0.7559, "U_hat": 0.6595, "sentence": "Last night you felt 66% content.", "cash": 226.95, "inventory": ["clothes_low_1", "game_3"], "wearing": "clothes_low_1", "partner": null, "status": "single"}
+{"t": 166, "day": 1, "phase": "night", "type": "night.state", "name": "Theo Brandt", "m": {"food": 1.0, "hugs": 0.0, "money": 1.0, "fun": 0.0}, "U": 0.65, "U_hat": 0.8119, "sentence": "Last night you felt 81% content.", "cash": 207.38, "inventory": ["clothes_low_1"], "wearing": "clothes_low_1", "partner": null, "status": "single"}
+{"t": 167, "day": 1, "phase": "night", "type": "night.state", "name": "Priya Nair", "m": {"food": 0.5, "hugs": 1.0, "money": 1.0, "fun": 0.0}, "U": 0.8, "U_hat": 0.9543, "sentence": "Last night you felt 95% content.", "cash": 214.64, "inventory": ["clothes_low_1", "clothes_mid_2"], "wearing": "clothes_mid_2", "partner": null, "status": "single"}
+{"t": 168, "day": 1, "phase": "night", "type": "night.state", "name": "Jonas Kell", "m": {"food": 0.5, "hugs": 1.0, "money": 0.5, "fun": 0.922}, "U": 0.7438, "U_hat": 0.6585, "sentence": "Last night you felt 66% content.", "cash": 215.21, "inventory": ["clothes_low_1", "game_1"], "wearing": "clothes_low_1", "partner": null, "status": "single"}
+{"t": 169, "day": 1, "phase": "night", "type": "run.cost", "calls": 54, "usd": 0.0243}
+{"t": 170, "day": 2, "phase": "morning", "type": "morning.allocation", "name": "Mara Vell", "hours": {"work": 6, "games": 1, "home": 7, "eat": 2}, "therapy": false, "meditation": false, "invite": null, "breakup": false, "raw": "{\"work\": 6, \"games\": 1, \"home\": 7, \"eat\": 2, \"shop\": [\"food_mid\", \"food_mid\"], \"therapy\": false, \"meditation\": false, \"invite\": null, \"breakup\": false}"}
+{"t": 171, "day": 2, "phase": "morning", "type": "morning.allocation", "name": "Dev Okonkwo", "hours": {"work": 9, "games": 0, "home": 5, "eat": 2}, "therapy": false, "meditation": false, "invite": null, "breakup": false, "raw": "{\"work\": 9, \"games\": 0, \"home\": 5, \"eat\": 2, \"shop\": [\"clothes_mid_1\", \"food_mid\", \"food_low\"], \"therapy\": false, \"meditation\": false, \"invite\": null, \"breakup\": false}"}
+{"t": 172, "day": 2, "phase": "morning", "type": "morning.allocation", "name": "Lina Sato", "hours": {"work": 6, "games": 5, "home": 3, "eat": 2}, "therapy": false, "meditation": true, "invite": null, "breakup": false, "raw": "{\"work\": 6, \"games\": 5, \"home\": 3, \"eat\": 2, \"shop\": [\"food_low\", \"food_low\"], \"therapy\": false, \"meditation\": true, \"invite\": null, \"breakup\": false}"}
+{"t": 173, "day": 2, "phase": "morning", "type": "morning.allocation", "name": "Theo Brandt", "hours": {"work": 8, "games": 0, "home": 6, "eat": 2}, "therapy": false, "meditation": false, "invite": null, "breakup": false, "raw": "{\"work\": 8, \"games\": 0, \"home\": 6, \"eat\": 2, \"shop\": [\"clothes_mid_1\", \"food_high\", \"food_high\"], \"therapy\": false, \"meditation\": false, \"invite\": null, \"breakup\": false}"}
+{"t": 174, "day": 2, "phase": "morning", "type": "morning.allocation", "name": "Priya Nair", "hours": {"work": 9, "games": 0, "home": 5, "eat": 2}, "therapy": false, "meditation": false, "invite": null, "breakup": false, "raw": "{\"work\": 9, \"games\": 0, \"home\": 5, \"eat\": 2, \"shop\": [\"food_mid\", \"food_mid\"], \"therapy\": false, \"meditation\": false, \"invite\": null, \"breakup\": false}"}
+{"t": 175, "day": 2, "phase": "morning", "type": "morning.allocation", "name": "Jonas Kell", "hours": {"work": 6, "games": 4, "home": 4, "eat": 2}, "therapy": true, "meditation": false, "invite": null, "breakup": false, "raw": "{\"work\": 6, \"games\": 4, \"home\": 4, \"eat\": 2, \"shop\": [\"food_low\", \"food_low\"], \"therapy\": true, \"meditation\": false, \"invite\": null, \"breakup\": false}"}
+{"t": 176, "day": 2, "phase": "market", "type": "market.order", "name": "Mara Vell", "side": "bid", "good": "food_mid", "price": 19.47, "qty": 1}
+{"t": 177, "day": 2, "phase": "market", "type": "market.order", "name": "Mara Vell", "side": "bid", "good": "food_mid", "price": 19.09, "qty": 1}
+{"t": 178, "day": 2, "phase": "market", "type": "market.order", "name": "Dev Okonkwo", "side": "bid", "good": "clothes_mid_1", "price": 96.97, "qty": 1}
+{"t": 179, "day": 2, "phase": "market", "type": "market.order", "name": "Dev Okonkwo", "side": "bid", "good": "food_mid", "price": 19.15, "qty": 1}
+{"t": 180, "day": 2, "phase": "market", "type": "market.order", "name": "Dev Okonkwo", "side": "bid", "good": "food_low", "price": 1.98, "qty": 1}
+{"t": 181, "day": 2, "phase": "market", "type": "market.order", "name": "Lina Sato", "side": "bid", "good": "food_low", "price": 1.98, "qty": 1}
+{"t": 182, "day": 2, "phase": "market", "type": "market.order", "name": "Lina Sato", "side": "bid", "good": "food_low", "price": 1.88, "qty": 1}
+{"t": 183, "day": 2, "phase": "market", "type": "market.order", "name": "Theo Brandt", "side": "bid", "good": "clothes_mid_1", "price": 93.08, "qty": 1}
+{"t": 184, "day": 2, "phase": "market", "type": "market.order", "name": "Theo Brandt", "side": "bid", "good": "food_high", "price": 74.5, "qty": 1}
+{"t": 185, "day": 2, "phase": "market", "type": "market.order", "name": "Theo Brandt", "side": "bid", "good": "food_high", "price": 74.57, "qty": 1}
+{"t": 186, "day": 2, "phase": "market", "type": "market.order", "name": "Priya Nair", "side": "bid", "good": "food_mid", "price": 17.24, "qty": 1}
+{"t": 187, "day": 2, "phase": "market", "type": "market.order", "name": "Priya Nair", "side": "bid", "good": "food_mid", "price": 17.09, "qty": 1}
+{"t": 188, "day": 2, "phase": "market", "type": "market.order", "name": "Jonas Kell", "side": "bid", "good": "food_low", "price": 1.96, "qty": 1}
+{"t": 189, "day": 2, "phase": "market", "type": "market.order", "name": "Jonas Kell", "side": "bid", "good": "food_low", "price": 1.86, "qty": 1}
+{"t": 190, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_low_1", "side": "ask", "good": "clothes_low_1", "price": 5.88, "qty": 3}
+{"t": 191, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_low_2", "side": "ask", "good": "clothes_low_2", "price": 5.95, "qty": 3}
+{"t": 192, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_1", "side": "ask", "good": "clothes_mid_1", "price": 88.93, "qty": 3}
+{"t": 193, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_2", "side": "ask", "good": "clothes_mid_2", "price": 90.82, "qty": 3}
+{"t": 194, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_high_1", "side": "ask", "good": "clothes_high_1", "price": 1473.06, "qty": 3}
+{"t": 195, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_high_2", "side": "ask", "good": "clothes_high_2", "price": 1574.92, "qty": 3}
+{"t": 196, "day": 2, "phase": "market", "type": "market.order", "name": "seller:game_1", "side": "ask", "good": "game_1", "price": 30.87, "qty": 3}
+{"t": 197, "day": 2, "phase": "market", "type": "market.order", "name": "seller:game_2", "side": "ask", "good": "game_2", "price": 29.76, "qty": 3}
+{"t": 198, "day": 2, "phase": "market", "type": "market.order", "name": "seller:game_3", "side": "ask", "good": "game_3", "price": 30.01, "qty": 3}
+{"t": 199, "day": 2, "phase": "market", "type": "market.order", "name": "seller:food_low", "side": "ask", "good": "food_low", "price": 2.02, "qty": 3}
+{"t": 200, "day": 2, "phase": "market", "type": "market.order", "name": "seller:food_mid", "side": "ask", "good": "food_mid", "price": 18.16, "qty": 3}
+{"t": 201, "day": 2, "phase": "market", "type": "market.order", "name": "seller:food_high", "side": "ask", "good": "food_high", "price": 79.19, "qty": 3}
+{"t": 202, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_low_1", "price": 6.0, "filled": []}
+{"t": 203, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_low_2", "price": 6.05, "filled": []}
+{"t": 204, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_mid_1", "price": 87.92, "filled": [{"buyer": "Dev Okonkwo", "seller": "seller:clothes_mid_1", "qty": 1}, {"buyer": "Theo Brandt", "seller": "seller:clothes_mid_1", "qty": 1}]}
+{"t": 205, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_mid_2", "price": 88.02, "filled": []}
+{"t": 206, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_high_1", "price": 1431.16, "filled": []}
+{"t": 207, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_high_2", "price": 1432.63, "filled": []}
+{"t": 208, "day": 2, "phase": "market", "type": "market.clear", "good": "game_1", "price": 29.09, "filled": []}
+{"t": 209, "day": 2, "phase": "market", "type": "market.clear", "good": "game_2", "price": 28.95, "filled": []}
+{"t": 210, "day": 2, "phase": "market", "type": "market.clear", "good": "game_3", "price": 29.96, "filled": []}
+{"t": 211, "day": 2, "phase": "market", "type": "market.clear", "good": "food_low", "price": 1.92, "filled": [{"buyer": "Dev Okonkwo", "seller": "seller:food_low", "qty": 1}, {"buyer": "Lina Sato", "seller": "seller:food_low", "qty": 1}, {"buyer": "Jonas Kell", "seller": "seller:food_low", "qty": 1}]}
+{"t": 212, "day": 2, "phase": "market", "type": "market.clear", "good": "food_mid", "price": 17.11, "filled": [{"buyer": "Mara Vell", "seller": "seller:food_mid", "qty": 1}, {"buyer": "Mara Vell", "seller": "seller:food_mid", "qty": 1}, {"buyer": "Dev Okonkwo", "seller": "seller:food_mid", "qty": 1}]}
+{"t": 213, "day": 2, "phase": "market", "type": "market.clear", "good": "food_high", "price": 80.48, "filled": []}
+{"t": 214, "day": 2, "phase": "market", "type": "market.prices", "round": 1, "prices": {"clothes_low_1": 6.0, "clothes_low_2": 6.05, "clothes_mid_1": 87.92, "clothes_mid_2": 88.02, "clothes_high_1": 1431.16, "clothes_high_2": 1432.63, "game_1": 29.09, "game_2": 28.95, "game_3": 29.96, "food_low": 1.92, "food_mid": 17.11, "food_high": 80.48}}
+{"t": 215, "day": 2, "phase": "market", "type": "market.order", "name": "Theo Brandt", "side": "bid", "good": "food_high", "price": 81.21, "qty": 1}
+{"t": 216, "day": 2, "phase": "market", "type": "market.order", "name": "Theo Brandt", "side": "bid", "good": "food_high", "price": 75.71, "qty": 1}
+{"t": 217, "day": 2, "phase": "market", "type": "market.order", "name": "Priya Nair", "side": "bid", "good": "food_mid", "price": 18.32, "qty": 1}
+{"t": 218, "day": 2, "phase": "market", "type": "market.order", "name": "Priya Nair", "side": "bid", "good": "food_mid", "price": 16.65, "qty": 1}
+{"t": 219, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_low_1", "side": "ask", "good": "clothes_low_1", "price": 6.13, "qty": 3}
+{"t": 220, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_low_2", "side": "ask", "good": "clothes_low_2", "price": 6.35, "qty": 3}
+{"t": 221, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_1", "side": "ask", "good": "clothes_mid_1", "price": 94.42, "qty": 3}
+{"t": 222, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_2", "side": "ask", "good": "clothes_mid_2", "price": 93.21, "qty": 3}
+{"t": 223, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_high_1", "side": "ask", "good": "clothes_high_1", "price": 1501.33, "qty": 3}
+{"t": 224, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_high_2", "side": "ask", "good": "clothes_high_2", "price": 1514.0, "qty": 3}
+{"t": 225, "day": 2, "phase": "market", "type": "market.order", "name": "seller:game_1", "side": "ask", "good": "game_1", "price": 29.8, "qty": 3}
+{"t": 226, "day": 2, "phase": "market", "type": "market.order", "name": "seller:game_2", "side": "ask", "good": "game_2", "price": 31.25, "qty": 3}
+{"t": 227, "day": 2, "phase": "market", "type": "market.order", "name": "seller:game_3", "side": "ask", "good": "game_3", "price": 30.68, "qty": 3}
+{"t": 228, "day": 2, "phase": "market", "type": "market.order", "name": "seller:food_low", "side": "ask", "good": "food_low", "price": 2.08, "qty": 3}
+{"t": 229, "day": 2, "phase": "market", "type": "market.order", "name": "seller:food_mid", "side": "ask", "good": "food_mid", "price": 18.11, "qty": 3}
+{"t": 230, "day": 2, "phase": "market", "type": "market.order", "name": "seller:food_high", "side": "ask", "good": "food_high", "price": 79.83, "qty": 3}
+{"t": 231, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_low_1", "price": 5.77, "filled": []}
+{"t": 232, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_low_2", "price": 5.83, "filled": []}
+{"t": 233, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_mid_1", "price": 86.77, "filled": []}
+{"t": 234, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_mid_2", "price": 86.51, "filled": []}
+{"t": 235, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_high_1", "price": 1443.01, "filled": []}
+{"t": 236, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_high_2", "price": 1435.94, "filled": []}
+{"t": 237, "day": 2, "phase": "market", "type": "market.clear", "good": "game_1", "price": 27.8, "filled": []}
+{"t": 238, "day": 2, "phase": "market", "type": "market.clear", "good": "game_2", "price": 28.32, "filled": []}
+{"t": 239, "day": 2, "phase": "market", "type": "market.clear", "good": "game_3", "price": 28.03, "filled": []}
+{"t": 240, "day": 2, "phase": "market", "type": "market.clear", "good": "food_low", "price": 1.83, "filled": []}
+{"t": 241, "day": 2, "phase": "market", "type": "market.clear", "good": "food_mid", "price": 16.46, "filled": [{"buyer": "Priya Nair", "seller": "seller:food_mid", "qty": 1}]}
+{"t": 242, "day": 2, "phase": "market", "type": "market.clear", "good": "food_high", "price": 74.37, "filled": [{"buyer": "Theo Brandt", "seller": "seller:food_high", "qty": 1}]}
+{"t": 243, "day": 2, "phase": "market", "type": "market.prices", "round": 2, "prices": {"clothes_low_1": 5.77, "clothes_low_2": 5.83, "clothes_mid_1": 86.77, "clothes_mid_2": 86.51, "clothes_high_1": 1443.01, "clothes_high_2": 1435.94, "game_1": 27.8, "game_2": 28.32, "game_3": 28.03, "food_low": 1.83, "food_mid": 16.46, "food_high": 74.37}}
+{"t": 244, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_low_1", "side": "ask", "good": "clothes_low_1", "price": 6.0, "qty": 3}
+{"t": 245, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_low_2", "side": "ask", "good": "clothes_low_2", "price": 6.21, "qty": 3}
+{"t": 246, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_1", "side": "ask", "good": "clothes_mid_1", "price": 95.09, "qty": 3}
+{"t": 247, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_2", "side": "ask", "good": "clothes_mid_2", "price": 91.42, "qty": 3}
+{"t": 248, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_high_1", "side": "ask", "good": "clothes_high_1", "price": 1582.44, "qty": 3}
+{"t": 249, "day": 2, "phase": "market", "type": "market.order", "name": "seller:clothes_high_2", "side": "ask", "good": "clothes_high_2", "price": 1588.56, "qty": 3}
+{"t": 250, "day": 2, "phase": "market", "type": "market.order", "name": "seller:game_1", "side": "ask", "good": "game_1", "price": 31.69, "qty": 3}
+{"t": 251, "day": 2, "phase": "market", "type": "market.order", "name": "seller:game_2", "side": "ask", "good": "game_2", "price": 30.28, "qty": 3}
+{"t": 252, "day": 2, "phase": "market", "type": "market.order", "name": "seller:game_3", "side": "ask", "good": "game_3", "price": 29.93, "qty": 3}
+{"t": 253, "day": 2, "phase": "market", "type": "market.order", "name": "seller:food_low", "side": "ask", "good": "food_low", "price": 2.0, "qty": 3}
+{"t": 254, "day": 2, "phase": "market", "type": "market.order", "name": "seller:food_mid", "side": "ask", "good": "food_mid", "price": 17.92, "qty": 3}
+{"t": 255, "day": 2, "phase": "market", "type": "market.order", "name": "seller:food_high", "side": "ask", "good": "food_high", "price": 79.71, "qty": 3}
+{"t": 256, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_low_1", "price": 5.75, "filled": []}
+{"t": 257, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_low_2", "price": 5.84, "filled": []}
+{"t": 258, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_mid_1", "price": 87.34, "filled": []}
+{"t": 259, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_mid_2", "price": 85.39, "filled": []}
+{"t": 260, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_high_1", "price": 1438.86, "filled": []}
+{"t": 261, "day": 2, "phase": "market", "type": "market.clear", "good": "clothes_high_2", "price": 1452.06, "filled": []}
+{"t": 262, "day": 2, "phase": "market", "type": "market.clear", "good": "game_1", "price": 27.75, "filled": []}
+{"t": 263, "day": 2, "phase": "market", "type": "market.clear", "good": "game_2", "price": 28.79, "filled": []}
+{"t": 264, "day": 2, "phase": "market", "type": "market.clear", "good": "game_3", "price": 29.24, "filled": []}
+{"t": 265, "day": 2, "phase": "market", "type": "market.clear", "good": "food_low", "price": 1.93, "filled": []}
+{"t": 266, "day": 2, "phase": "market", "type": "market.clear", "good": "food_mid", "price": 17.37, "filled": []}
+{"t": 267, "day": 2, "phase": "market", "type": "market.clear", "good": "food_high", "price": 75.9, "filled": []}
+{"t": 268, "day": 2, "phase": "market", "type": "market.prices", "round": 3, "prices": {"clothes_low_1": 5.75, "clothes_low_2": 5.84, "clothes_mid_1": 87.34, "clothes_mid_2": 85.39, "clothes_high_1": 1438.86, "clothes_high_2": 1452.06, "game_1": 27.75, "game_2": 28.79, "game_3": 29.24, "food_low": 1.93, "food_mid": 17.37, "food_high": 75.9}}
+{"t": 269, "day": 2, "phase": "app", "type": "app.profile", "name": "Mara Vell", "picture": {"item": "clothes_mid_1", "tier": "mid"}, "text": "Still drawing, still losing at board games. Last night's date went well and I am not going to pretend otherwise. Free after six most days."}
+{"t": 270, "day": 2, "phase": "app", "type": "app.profile", "name": "Dev Okonkwo", "picture": {"item": "clothes_mid_1", "tier": "mid"}, "text": "Runner, analyst, and apparently now a person who buys shirts. Cutting back on work hours this week. Would like a slow dinner with someone kind."}
+{"t": 271, "day": 2, "phase": "app", "type": "app.profile", "name": "Lina Sato", "picture": {"item": "clothes_low_1", "tier": "low"}, "text": "Meditating now, apparently. Still plays games seven hours a day and would rather talk about that than about work. Plain tee. Do not expect a wardrobe."}
+{"t": 272, "day": 2, "phase": "app", "type": "app.profile", "name": "Theo Brandt", "picture": {"item": "clothes_mid_1", "tier": "mid"}, "text": "Chef. Bought a shirt for this, which is new for me. Looking for the kind of evening where nobody checks their phone. Big appetite, big heart, small flat."}
+{"t": 273, "day": 2, "phase": "app", "type": "app.profile", "name": "Priya Nair", "picture": {"item": "clothes_mid_2", "tier": "mid"}, "text": "Bar exam in progress, wool coat acquired. Had a good night in and a better night out. Looking for someone who shows up on time and stays."}
+{"t": 274, "day": 2, "phase": "app", "type": "app.profile", "name": "Jonas Kell", "picture": {"item": "clothes_low_1", "tier": "low"}, "text": "Booked a therapy session, so this profile is honest now: I overspend on games and underwork. Still generous with time. Canvas jacket incoming when I can afford it."}
+{"t": 275, "day": 2, "phase": "app", "type": "app.swipe", "name": "Mara Vell", "target": "Dev Okonkwo", "yes": true}
+{"t": 276, "day": 2, "phase": "app", "type": "app.swipe", "name": "Mara Vell", "target": "Jonas Kell", "yes": false}
+{"t": 277, "day": 2, "phase": "app", "type": "app.swipe", "name": "Dev Okonkwo", "target": "Mara Vell", "yes": true}
+{"t": 278, "day": 2, "phase": "app", "type": "app.swipe", "name": "Dev Okonkwo", "target": "Lina Sato", "yes": false}
+{"t": 279, "day": 2, "phase": "app", "type": "app.swipe", "name": "Lina Sato", "target": "Jonas Kell", "yes": false}
+{"t": 280, "day": 2, "phase": "app", "type": "app.swipe", "name": "Lina Sato", "target": "Priya Nair", "yes": false}
+{"t": 281, "day": 2, "phase": "app", "type": "app.swipe", "name": "Lina Sato", "target": "Theo Brandt", "yes": false}
+{"t": 282, "day": 2, "phase": "app", "type": "app.swipe", "name": "Theo Brandt", "target": "Priya Nair", "yes": true}
+{"t": 283, "day": 2, "phase": "app", "type": "app.swipe", "name": "Theo Brandt", "target": "Lina Sato", "yes": true}
+{"t": 284, "day": 2, "phase": "app", "type": "app.swipe", "name": "Priya Nair", "target": "Theo Brandt", "yes": true}
+{"t": 285, "day": 2, "phase": "app", "type": "app.swipe", "name": "Priya Nair", "target": "Jonas Kell", "yes": false}
+{"t": 286, "day": 2, "phase": "app", "type": "app.swipe", "name": "Jonas Kell", "target": "Lina Sato", "yes": true}
+{"t": 287, "day": 2, "phase": "app", "type": "app.swipe", "name": "Jonas Kell", "target": "Priya Nair", "yes": true}
+{"t": 288, "day": 2, "phase": "app", "type": "app.match", "a": "Mara Vell", "b": "Dev Okonkwo"}
+{"t": 289, "day": 2, "phase": "app", "type": "app.match", "a": "Theo Brandt", "b": "Priya Nair"}
+{"t": 290, "day": 2, "phase": "date", "type": "date.scene", "a": "Mara Vell", "b": "Dev Okonkwo", "text": "The restaurant in Love Town, evening. Mara Vell arrives wearing a linen shirt (mid tier); Dev Okonkwo arrives wearing a linen shirt (mid tier). Mara Vell's stated day: work 6h, games 1h, home 7h, eat 2h. Dev Okonkwo's stated day: work 9h, games 0h, home 5h, eat 2h. They have ten turns."}
+{"t": 291, "day": 2, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Mara Vell", "text": "Same table. Is that romantic or a scheduling artefact?"}
+{"t": 292, "day": 2, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Dev Okonkwo", "text": "Both. I bought a shirt. I want that noted."}
+{"t": 293, "day": 2, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Mara Vell", "text": "Noted and admired. You worked less today. I saw it on your profile before I saw you."}
+{"t": 294, "day": 2, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Dev Okonkwo", "text": "Nine hours instead of eleven. I felt strange about it all morning and then fine."}
+{"t": 295, "day": 2, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Mara Vell", "text": "I felt sixty-something percent content last night, which is the most I have felt since I moved here."}
+{"t": 296, "day": 2, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Dev Okonkwo", "text": "I was told fifty-one. I think I need more of whatever yesterday was."}
+{"t": 297, "day": 2, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Mara Vell", "text": "Then here is a thought. My place has two rooms and one of them is full of drawings I never look at."}
+{"t": 298, "day": 2, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Dev Okonkwo", "text": "Are you asking me to move into the drawing room?"}
+{"t": 299, "day": 2, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Mara Vell", "text": "I am asking if you want to try. The board games come with it."}
+{"t": 300, "day": 2, "phase": "date", "type": "date.turn", "a": "Mara Vell", "b": "Dev Okonkwo", "speaker": "Dev Okonkwo", "text": "I want to try. I will bring the calendar and you can lose to it."}
+{"t": 301, "day": 2, "phase": "date", "type": "date.outcome", "name": "Mara Vell", "partner": "Dev Okonkwo", "rating": 9, "choice": "propose_move_in"}
+{"t": 302, "day": 2, "phase": "date", "type": "date.outcome", "name": "Dev Okonkwo", "partner": "Mara Vell", "rating": 9, "choice": "propose_move_in"}
+{"t": 303, "day": 2, "phase": "date", "type": "relationship.change", "a": "Mara Vell", "b": "Dev Okonkwo", "from": "dating", "to": "cohabiting"}
+{"t": 304, "day": 2, "phase": "date", "type": "date.scene", "a": "Theo Brandt", "b": "Priya Nair", "text": "The restaurant in Love Town, evening. Theo Brandt arrives wearing a linen shirt (mid tier); Priya Nair arrives wearing a wool coat (mid tier). Theo Brandt's stated day: work 8h, games 0h, home 6h, eat 2h. Priya Nair's stated day: work 9h, games 0h, home 5h, eat 2h. They have ten turns."}
+{"t": 305, "day": 2, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Theo Brandt", "text": "You are the one who does not want to be the fun one. Good. I am tired and I cook. That is the whole offer."}
+{"t": 306, "day": 2, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Priya Nair", "text": "The offer is acceptable. I saw you swiped on three people yesterday. The board mentioned you were at the noodle place."}
+{"t": 307, "day": 2, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Theo Brandt", "text": "The board also says Jonas left your place late. So we both read it."}
+{"t": 308, "day": 2, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Priya Nair", "text": "We both read it. He came over, we ate, he fixed my speaker, he left. That was the whole visit."}
+{"t": 309, "day": 2, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Theo Brandt", "text": "I believe you. I am not sure why, but I do. What is the bar exam like?"}
+{"t": 310, "day": 2, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Priya Nair", "text": "Like cooking a tasting menu for a critic who never shows up. Every night. What do you do at home for six hours?"}
+{"t": 311, "day": 2, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Theo Brandt", "text": "Cook, sit, listen to the neighbours. I would like to listen to someone in the room instead."}
+{"t": 312, "day": 2, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Priya Nair", "text": "I work a lot. I am honest about that. But I am home by seven and I do not go out after."}
+{"t": 313, "day": 2, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Theo Brandt", "text": "Seven works. Shifts end at six. That is an hour to argue about dinner."}
+{"t": 314, "day": 2, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Priya Nair", "text": "I do not argue about dinner. I decide it. You are welcome to cook it."}
+{"t": 315, "day": 2, "phase": "date", "type": "date.outcome", "name": "Theo Brandt", "partner": "Priya Nair", "rating": 8, "choice": "ask_again"}
+{"t": 316, "day": 2, "phase": "date", "type": "date.outcome", "name": "Priya Nair", "partner": "Theo Brandt", "rating": 8, "choice": "ask_again"}
+{"t": 317, "day": 2, "phase": "date", "type": "relationship.change", "a": "Theo Brandt", "b": "Priya Nair", "from": "single", "to": "dating"}
+{"t": 318, "day": 2, "phase": "night", "type": "night.state", "name": "Mara Vell", "m": {"food": 1.0, "hugs": 1.0, "money": 0.75, "fun": 0.0}, "U": 0.7625, "U_hat": 0.9012, "sentence": "Last night you felt 90% content.", "cash": 223.86, "inventory": ["clothes_low_1", "clothes_mid_1"], "wearing": "clothes_mid_1", "partner": "Dev Okonkwo", "status": "cohabiting"}
+{"t": 319, "day": 2, "phase": "night", "type": "night.state", "name": "Dev Okonkwo", "m": {"food": 1.0, "hugs": 1.0, "money": 1.0, "fun": 0.0}, "U": 0.85, "U_hat": 0.7294, "sentence": "Last night you felt 73% content.", "cash": 330.93, "inventory": ["clothes_low_1", "clothes_mid_1"], "wearing": "clothes_mid_1", "partner": "Mara Vell", "status": "cohabiting"}
+{"t": 320, "day": 2, "phase": "night", "type": "night.state", "name": "Lina Sato", "m": {"food": 0.5, "hugs": 0.0, "money": 0.75, "fun": 0.176}, "U": 0.2468, "U_hat": 0.08, "sentence": "Last night you felt 8% content.", "cash": 297.03, "inventory": ["clothes_low_1", "game_3"], "wearing": "clothes_low_1", "partner": null, "status": "single"}
+{"t": 321, "day": 2, "phase": "night", "type": "night.state", "name": "Theo Brandt", "m": {"food": 1.0, "hugs": 0.0, "money": 1.0, "fun": 0.0}, "U": 0.65, "U_hat": 0.9208, "sentence": "Last night you felt 92% content.", "cash": 141.09, "inventory": ["clothes_low_1", "clothes_mid_1"], "wearing": "clothes_mid_1", "partner": "Priya Nair", "status": "dating"}
+{"t": 322, "day": 2, "phase": "night", "type": "night.state", "name": "Priya Nair", "m": {"food": 1.0, "hugs": 0.0, "money": 1.0, "fun": 0.0}, "U": 0.5, "U_hat": 0.5717, "sentence": "Last night you felt 57% content.", "cash": 306.18, "inventory": ["clothes_low_1", "clothes_mid_2"], "wearing": "clothes_mid_2", "partner": "Theo Brandt", "status": "dating"}
+{"t": 323, "day": 2, "phase": "night", "type": "night.state", "name": "Jonas Kell", "m": {"food": 0.5, "hugs": 0.0, "money": 0.75, "fun": 0.193}, "U": 0.3647, "U_hat": 0.3739, "sentence": "Last night you felt 37% content.", "cash": 225.29, "inventory": ["clothes_low_1", "game_1"], "wearing": "clothes_low_1", "partner": null, "status": "single"}
+{"t": 324, "day": 2, "phase": "night", "type": "run.cost", "calls": 103, "usd": 0.0706}
+{"t": 325, "day": 3, "phase": "morning", "type": "morning.allocation", "name": "Mara Vell", "hours": {"work": 9, "games": 3, "home": 2, "eat": 2}, "therapy": false, "meditation": false, "invite": null, "breakup": true, "raw": "{\"work\": 9, \"games\": 3, \"home\": 2, \"eat\": 2, \"shop\": [\"clothes_high_2\", \"food_mid\", \"food_mid\"], \"therapy\": false, \"meditation\": false, \"invite\": null, \"breakup\": true}"}
+{"t": 326, "day": 3, "phase": "morning", "type": "morning.allocation", "name": "Dev Okonkwo", "hours": {"work": 10, "games": 0, "home": 4, "eat": 2}, "therapy": false, "meditation": false, "invite": "Lina Sato", "breakup": false, "raw": "{\"work\": 10, \"games\": 0, \"home\": 4, \"eat\": 2, \"shop\": [\"food_low\", \"food_low\"], \"therapy\": false, \"meditation\": false, \"invite\": \"Lina Sato\", \"breakup\": false}"}
+{"t": 327, "day": 3, "phase": "morning", "type": "morning.allocation", "name": "Lina Sato", "hours": {"work": 7, "games": 6, "home": 1, "eat": 2}, "therapy": false, "meditation": true, "invite": null, "breakup": false, "raw": "{\"work\": 7, \"games\": 6, \"home\": 1, \"eat\": 2, \"shop\": [\"game_2\", \"food_low\", \"food_low\"], \"therapy\": false, \"meditation\": true, \"invite\": null, \"breakup\": false}"}
+{"t": 328, "day": 3, "phase": "morning", "type": "morning.allocation", "name": "Theo Brandt", "hours": {"work": 7, "games": 0, "home": 7, "eat": 2}, "therapy": false, "meditation": false, "invite": null, "breakup": false, "raw": "{\"work\": 7, \"games\": 0, \"home\": 7, \"eat\": 2, \"shop\": [\"food_high\", \"food_mid\"], \"therapy\": false, \"meditation\": false, \"invite\": null, \"breakup\": false}"}
+{"t": 329, "day": 3, "phase": "morning", "type": "morning.allocation", "name": "Priya Nair", "hours": {"work": 8, "games": 0, "home": 6, "eat": 2}, "therapy": true, "meditation": false, "invite": null, "breakup": false, "raw": "{\"work\": 8, \"games\": 0, \"home\": 6, \"eat\": 2, \"shop\": [\"clothes_mid_2\", \"food_mid\", \"food_mid\"], \"therapy\": true, \"meditation\": false, \"invite\": null, \"breakup\": false}"}
+{"t": 330, "day": 3, "phase": "morning", "type": "morning.allocation", "name": "Jonas Kell", "hours": {"work": 8, "games": 3, "home": 3, "eat": 2}, "therapy": false, "meditation": false, "invite": null, "breakup": false, "raw": "{\"work\": 8, \"games\": 3, \"home\": 3, \"eat\": 2, \"shop\": [\"clothes_low_2\", \"food_low\", \"food_low\"], \"therapy\": false, \"meditation\": false, \"invite\": null, \"breakup\": false}"}
+{"t": 331, "day": 3, "phase": "morning", "type": "relationship.change", "a": "Mara Vell", "b": "Dev Okonkwo", "from": "cohabiting", "to": "single"}
+{"t": 332, "day": 3, "phase": "market", "type": "market.order", "name": "Mara Vell", "side": "bid", "good": "clothes_high_2", "price": 1522.18, "qty": 1}
+{"t": 333, "day": 3, "phase": "market", "type": "market.order", "name": "Mara Vell", "side": "bid", "good": "food_mid", "price": 19.58, "qty": 1}
+{"t": 334, "day": 3, "phase": "market", "type": "market.order", "name": "Mara Vell", "side": "bid", "good": "food_mid", "price": 17.97, "qty": 1}
+{"t": 335, "day": 3, "phase": "market", "type": "market.order", "name": "Dev Okonkwo", "side": "bid", "good": "food_low", "price": 2.15, "qty": 1}
+{"t": 336, "day": 3, "phase": "market", "type": "market.order", "name": "Dev Okonkwo", "side": "bid", "good": "food_low", "price": 2.14, "qty": 1}
+{"t": 337, "day": 3, "phase": "market", "type": "market.order", "name": "Lina Sato", "side": "bid", "good": "game_2", "price": 28.74, "qty": 1}
+{"t": 338, "day": 3, "phase": "market", "type": "market.order", "name": "Lina Sato", "side": "bid", "good": "food_low", "price": 1.93, "qty": 1}
+{"t": 339, "day": 3, "phase": "market", "type": "market.order", "name": "Lina Sato", "side": "bid", "good": "food_low", "price": 1.95, "qty": 1}
+{"t": 340, "day": 3, "phase": "market", "type": "market.order", "name": "Theo Brandt", "side": "bid", "good": "food_high", "price": 77.06, "qty": 1}
+{"t": 341, "day": 3, "phase": "market", "type": "market.order", "name": "Theo Brandt", "side": "bid", "good": "food_mid", "price": 18.46, "qty": 1}
+{"t": 342, "day": 3, "phase": "market", "type": "market.order", "name": "Priya Nair", "side": "bid", "good": "clothes_mid_2", "price": 87.0, "qty": 1}
+{"t": 343, "day": 3, "phase": "market", "type": "market.order", "name": "Priya Nair", "side": "bid", "good": "food_mid", "price": 17.92, "qty": 1}
+{"t": 344, "day": 3, "phase": "market", "type": "market.order", "name": "Priya Nair", "side": "bid", "good": "food_mid", "price": 16.98, "qty": 1}
+{"t": 345, "day": 3, "phase": "market", "type": "market.order", "name": "Jonas Kell", "side": "bid", "good": "clothes_low_2", "price": 6.5, "qty": 1}
+{"t": 346, "day": 3, "phase": "market", "type": "market.order", "name": "Jonas Kell", "side": "bid", "good": "food_low", "price": 1.97, "qty": 1}
+{"t": 347, "day": 3, "phase": "market", "type": "market.order", "name": "Jonas Kell", "side": "bid", "good": "food_low", "price": 2.0, "qty": 1}
+{"t": 348, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_low_1", "side": "ask", "good": "clothes_low_1", "price": 6.16, "qty": 3}
+{"t": 349, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_low_2", "side": "ask", "good": "clothes_low_2", "price": 6.31, "qty": 3}
+{"t": 350, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_1", "side": "ask", "good": "clothes_mid_1", "price": 91.23, "qty": 3}
+{"t": 351, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_2", "side": "ask", "good": "clothes_mid_2", "price": 94.81, "qty": 3}
+{"t": 352, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_high_1", "side": "ask", "good": "clothes_high_1", "price": 1530.2, "qty": 3}
+{"t": 353, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_high_2", "side": "ask", "good": "clothes_high_2", "price": 1533.82, "qty": 3}
+{"t": 354, "day": 3, "phase": "market", "type": "market.order", "name": "seller:game_1", "side": "ask", "good": "game_1", "price": 30.66, "qty": 3}
+{"t": 355, "day": 3, "phase": "market", "type": "market.order", "name": "seller:game_2", "side": "ask", "good": "game_2", "price": 29.44, "qty": 3}
+{"t": 356, "day": 3, "phase": "market", "type": "market.order", "name": "seller:game_3", "side": "ask", "good": "game_3", "price": 30.46, "qty": 3}
+{"t": 357, "day": 3, "phase": "market", "type": "market.order", "name": "seller:food_low", "side": "ask", "good": "food_low", "price": 1.99, "qty": 3}
+{"t": 358, "day": 3, "phase": "market", "type": "market.order", "name": "seller:food_mid", "side": "ask", "good": "food_mid", "price": 17.65, "qty": 3}
+{"t": 359, "day": 3, "phase": "market", "type": "market.order", "name": "seller:food_high", "side": "ask", "good": "food_high", "price": 83.51, "qty": 3}
+{"t": 360, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_low_1", "price": 5.52, "filled": []}
+{"t": 361, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_low_2", "price": 5.63, "filled": [{"buyer": "Jonas Kell", "seller": "seller:clothes_low_2", "qty": 1}]}
+{"t": 362, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_mid_1", "price": 85.84, "filled": []}
+{"t": 363, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_mid_2", "price": 84.93, "filled": []}
+{"t": 364, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_high_1", "price": 1394.68, "filled": []}
+{"t": 365, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_high_2", "price": 1412.0, "filled": [{"buyer": "Mara Vell", "seller": "seller:clothes_high_2", "qty": 1}]}
+{"t": 366, "day": 3, "phase": "market", "type": "market.clear", "good": "game_1", "price": 28.31, "filled": []}
+{"t": 367, "day": 3, "phase": "market", "type": "market.clear", "good": "game_2", "price": 28.72, "filled": [{"buyer": "Lina Sato", "seller": "seller:game_2", "qty": 1}]}
+{"t": 368, "day": 3, "phase": "market", "type": "market.clear", "good": "game_3", "price": 27.5, "filled": []}
+{"t": 369, "day": 3, "phase": "market", "type": "market.clear", "good": "food_low", "price": 1.89, "filled": [{"buyer": "Dev Okonkwo", "seller": "seller:food_low", "qty": 1}, {"buyer": "Dev Okonkwo", "seller": "seller:food_low", "qty": 1}, {"buyer": "Lina Sato", "seller": "seller:food_low", "qty": 1}, {"buyer": "Jonas Kell", "seller": "seller:food_low", "qty": 1}, {"buyer": "Jonas Kell", "seller": "seller:food_low", "qty": 1}]}
+{"t": 370, "day": 3, "phase": "market", "type": "market.clear", "good": "food_mid", "price": 16.65, "filled": [{"buyer": "Mara Vell", "seller": "seller:food_mid", "qty": 1}, {"buyer": "Mara Vell", "seller": "seller:food_mid", "qty": 1}, {"buyer": "Theo Brandt", "seller": "seller:food_mid", "qty": 1}, {"buyer": "Priya Nair", "seller": "seller:food_mid", "qty": 1}]}
+{"t": 371, "day": 3, "phase": "market", "type": "market.clear", "good": "food_high", "price": 74.15, "filled": []}
+{"t": 372, "day": 3, "phase": "market", "type": "market.prices", "round": 1, "prices": {"clothes_low_1": 5.52, "clothes_low_2": 5.63, "clothes_mid_1": 85.84, "clothes_mid_2": 84.93, "clothes_high_1": 1394.68, "clothes_high_2": 1412.0, "game_1": 28.31, "game_2": 28.72, "game_3": 27.5, "food_low": 1.89, "food_mid": 16.65, "food_high": 74.15}}
+{"t": 373, "day": 3, "phase": "market", "type": "market.order", "name": "Theo Brandt", "side": "bid", "good": "food_high", "price": 84.72, "qty": 1}
+{"t": 374, "day": 3, "phase": "market", "type": "market.order", "name": "Priya Nair", "side": "bid", "good": "clothes_mid_2", "price": 91.02, "qty": 1}
+{"t": 375, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_low_1", "side": "ask", "good": "clothes_low_1", "price": 6.15, "qty": 3}
+{"t": 376, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_low_2", "side": "ask", "good": "clothes_low_2", "price": 6.24, "qty": 3}
+{"t": 377, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_1", "side": "ask", "good": "clothes_mid_1", "price": 94.77, "qty": 3}
+{"t": 378, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_2", "side": "ask", "good": "clothes_mid_2", "price": 91.39, "qty": 3}
+{"t": 379, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_high_1", "side": "ask", "good": "clothes_high_1", "price": 1543.5, "qty": 3}
+{"t": 380, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_high_2", "side": "ask", "good": "clothes_high_2", "price": 1530.67, "qty": 3}
+{"t": 381, "day": 3, "phase": "market", "type": "market.order", "name": "seller:game_1", "side": "ask", "good": "game_1", "price": 30.63, "qty": 3}
+{"t": 382, "day": 3, "phase": "market", "type": "market.order", "name": "seller:game_2", "side": "ask", "good": "game_2", "price": 31.06, "qty": 3}
+{"t": 383, "day": 3, "phase": "market", "type": "market.order", "name": "seller:game_3", "side": "ask", "good": "game_3", "price": 30.49, "qty": 3}
+{"t": 384, "day": 3, "phase": "market", "type": "market.order", "name": "seller:food_low", "side": "ask", "good": "food_low", "price": 2.05, "qty": 3}
+{"t": 385, "day": 3, "phase": "market", "type": "market.order", "name": "seller:food_mid", "side": "ask", "good": "food_mid", "price": 18.33, "qty": 3}
+{"t": 386, "day": 3, "phase": "market", "type": "market.order", "name": "seller:food_high", "side": "ask", "good": "food_high", "price": 84.43, "qty": 3}
+{"t": 387, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_low_1", "price": 5.87, "filled": []}
+{"t": 388, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_low_2", "price": 5.94, "filled": []}
+{"t": 389, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_mid_1", "price": 89.41, "filled": []}
+{"t": 390, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_mid_2", "price": 85.73, "filled": [{"buyer": "Priya Nair", "seller": "seller:clothes_mid_2", "qty": 1}]}
+{"t": 391, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_high_1", "price": 1455.79, "filled": []}
+{"t": 392, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_high_2", "price": 1490.33, "filled": []}
+{"t": 393, "day": 3, "phase": "market", "type": "market.clear", "good": "game_1", "price": 29.62, "filled": []}
+{"t": 394, "day": 3, "phase": "market", "type": "market.clear", "good": "game_2", "price": 28.36, "filled": []}
+{"t": 395, "day": 3, "phase": "market", "type": "market.clear", "good": "game_3", "price": 28.33, "filled": []}
+{"t": 396, "day": 3, "phase": "market", "type": "market.clear", "good": "food_low", "price": 1.93, "filled": []}
+{"t": 397, "day": 3, "phase": "market", "type": "market.clear", "good": "food_mid", "price": 16.94, "filled": []}
+{"t": 398, "day": 3, "phase": "market", "type": "market.clear", "good": "food_high", "price": 76.11, "filled": [{"buyer": "Theo Brandt", "seller": "seller:food_high", "qty": 1}]}
+{"t": 399, "day": 3, "phase": "market", "type": "market.prices", "round": 2, "prices": {"clothes_low_1": 5.87, "clothes_low_2": 5.94, "clothes_mid_1": 89.41, "clothes_mid_2": 85.73, "clothes_high_1": 1455.79, "clothes_high_2": 1490.33, "game_1": 29.62, "game_2": 28.36, "game_3": 28.33, "food_low": 1.93, "food_mid": 16.94, "food_high": 76.11}}
+{"t": 400, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_low_1", "side": "ask", "good": "clothes_low_1", "price": 5.92, "qty": 3}
+{"t": 401, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_low_2", "side": "ask", "good": "clothes_low_2", "price": 6.2, "qty": 3}
+{"t": 402, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_1", "side": "ask", "good": "clothes_mid_1", "price": 93.84, "qty": 3}
+{"t": 403, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_mid_2", "side": "ask", "good": "clothes_mid_2", "price": 94.66, "qty": 3}
+{"t": 404, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_high_1", "side": "ask", "good": "clothes_high_1", "price": 1488.53, "qty": 3}
+{"t": 405, "day": 3, "phase": "market", "type": "market.order", "name": "seller:clothes_high_2", "side": "ask", "good": "clothes_high_2", "price": 1555.93, "qty": 3}
+{"t": 406, "day": 3, "phase": "market", "type": "market.order", "name": "seller:game_1", "side": "ask", "good": "game_1", "price": 30.98, "qty": 3}
+{"t": 407, "day": 3, "phase": "market", "type": "market.order", "name": "seller:game_2", "side": "ask", "good": "game_2", "price": 29.74, "qty": 3}
+{"t": 408, "day": 3, "phase": "market", "type": "market.order", "name": "seller:game_3", "side": "ask", "good": "game_3", "price": 31.52, "qty": 3}
+{"t": 409, "day": 3, "phase": "market", "type": "market.order", "name": "seller:food_low", "side": "ask", "good": "food_low", "price": 2.11, "qty": 3}
+{"t": 410, "day": 3, "phase": "market", "type": "market.order", "name": "seller:food_mid", "side": "ask", "good": "food_mid", "price": 17.96, "qty": 3}
+{"t": 411, "day": 3, "phase": "market", "type": "market.order", "name": "seller:food_high", "side": "ask", "good": "food_high", "price": 84.5, "qty": 3}
+{"t": 412, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_low_1", "price": 6.08, "filled": []}
+{"t": 413, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_low_2", "price": 6.11, "filled": []}
+{"t": 414, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_mid_1", "price": 94.33, "filled": []}
+{"t": 415, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_mid_2", "price": 93.48, "filled": []}
+{"t": 416, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_high_1", "price": 1497.57, "filled": []}
+{"t": 417, "day": 3, "phase": "market", "type": "market.clear", "good": "clothes_high_2", "price": 1521.88, "filled": []}
+{"t": 418, "day": 3, "phase": "market", "type": "market.clear", "good": "game_1", "price": 30.59, "filled": []}
+{"t": 419, "day": 3, "phase": "market", "type": "market.clear", "good": "game_2", "price": 30.27, "filled": []}
+{"t": 420, "day": 3, "phase": "market", "type": "market.clear", "good": "game_3", "price": 30.01, "filled": []}
+{"t": 421, "day": 3, "phase": "market", "type": "market.clear", "good": "food_low", "price": 2.02, "filled": []}
+{"t": 422, "day": 3, "phase": "market", "type": "market.clear", "good": "food_mid", "price": 18.58, "filled": []}
+{"t": 423, "day": 3, "phase": "market", "type": "market.clear", "good": "food_high", "price": 79.19, "filled": []}
+{"t": 424, "day": 3, "phase": "market", "type": "market.prices", "round": 3, "prices": {"clothes_low_1": 6.08, "clothes_low_2": 6.11, "clothes_mid_1": 94.33, "clothes_mid_2": 93.48, "clothes_high_1": 1497.57, "clothes_high_2": 1521.88, "game_1": 30.59, "game_2": 30.27, "game_3": 30.01, "food_low": 2.02, "food_mid": 18.58, "food_high": 79.19}}
+{"t": 425, "day": 3, "phase": "app", "type": "app.profile", "name": "Mara Vell", "picture": {"item": "clothes_high_2", "tier": "high"}, "text": "Back on here. Learned I need more evenings to myself than I thought. Ambitious, warm, occasionally wearing something ridiculous."}
+{"t": 426, "day": 3, "phase": "app", "type": "app.profile", "name": "Dev Okonkwo", "picture": {"item": "clothes_mid_1", "tier": "mid"}, "text": "Single again. Not sure what I did wrong, possibly the calendar. Still running at 6am if you want to join, still working too much probably."}
+{"t": 427, "day": 3, "phase": "app", "type": "app.profile", "name": "Lina Sato", "picture": {"item": "clothes_low_1", "tier": "low"}, "text": "Second week in town. Bought another game. If you can beat me at Beat Garden I will listen to your work story, briefly."}
+{"t": 428, "day": 3, "phase": "app", "type": "app.profile", "name": "Theo Brandt", "picture": {"item": "clothes_mid_1", "tier": "mid"}, "text": "Cooking more at home, working a little less. Dating someone who laughs at my knife jokes. Profile stays up because the app makes me, not because I am looking."}
+{"t": 429, "day": 3, "phase": "app", "type": "app.profile", "name": "Priya Nair", "picture": {"item": "clothes_mid_2", "tier": "mid"}, "text": "Trying therapy this week, which is out of character. Dating a chef. Still on the app because it will not let me leave, apparently."}
+{"t": 430, "day": 3, "phase": "app", "type": "app.profile", "name": "Jonas Kell", "picture": {"item": "clothes_low_2", "tier": "low"}, "text": "Working more, playing less, feeling weirdly fine. Canvas jacket acquired. Want someone with a sharp tongue and a soft spot for retro synth."}
+{"t": 431, "day": 3, "phase": "app", "type": "app.swipe", "name": "Mara Vell", "target": "Jonas Kell", "yes": false}
+{"t": 432, "day": 3, "phase": "app", "type": "app.swipe", "name": "Mara Vell", "target": "Theo Brandt", "yes": true}
+{"t": 433, "day": 3, "phase": "app", "type": "app.swipe", "name": "Mara Vell", "target": "Lina Sato", "yes": false}
+{"t": 434, "day": 3, "phase": "app", "type": "app.swipe", "name": "Dev Okonkwo", "target": "Lina Sato", "yes": true}
+{"t": 435, "day": 3, "phase": "app", "type": "app.swipe", "name": "Dev Okonkwo", "target": "Priya Nair", "yes": false}
+{"t": 436, "day": 3, "phase": "app", "type": "app.swipe", "name": "Lina Sato", "target": "Jonas Kell", "yes": true}
+{"t": 437, "day": 3, "phase": "app", "type": "app.swipe", "name": "Lina Sato", "target": "Dev Okonkwo", "yes": false}
+{"t": 438, "day": 3, "phase": "app", "type": "app.swipe", "name": "Theo Brandt", "target": "Priya Nair", "yes": true}
+{"t": 439, "day": 3, "phase": "app", "type": "app.swipe", "name": "Theo Brandt", "target": "Mara Vell", "yes": false}
+{"t": 440, "day": 3, "phase": "app", "type": "app.swipe", "name": "Priya Nair", "target": "Theo Brandt", "yes": true}
+{"t": 441, "day": 3, "phase": "app", "type": "app.swipe", "name": "Jonas Kell", "target": "Lina Sato", "yes": true}
+{"t": 442, "day": 3, "phase": "app", "type": "app.swipe", "name": "Jonas Kell", "target": "Mara Vell", "yes": true}
+{"t": 443, "day": 3, "phase": "app", "type": "app.match", "a": "Lina Sato", "b": "Jonas Kell"}
+{"t": 444, "day": 3, "phase": "app", "type": "app.match", "a": "Theo Brandt", "b": "Priya Nair"}
+{"t": 445, "day": 3, "phase": "visit", "type": "visit.invite", "name": "Dev Okonkwo", "target": "Lina Sato", "accepted": false}
+{"t": 446, "day": 3, "phase": "date", "type": "date.scene", "a": "Lina Sato", "b": "Jonas Kell", "text": "The restaurant in Love Town, evening. Lina Sato arrives wearing a plain tee (low tier); Jonas Kell arrives wearing a canvas jacket (low tier). Lina Sato's stated day: work 7h, games 6h, home 1h, eat 2h. Jonas Kell's stated day: work 8h, games 3h, home 3h, eat 2h. They have ten turns."}
+{"t": 447, "day": 3, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Jonas Kell", "speaker": "Lina Sato", "text": "You have the cartridges. I have Beat Garden. This could be a very short date or a very long one."}
+{"t": 448, "day": 3, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Jonas Kell", "speaker": "Jonas Kell", "text": "Long, please. I went to therapy yesterday and the main takeaway is that I should talk to people who are not screens."}
+{"t": 449, "day": 3, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Jonas Kell", "speaker": "Lina Sato", "text": "What did they say?"}
+{"t": 450, "day": 3, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Jonas Kell", "speaker": "Jonas Kell", "text": "That I keep thinking I am broke because I am lazy, when actually I just like games more than money and pretend I do not."}
+{"t": 451, "day": 3, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Jonas Kell", "speaker": "Lina Sato", "text": "That is the least small-talk thing anyone has said to me in this town. What is your best cartridge?"}
+{"t": 452, "day": 3, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Jonas Kell", "speaker": "Jonas Kell", "text": "A racing game nobody remembers with a soundtrack I still hum. What do you do when you are not playing?"}
+{"t": 453, "day": 3, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Jonas Kell", "speaker": "Lina Sato", "text": "Write. Meditate now, badly. Two hours sitting in the garden thinking about sentences."}
+{"t": 454, "day": 3, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Jonas Kell", "speaker": "Jonas Kell", "text": "Did it work?"}
+{"t": 455, "day": 3, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Jonas Kell", "speaker": "Lina Sato", "text": "I felt calmer and the number they tell me at night went up a little. Or the number lies. I cannot tell yet."}
+{"t": 456, "day": 3, "phase": "date", "type": "date.turn", "a": "Lina Sato", "b": "Jonas Kell", "speaker": "Jonas Kell", "text": "Then we should compare numbers for a week. Purely scientific."}
+{"t": 457, "day": 3, "phase": "date", "type": "date.outcome", "name": "Lina Sato", "partner": "Jonas Kell", "rating": 7, "choice": "decline"}
+{"t": 458, "day": 3, "phase": "date", "type": "date.outcome", "name": "Jonas Kell", "partner": "Lina Sato", "rating": 9, "choice": "ask_again"}
+{"t": 459, "day": 3, "phase": "date", "type": "date.scene", "a": "Theo Brandt", "b": "Priya Nair", "text": "The restaurant in Love Town, evening. Theo Brandt arrives wearing a linen shirt (mid tier); Priya Nair arrives wearing a wool coat (mid tier). Theo Brandt's stated day: work 7h, games 0h, home 7h, eat 2h. Priya Nair's stated day: work 8h, games 0h, home 6h, eat 2h. They have ten turns."}
+{"t": 460, "day": 3, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Theo Brandt", "text": "You went to therapy. I saw it in your schedule before I saw your face."}
+{"t": 461, "day": 3, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Priya Nair", "text": "I did. Sixty cash to be told I am hard on myself. I already knew that for free."}
+{"t": 462, "day": 3, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Theo Brandt", "text": "Did it help?"}
+{"t": 463, "day": 3, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Priya Nair", "text": "Ask me next week. Did you cook today?"}
+{"t": 464, "day": 3, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Theo Brandt", "text": "Twice. I stayed home seven hours and it was the best day I have had here. Mostly because of last night."}
+{"t": 465, "day": 3, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Priya Nair", "text": "I noticed you did not ask me to move in. Thank you."}
+{"t": 466, "day": 3, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Theo Brandt", "text": "I thought about it. Then I thought about your bar exam and your six hours of home and how new this is."}
+{"t": 467, "day": 3, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Priya Nair", "text": "It is new. Ask me again in a few days. Bring the bread you keep insulting."}
+{"t": 468, "day": 3, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Theo Brandt", "text": "I will bake it myself. That is the only fix."}
+{"t": 469, "day": 3, "phase": "date", "type": "date.turn", "a": "Theo Brandt", "b": "Priya Nair", "speaker": "Priya Nair", "text": "That is the most romantic sentence anyone has said to me on this app, and it is about bread."}
+{"t": 470, "day": 3, "phase": "date", "type": "date.outcome", "name": "Theo Brandt", "partner": "Priya Nair", "rating": 9, "choice": "ask_again"}
+{"t": 471, "day": 3, "phase": "date", "type": "date.outcome", "name": "Priya Nair", "partner": "Theo Brandt", "rating": 8, "choice": "ask_again"}
+{"t": 472, "day": 3, "phase": "night", "type": "night.state", "name": "Mara Vell", "m": {"food": 1.0, "hugs": 0.0, "money": 1.0, "fun": 0.0}, "U": 0.35, "U_hat": 0.3629, "sentence": "Last night you felt 36% content.", "cash": -1113.44, "inventory": ["clothes_low_1", "clothes_mid_1", "clothes_high_2"], "wearing": "clothes_high_2", "partner": null, "status": "single"}
+{"t": 473, "day": 3, "phase": "night", "type": "night.state", "name": "Dev Okonkwo", "m": {"food": 1.0, "hugs": 0.0, "money": 1.0, "fun": 0.0}, "U": 0.55, "U_hat": 0.5958, "sentence": "Last night you felt 60% content.", "cash": 447.15, "inventory": ["clothes_low_1", "clothes_mid_1"], "wearing": "clothes_mid_1", "partner": null, "status": "single"}
+{"t": 474, "day": 3, "phase": "night", "type": "night.state", "name": "Lina Sato", "m": {"food": 1.0, "hugs": 0.0, "money": 0.875, "fun": 0.922}, "U": 0.7446, "U_hat": 0.5583, "sentence": "Last night you felt 56% content.", "cash": 350.42, "inventory": ["clothes_low_1", "game_3", "game_2"], "wearing": "clothes_low_1", "partner": null, "status": "single"}
+{"t": 475, "day": 3, "phase": "night", "type": "night.state", "name": "Theo Brandt", "m": {"food": 1.0, "hugs": 0.0, "money": 0.875, "fun": 0.0}, "U": 0.6312, "U_hat": 0.9199, "sentence": "Last night you felt 92% content.", "cash": 132.33, "inventory": ["clothes_low_1", "clothes_mid_1"], "wearing": "clothes_mid_1", "partner": "Priya Nair", "status": "dating"}
+{"t": 476, "day": 3, "phase": "night", "type": "night.state", "name": "Priya Nair", "m": {"food": 1.0, "hugs": 0.0, "money": 1.0, "fun": 0.0}, "U": 0.5, "U_hat": 0.5582, "sentence": "Last night you felt 56% content.", "cash": 239.8, "inventory": ["clothes_low_1", "clothes_mid_2", "clothes_mid_2"], "wearing": "clothes_mid_2", "partner": "Theo Brandt", "status": "dating"}
+{"t": 477, "day": 3, "phase": "night", "type": "night.state", "name": "Jonas Kell", "m": {"food": 1.0, "hugs": 0.0, "money": 1.0, "fun": 0.065}, "U": 0.476, "U_hat": 0.4479, "sentence": "Last night you felt 45% content.", "cash": 311.88, "inventory": ["clothes_low_1", "game_1", "clothes_low_2"], "wearing": "clothes_low_2", "partner": null, "status": "single"}
+{"t": 478, "day": 3, "phase": "night", "type": "run.cost", "calls": 151, "usd": 0.1386}
+{"t": 479, "day": 3, "phase": "night", "type": "run.end", "days": 3, "total_usd": 0.1386, "standings": [{"name": "Dev Okonkwo", "sum_U": 1.95}, {"name": "Theo Brandt", "sum_U": 1.9312}, {"name": "Priya Nair", "sum_U": 1.8}, {"name": "Lina Sato", "sum_U": 1.7473}, {"name": "Jonas Kell", "sum_U": 1.5845}, {"name": "Mara Vell", "sum_U": 1.4625}]}

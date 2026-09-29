@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fog of Love — Love Town replay</title>
+  <link rel="stylesheet" href="viewer.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>Fog of Love</h1>
+      <span class="sub">Love Town replay</span>
+    </div>
+    <div class="controls" role="group" aria-label="Playback">
+      <button id="play" aria-pressed="true">Pause</button>
+      <span class="speeds">
+        <button data-speed="1">1×</button>
+        <button data-speed="4">4×</button>
+        <button data-speed="16">16×</button>
+      </span>
+      <span id="clock" class="clock">—</span>
+      <input id="seek" type="range" min="0" max="60" step="0.25" value="0" aria-label="Seek">
+      <span id="days" class="days"></span>
+      <button id="auto" aria-pressed="true">Auto camera: on</button>
+      <button id="reveal" aria-pressed="false" class="reveal-btn">Reveal: off</button>
+    </div>
+    <div class="loader">
+      <span id="load-status" class="status">Loading…</span>
+      <label class="file">Open events.jsonl <input id="file" type="file" accept=".jsonl,.json,.txt"></label>
+      <button id="load-fixture" hidden>Load sample fixture</button>
+      <span id="cost" class="muted small"></span>
+    </div>
+  </header>
+
+  <main class="grid">
+    <div class="col col-left">
+    <section class="panel map-panel" aria-label="Town map">
+      <h2>Love Town <span class="muted small">click an agent to follow</span></h2>
+      <div class="map-wrap"><canvas id="map"></canvas></div>
+    </section>
+
+    <section class="panel market-panel" aria-label="Market">
+      <h2>Market <span class="muted small">clearing prices by round · hover for values</span></h2>
+      <div class="market-wrap"><canvas id="market"></canvas></div>
+      <div id="orders" class="orders"></div>
+    </section>
+    </div>
+
+    <section class="panel app-panel" aria-label="Dating app">
+      <h2>Dating app <span id="app-day" class="muted small"></span></h2>
+      <div class="app-cols">
+        <div id="cards" class="cards"></div>
+        <aside class="app-side">
+          <h3>Swipes</h3>
+          <ul id="swipes" class="swipes"></ul>
+          <h3>Matches · tonight's dates</h3>
+          <ul id="matches" class="matches"></ul>
+        </aside>
+      </div>
+    </section>
+
+    <div class="col col-right">
+    <section class="panel agent-panel" aria-label="Selected agent">
+      <h2>Agent <select id="agent-pick" aria-label="Pick an agent"></select></h2>
+      <div id="agent" class="agent"></div>
+    </section>
+
+    <section class="panel gossip-panel" aria-label="Gossip board">
+      <h2>Gossip board <span class="muted small">newest first</span></h2>
+      <ul id="gossip" class="gossip"></ul>
+    </section>
+
+    <section class="panel standings-panel" id="standings-section" aria-label="Standings" hidden>
+      <h2>Standings <span class="muted small">author-level Σ U</span></h2>
+      <div id="standings"></div>
+      <p id="standings-note" class="muted small"></p>
+    </section>
+    </div>
+  </main>
+
+  <footer class="foot muted small">
+    Keys: space play/pause · ← → seek 5 s · r reveal. Load with <code>?events=&lt;url&gt;</code>; optional <code>day</code>, <code>t</code>, <code>speed</code>, <code>follow</code>, <code>reveal=1</code>, <code>play=0</code>, <code>auto=0</code>.
+  </footer>
+
+  <script src="viewer.js"></script>
+</body>
+</html>
