@@ -29,9 +29,10 @@ def scene_text(a: AgentState, b: AgentState) -> str:
 
 
 def clean_line(text: str, speaker: str) -> str:
-    t = text.strip().strip('"').strip()
+    quotes = "\"\u201c\u201d\u2018\u2019'"
+    t = text.strip().strip(quotes).strip()
     t = re.sub(rf"^{re.escape(speaker)}\s*(--|:|says:?)\s*", "", t, flags=re.IGNORECASE).strip()
-    t = t.strip('"').strip()
+    t = t.strip(quotes).strip()
     t = t.split("\n")[0].strip() if t else t
     return t[:400] if t else "..."
 

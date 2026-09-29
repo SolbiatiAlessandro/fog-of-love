@@ -144,7 +144,9 @@ class World:
         games = ", ".join(f"{g} (fun yield {y:.2f})" for g, y in a.games.items()) or "none"
         parts = [
             f"Day {day} morning. Cash: {a.cash:.0f}. Wearing: {a.wearing} ({goods.tier(a.wearing)} tier). "
-            f"Inventory: {inv}. Games owned: {games}. Status: {a.status_line()}.",
+            f"Inventory: {inv}. Meals in stock: {a.meals} (each eating hour consumes one meal; meals are bought "
+            f"at the restaurant through shopping and are the only food). Games owned: {games}. "
+            f"Status: {a.status_line()}.",
             a.last_sentence or "This is your first day in Love Town.",
             self.gossip.render(day),
         ]
