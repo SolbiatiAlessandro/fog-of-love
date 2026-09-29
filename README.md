@@ -44,6 +44,9 @@ Consistent across runs: matched pairs are closer in hidden need weights than ran
 
 ## Watch a replay
 
+**Live:** https://solbiatialessandro.github.io/fog-of-love/replay/ (GitHub Pages from `docs/`; pick a run in the header, default is the 24-agent adaptive-market run).
+
+
 The viewer (`viewer/`, vanilla HTML/JS, no build) replays an `events.jsonl`: town map with the agents moving
 between work, restaurant, garden and home, the dating app with swipes and matches, the market with clearing
 prices and volume, the gossip board, an agent card with the date transcript, and a Reveal toggle for the hidden

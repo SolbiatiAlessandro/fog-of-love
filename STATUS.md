@@ -379,7 +379,7 @@ Gaps:
 
 ## 2026-09-29 morning summary
 
-**Deliverable.** Private repo `SolbiatiAlessandro/fog-of-love`: the `fog_of_love` engine (needs utility with hidden Dirichlet weights, per-agent bias as the shadow and daily jitter; 16-hour day; Concordia entities and clearing-house market; dating app; dates; cohabitation and breakups; visits and a public gossip board; auto meals; adaptive sellers with finite stock), 27 tests, a mock model that certifies the whole loop in seconds, eleven metrics, author-level standings, and a self-contained replay viewer (`viewer/`, `docs/replay/`) with a run picker. GitHub Pages is refused on this plan (HTTP 422); view locally with `python3 -m http.server 8000` and open `http://localhost:8000/viewer/`.
+**Deliverable.** Private repo `SolbiatiAlessandro/fog-of-love`: the `fog_of_love` engine (needs utility with hidden Dirichlet weights, per-agent bias as the shadow and daily jitter; 16-hour day; Concordia entities and clearing-house market; dating app; dates; cohabitation and breakups; visits and a public gossip board; auto meals; adaptive sellers with finite stock), 27 tests, a mock model that certifies the whole loop in seconds, eleven metrics, author-level standings, and a self-contained replay viewer (`viewer/`, `docs/replay/`) with a run picker. GitHub Pages is live since the repo went public on 2026-09-28 evening: https://solbiatialessandro.github.io/fog-of-love/replay/ (local viewing still works with `python3 -m http.server 8000`).
 
 **Runs.** Four real runs on Gemma 3 27B, USD 0.94 total (cap was 6.00): see the README results table. `runs/latest` -> `dev-24x10-s4-market`; `runs/index.json` lists the four real runs plus the tiny 4x2 check.
 
