@@ -261,8 +261,10 @@ Counts:
   rare (2 of 10) because most invitees are already dating by the morning they answer.
 
 `runs/latest` is a **git symlink** to `dev-24x10-s3` (most relationship progression: 11 cohabiting pairs, and the only
-real run with gossip posts, so the viewer's strict check passes); `viewer/` resolves `../runs/latest/events.jsonl`
-through it under `python3 -m http.server`. On a checkout without symlink support, copy the directory instead.
+real run with gossip posts, so the viewer's strict check passes). The viewer (since `e24070f`) defaults to the first
+entry of `runs/index.json` (largest run) and falls back to `runs/latest/events.jsonl`; `runs/index.json` was regenerated
+with `python3 viewer/make_runs_index.py runs` so `dev-24x10-s3` is first (checked: the scanner does not add a
+duplicate entry for the `latest` symlink). On a checkout without symlink support, copy the directory instead.
 
 ### 2026-09-28 21:52 PDT — Engine iteration 2 handoff
 
