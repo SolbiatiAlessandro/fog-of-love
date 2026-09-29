@@ -316,7 +316,7 @@ Module.canvas.focus = function (options) { HTMLElement.prototype.focus.call(this
       return `<article><h4><span class="heart" style="color:var(--heart)">♥</span>${esc(agentName(d.pair[0]))} &amp; ${esc(agentName(d.pair[1]))}<span class="stage">table ${d.table + 1} · ${d.stage}</span></h4>
         <ol>${d.turns.slice(Math.max(0, d.turnsShown - 4), d.turnsShown).map((t) => `<li><b>${esc(firstName(agentName(t.speaker)))}:</b> ${esc(t.text)}</li>`).join('') || `<li class="muted small">${esc(d.scene || 'walking to the restaurant')}</li>`}</ol>
         ${d.outcomesShown ? `<div class="small muted">${d.outcomes.map((o) => `${esc(firstName(agentName(o.agent)))}: ${esc(o.choice || '—')} (${o.rating == null ? '—' : esc(o.rating)}/10)`).join(' · ')}${d.change ? ` → <b>${esc(d.change.to)}</b>` : ''}</div>` : ''}${lastTurn ? '' : ''}</article>`;
-    }).join('') || `<p class="muted small">${s.clock.phase === 'date' ? 'No dates tonight.' : 'Dates start in the evening (28 s into the day).'}</p>`;
+    }).join('') || `<p class="muted small">${s.clock.phase === 'date' ? 'No dates tonight.' : 'Dates start in the evening (29 s into the day).'}</p>`;
   }
   function renderOverlay(state) {
     const s = ui.snapshot, layer = $('world-labels');
@@ -388,7 +388,8 @@ Module.canvas.focus = function (options) { HTMLElement.prototype.focus.call(this
       e.style.left = `${p.sx * 100}%`; e.style.top = `${p.sy * 100}%`; layer.append(e); setTimeout(() => e.remove(), 1700);
     }
     const activeDates = s.dates.filter((d) => d.active);
-    const phaseLabel = { morning: 'Morning', market: 'Market', app: 'Dating app', visit: 'Visits', date: 'Dates', night: 'Night' }[s.clock.phase] || s.clock.phase;
+    const phaseName = state && typeof state.phase === 'string' ? state.phase : s.clock.phase;
+    const phaseLabel = { morning: 'Morning', day: 'Working day', market: 'Market', app: 'Dating app', visit: 'Visits', date: 'Dates', night: 'Night' }[phaseName] || phaseName;
     $('scene-caption').textContent = `Day ${s.clock.day} · ${phaseLabel}${activeDates.length ? ' · ' + activeDates.map((d) => d.pair.map((id) => firstName(agentName(id))).join(' & ')).join(' · ') : ''}${state && state.place ? '' : ''}`;
   }
 

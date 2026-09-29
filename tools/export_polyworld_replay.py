@@ -19,12 +19,12 @@ from pathlib import Path
 SCHEMA = "love-town-replay/1"
 DAY_SECONDS = 60
 PHASES = {
-    "morning": [0, 6],
-    "market": [6, 14],
-    "app": [14, 24],
-    "visit": [24, 28],
-    "date": [28, 56],
-    "night": [56, 60],
+    "morning": [0, 3],
+    "market": [3, 18],
+    "app": [18, 29],
+    "date": [29, 51],
+    "visit": [51, 55],
+    "night": [55, 60],
 }
 TABLES = 2
 NEEDS = ("food", "hugs", "money", "fun")

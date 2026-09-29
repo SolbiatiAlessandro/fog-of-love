@@ -16,9 +16,9 @@
   "use strict";
 
   const SCHEMA = "love-town-replay/1";
-  const PHASE_ORDER = ["morning", "market", "app", "visit", "date", "night"];
+  const PHASE_ORDER = ["morning", "market", "app", "date", "visit", "night"];
   const NEEDS = ["food", "hugs", "money", "fun"];
-  const DEFAULT_PHASES = { morning: [0, 6], market: [6, 14], app: [14, 24], visit: [24, 28], date: [28, 56], night: [56, 60] };
+  const DEFAULT_PHASES = { morning: [0, 3], market: [3, 18], app: [18, 29], date: [29, 51], visit: [51, 55], night: [55, 60] };
 
   function invariant(condition, message) {
     if (!condition) throw new TypeError(`Invalid Love Town replay: ${message}`);
@@ -63,16 +63,16 @@
     if (day > doc.run.days) { day = doc.run.days; tin = ds; }
     const win = phases(doc);
     let phase = "morning";
-    for (const p of PHASE_ORDER) if (win[p] && tin >= win[p][0]) phase = p;
+    for (const p of [...PHASE_ORDER].sort((a, b) => (win[a] || [0])[0] - (win[b] || [0])[0])) if (win[p] && tin >= win[p][0]) phase = p;
     const [a, b] = win[phase] || [0, ds];
     const frac = b > a ? Math.max(0, Math.min(1, (tin - a) / (b - a))) : 1;
-    return { t: tt, day, tin, phase, phaseFrac: frac, phaseStart: a, phaseEnd: b, daySeconds: ds, total, ended: tt >= total };
+    return { t: tt, day, tin, phase, phaseFrac: frac, phaseStart: a, phaseEnd: b, daySeconds: ds, total, ended: tt >= total, windows: win };
   }
 
   function phaseState(clk, phase) {
-    const order = PHASE_ORDER.indexOf(phase);
-    const current = PHASE_ORDER.indexOf(clk.phase);
-    return order < current ? "past" : order > current ? "future" : "now";
+    if (phase === clk.phase) return "now";
+    const win = clk.windows || DEFAULT_PHASES;
+    return (win[phase] || [0])[0] < (win[clk.phase] || [0])[0] ? "past" : "future";
   }
   /** How many of n items are visible when a phase is past / now (fraction f) / future. */
   function revealed(n, state, f) {

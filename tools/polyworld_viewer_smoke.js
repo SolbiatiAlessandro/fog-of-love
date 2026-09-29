@@ -71,7 +71,8 @@ const server = http.createServer((req, res) => {
       caption: document.getElementById('scene-caption').textContent,
       cards: q('.card'), labelsVisible: q('.agent-label:not([hidden])'), bubbles: q('.bubble'), matches: q('.match'), transcript: q('.transcript li'),
       runs: q('#runs option'), gossip: q('#gossip li'), orders: q('#orders tr'), marketCanvas: (document.getElementById('market') || {}).width || 0,
-      bridge: state ? { t: state.t, day: state.day, phase: state.phase, followed: state.followed, agents: (state.agents || []).length, hasSx: !!(state.agents || [])[0] && typeof state.agents[0].sx === 'number' } : null,
+      bridge: state ? { t: state.t, day: state.day, phase: state.phase, followed: state.followed, agents: (state.agents || []).length, hasSx: !!(state.agents || [])[0] && typeof state.agents[0].sx === 'number',
+        speakerVisible: Array.isArray(state.dates) ? state.dates.some((d) => (state.agents || []).some((a) => a.id === d.speaker && a.visible !== false)) : null } : null,
       ready: M.lovetownReady === true || typeof M.lovetownReady === 'function', pendingCommands: (M.lovetownCommand || []).length, webgl,
       noScene: !!window.LOVETOWN_NO_SCENE, transcriptColumn: q('#transcript-col.show'), liveDates: q('#date-live article'),
     };
@@ -85,7 +86,8 @@ const server = http.createServer((req, res) => {
   if (!result.bridge && !result.noScene) failures.push('Module.lovetownState never written');
   if (result.noScene && result.transcriptColumn < 1) failures.push('no-scene bundle must show the transcript column');
   else if (result.bridge && result.bridge.hasSx && result.labelsVisible < 1) failures.push('no positioned agent labels');
-  if (result.bridge && result.bridge.hasSx && result.bubbles < 1 && result.bridge.phase === 'date') failures.push('no speech bubble during a date');
+  // a bubble is expected only when the scene says a speaker is in frame (the camera follows one agent)
+  if (result.bridge && result.bridge.hasSx && result.bubbles < 1 && result.bridge.phase === 'date' && result.bridge.speakerVisible !== false) failures.push('no speech bubble during a date');
   if (result.pendingCommands > 5) failures.push(`commands not drained (${result.pendingCommands})`);
   if (errors.length) failures.push(`console errors: ${errors.slice(0, 3).join(' | ')}`);
   console.log(JSON.stringify(result, null, 1));

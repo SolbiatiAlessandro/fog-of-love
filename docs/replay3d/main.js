@@ -27,7 +27,7 @@ var ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIR
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpe45pwly7.js
+// include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmp2yf9s9e6.js
 
   Module['expectedDataFileDownloads'] ??= 0;
   Module['expectedDataFileDownloads']++;
@@ -159,21 +159,21 @@ var ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIR
 
   })();
 
-// end include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpe45pwly7.js
-// include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmphsom06xs.js
+// end include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmp2yf9s9e6.js
+// include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpk960e296.js
 
     // All the pre-js content up to here must remain later on, we need to run
     // it.
     if ((typeof ENVIRONMENT_IS_WASM_WORKER != 'undefined' && ENVIRONMENT_IS_WASM_WORKER) || (typeof ENVIRONMENT_IS_PTHREAD != 'undefined' && ENVIRONMENT_IS_PTHREAD) || (typeof ENVIRONMENT_IS_AUDIO_WORKLET != 'undefined' && ENVIRONMENT_IS_AUDIO_WORKLET)) Module['preRun'] = [];
     var necessaryPreJSTasks = Module['preRun'].slice();
-  // end include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmphsom06xs.js
-// include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpfaepef0c.js
+  // end include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpk960e296.js
+// include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpzknc_z0y.js
 
     if (!Module['preRun']) throw 'Module.preRun should exist because file support used it; did a pre-js delete it?';
     necessaryPreJSTasks.forEach((task) => {
       if (Module['preRun'].indexOf(task) < 0) throw 'All preRun tasks that exist before user pre-js code should remain after; did you replace Module or modify Module.preRun?';
     });
-  // end include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpfaepef0c.js
+  // end include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpzknc_z0y.js
 
 
 var arguments_ = [];
@@ -6787,10 +6787,10 @@ function checkIncomingModuleAPI() {
   ignoredModuleProp('fetchSettings');
 }
 var ASM_CONSTS = {
-  118119: ($0, $1) => { if (Module.polyworldFrame) Module.polyworldFrame($0, $1); },  
- 118181: ($0, $1) => { if (Module.lovetownReady) Module.lovetownReady({schema: 'love-town-replay/1', agents: $0, days: $1, daySeconds: 60}); },  
- 118303: () => { var q = Module.lovetownCommand; if (!Array.isArray(q) || !q.length) return 0; var c = q.shift(); if (c && typeof c === 'object') { var t = c.type || c.cmd || ''; var v = c.value !== undefined ? c.value : (c.speed !== undefined ? c.speed : c.t !== undefined ? c.t : c.seconds !== undefined ? c.seconds : c.agentId !== undefined ? c.agentId : c.agent !== undefined ? c.agent : c.day !== undefined ? c.day : c.enabled !== undefined ? (c.enabled ? 1 : 0) : ''); c = (t + ' ' + v).trim(); } return stringToNewUTF8(String(c)); },  
- 118828: ($0) => { if (typeof Module.lovetownState === 'function') { try { Module.lovetownState(JSON.parse(UTF8ToString($0))); } catch (error) { if (!Module.lovetownBridgeError) { Module.lovetownBridgeError = true; console.error('Love Town bridge callback failed', error); } } } }
+  118103: ($0, $1) => { if (Module.polyworldFrame) Module.polyworldFrame($0, $1); },  
+ 118165: ($0, $1) => { if (Module.lovetownReady) Module.lovetownReady({schema: 'love-town-replay/1', agents: $0, days: $1, daySeconds: 60}); },  
+ 118287: () => { var q = Module.lovetownCommand; if (!Array.isArray(q) || !q.length) return 0; var c = q.shift(); if (c && typeof c === 'object') { var t = c.type || c.cmd || ''; var v = c.value !== undefined ? c.value : (c.speed !== undefined ? c.speed : c.t !== undefined ? c.t : c.seconds !== undefined ? c.seconds : c.agentId !== undefined ? c.agentId : c.agent !== undefined ? c.agent : c.day !== undefined ? c.day : c.enabled !== undefined ? (c.enabled ? 1 : 0) : ''); c = (t + ' ' + v).trim(); } return stringToNewUTF8(String(c)); },  
+ 118812: ($0) => { if (typeof Module.lovetownState === 'function') { try { Module.lovetownState(JSON.parse(UTF8ToString($0))); } catch (error) { if (!Module.lovetownBridgeError) { Module.lovetownBridgeError = true; console.error('Love Town bridge callback failed', error); } } } }
 };
 function get_window_width() { var canvas = (typeof Module !== 'undefined' && Module.canvas) ? Module.canvas : document.getElementById('canvas'); if (canvas && canvas.clientWidth > 0) { return canvas.clientWidth; } return window.innerWidth; }
 function get_window_height() { var canvas = (typeof Module !== 'undefined' && Module.canvas) ? Module.canvas : document.getElementById('canvas'); if (canvas && canvas.clientHeight > 0) { return canvas.clientHeight; } return window.innerHeight; }

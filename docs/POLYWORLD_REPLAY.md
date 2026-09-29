@@ -39,12 +39,16 @@ The JSON carries no seconds. Both the Nim viewer and the HTML layer share this c
 
 | phase   | seconds in day | staged content                                              |
 | ------- | -------------- | ----------------------------------------------------------- |
-| morning | 0 – 6          | agents leave home, `allocations` (work, games, home, eat, therapy, meditation) |
-| market  | 6 – 14         | `market.rounds` in order (asks, bids, clears)               |
-| app     | 14 – 24        | `app.profiles`, `app.swipes`, `app.matches`                 |
-| visit   | 24 – 28        | accepted `visits` (guest walks to host's house)             |
-| date    | 28 – 56        | `dates`: the two tables run in parallel, see below          |
-| night   | 56 – 60        | `night` states, `relationship_changes` effects, everyone home |
+| morning | 0 – 3          | agents leave home, `allocations` (work, games, home, eat, therapy, meditation) |
+| market  | 3 – 18         | working day; `market.rounds` in order (asks, bids, clears)  |
+| app     | 18 – 29        | `app.profiles`, `app.swipes`, `app.matches`                 |
+| date    | 29 – 51        | `dates`: the two tables run in parallel, see below          |
+| visit   | 51 – 55        | accepted `visits` (guest walks to host's house), `gossip`   |
+| night   | 55 – 60        | `night` states, everyone home                               |
+
+(These match the scene's constants `MorningEnd = 3`, `AppEnd = 29`, `DateEnd = 51`,
+`VisitEnd = 55`; the scene's single "day" window 3 – 26 covers the HUD's market and app
+windows, and it may set `DayEnd = 18` to match the split exactly.)
 
 Within one phase the items of a list are revealed in list order, spread evenly across the
 window: with `n` items and `f` the fraction of the window elapsed, items `0 .. floor(f * n)`
@@ -78,7 +82,7 @@ empty. `run.days * 60` is the total length; `t` beyond the end is clamped.
     "calls": 922,
     "total_usd": 0.3354
   },
-  "timeline": {"day_seconds": 60, "phases": {"morning": [0, 6], "market": [6, 14], "app": [14, 24], "visit": [24, 28], "date": [28, 56], "night": [56, 60]}},
+  "timeline": {"day_seconds": 60, "phases": {"morning": [0, 3], "market": [3, 18], "app": [18, 29], "date": [29, 51], "visit": [51, 55], "night": [55, 60]}},
   "agents": [],
   "goods": [],
   "days": [],
@@ -312,8 +316,9 @@ position of a point just above the agent's head, normalised to `0..1` of the can
 (origin top-left), and `visible` says whether that point is inside the frame; the HTML
 layer anchors speech bubbles and name labels with them. If `sx`/`sy` are absent the
 HTML falls back to a transcript column instead of bubbles. `place` is one of `home`,
-`street`, `work`, `restaurant`, `table`, `therapy`, `garden`, `visit`. `phase` is one of
-the six phase names above (or `setup` before the first day).
+`street`, `work`, `restaurant`, `table`, `therapy`, `garden`, `visit`. `phase` is the
+scene's own phase name (`morning`, `day`, `app`, `date`, `visit`, `night`); the HTML layer
+shows it in the scene caption and keeps its own reveal schedule from `timeline.phases`.
 
 `Module.lovetownReady(info)` — the HTML defines it as a function; the Nim side calls it
 once the replay is loaded and the scene is ready (`info` is free-form, for example
