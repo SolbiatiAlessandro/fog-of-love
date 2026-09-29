@@ -122,3 +122,69 @@ What did not / known gaps:
   decline reason.
 - The shared checkout `~/Projects/fog-of-love` may still be on the viewer agent's state; the engine lives in the
   same `main` (pushed from the `engine` worktree). `git pull` there.
+
+### 2026-09-28 23:30 PDT — Engine iteration 2: dating hugs, app exclusivity, honest invites, auto meals
+
+Diagnosis of `dev-12x7-s1`: hugs 0.0 for every agent every day (only cohabiting or a visit gave hug hours, and neither
+happened), 0 cohabiting, 42 ask_again / 8 decline / 0 propose_move_in, 6 invites all from one agent and 0 accepted,
+dating pairs churned because dating agents kept swiping and re-matching, food 0.65 because agents scheduled eating
+without buying meals.
+
+Engine changes (commit `0396da1`, then `2d58111`; BUILD_SPEC event schema unchanged, only optional fields added):
+1. **Dating pairs share home hours.** A dating pair's hug hours = min of the two partners' home hours, exactly as for
+   cohabiting. Cohabiting keeps: the same overlap without any invite, shared meals and videogames (a cohabiting agent
+   eats from the partner's stock when short and plays the best game of the shared collection; decay lands on the
+   owner's copy), and the standing evening together. The morning observation for dating agents says "You are dating X.
+   Hours you both spend at home are spent together."
+2. **Exclusivity and progression.** Dating agents do not see the app (no profile, no swipes, not shown to others)
+   unless they `breakup` in the morning JSON; the standing evening date stays. The post-date question states how many
+   days they have been dating (or that it was a first date) and spells out the three choices: keep dating, propose
+   moving in together (share a home, meals and games; happens if both propose or the other accepts next morning), or
+   end it. `propose_move_in: true` in the morning JSON of a dating agent goes through the existing
+   `pending_move_in` / `accept_move_in` path (both proposing the same morning cohabit at once).
+3. **Invites.** The singles' observation states the mechanic: accept an invite and you spend your home hours at their
+   place tonight and get hug time; every non-partner visit is posted on the public gossip board. When a visit is
+   accepted, both guest and host get at least 2 home hours (taken from work, then games), before `morning.allocation`
+   is logged, with `home_hours_adjusted: true`; the agent is told its adjusted day. `gossip.post` is exactly
+   `{text, about}`. Second fix (`2d58111`): an accepted invite is honoured unless either side is cohabiting. In
+   `dev-12x14-s2` the invitees accepted 4 of 8 invites but every one was voided because a date on the evening between
+   invite and answer had made someone "dating" (twice the pair were dating each other). Now the visit happens; if the
+   two are not each other's partner it is posted on the board, a partner's visit is not.
+4. **Meals.** If an agent schedules more eating hours than meals it owns, the world buys the cheapest meal (Food Truck
+   Meal, 2) at list price from its cash for the shortfall, logged as `market.order` (`side: "bid", auto: true`) and a
+   `market.clear` fill (`auto: true`); the observation states the rule and the agent is told what was charged.
+5. `--num-days` default stays 7; the runs below use 14 and 10 days.
+6. Metrics: 5 also reports the mean need-weight distance of pairs that reached cohabiting; 10 defines a "better-fit
+   willing single" as a single whose need distance to the agent is lower than the partner's and who swiped yes on the
+   agent at some point in the run (examples listed).
+7. Tests: `tests/test_iteration2.py`, 6 new (dating hug overlap + cohabiting shared goods, app hidden while dating,
+   morning propose_move_in path, auto meal purchase, invite with zero home hours, invite surviving a date in between /
+   partner visits not gossip). `pytest`: 21 passed. Mock 12x14 in 1.6 s, `STRICT=1 node viewer/smoke_test.js` OK.
+
+**Real run 3: `runs/dev-12x14-s2`** (12 agents, 14 days, google/gemma-3-27b-it, seed 2, `--budget-usd 0.8`,
+`--concurrency 8`): 618 calls, **USD 0.2063** (all calls reported cost; 2.59M prompt tokens, 47k completion tokens),
+798 s, 0 failed calls, 1 retry, 0 JSON fallbacks. Run before the `2d58111` visit fix. Total real spend tonight after it:
+USD 0.343.
+
+Counts (vs `dev-12x7-s1`):
+- Relationship changes 16: single->dating 8, dating->cohabiting 5, dating->single 3 (s1: 25, all single<->dating).
+  **5 cohabiting pairs** (first on day 4; 10 of 12 agents live with someone at the end), 0 dating pairs left, 2 singles.
+- Post-date choices: 53 ask_again, **10 propose_move_in**, 5 decline (s1: 42 / 0 / 8). 3 morning `accept_move_in`,
+  1 morning `propose_move_in`, 0 morning breakups. 34 dates, 15 app matches (s1: 25 dates, 33 matches: the app is
+  quieter because dating agents are off it).
+- Visits: 8 invites (from 5 agents), 0 accepted, 0 gossip posts (see fix 3 above: 4 were accepted by the invitee and
+  voided by the engine). `STRICT=1` smoke test therefore fails on this run for the missing `gossip.post` only.
+- Hugs on **110 of 168 agent-days** (s1: 0 of 84). Mean m: food **0.911** (s1 0.649), hugs **0.488** (0.0), money 0.852
+  (0.946), fun 0.146 (0.130). Mean hours: work 7.48 (s1 9.61), games 2.68 (1.4), home 2.65 (1.92), eat 1.82 (1.76).
+- 79 auto-bought meals (all Food Truck Meals); 3 therapy agent-days (1 agent), 112 meditation agent-days.
+- Metrics: clothes spend 26.9 per agent-day before cohabiting vs 25.8 after (72 cohabiting agent-days); matched pairs
+  closer than random (L1 0.75 vs 0.88, n=15), breakups farther (0.99, n=3) than couples that stayed (0.84, n=5, all of
+  them cohabiting); **every one of the 10 cohabiting partners works fewer hours after moving in** (e.g. Cameron Diaz
+  11.3 -> 5.5, Quentin Ramirez 8.8 -> 4.8); love residual: a better-fit willing single existed on 9 of 72 cohabiting
+  agent-days (Olivia Perez 3, Felix Garcia 3, Katherine Lee 2, Sebastian Thompson 1) and nobody left; profile texts
+  that mention a schedule got a 0.79 yes-rate vs 0.51; Linen Shirt is again the marker (first wearer neither
+  most-matched nor most-seen).
+- Reading: making hugs reachable while dating and hiding the app while dating turned churn into progression; Gemma
+  proposes moving in on its own once the choice is explained (10 of 68 choices) and the acceptance path works. Fun
+  stays low (0.15) even with more game hours because yields decay and few own more than one game. Visits are the
+  remaining dead mechanic, for an engine reason now fixed.
