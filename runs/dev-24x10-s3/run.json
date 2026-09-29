@@ -1,0 +1,25 @@
+{
+  "model": "google/gemma-3-27b-it",
+  "num_agents": 24,
+  "num_days": 10,
+  "seed": 3,
+  "budget_usd": 1.2,
+  "days": 10,
+  "total_usd": 0.2535,
+  "calls": 828,
+  "seconds": 479.5,
+  "llm": {
+    "calls": 828,
+    "failed_calls": 0,
+    "retries": 0,
+    "prompt_tokens": 3255917,
+    "completion_tokens": 64686,
+    "cost_usd_reported": 0.25353972399999986,
+    "cost_usd_fallback": 0.2895820600000005,
+    "cost_reported_calls": 828,
+    "latency_seconds_total": 2628.493259191513,
+    "first_failure": null,
+    "estimated_cost_usd": 0.25353972399999986,
+    "transport": "https://openrouter.ai/api/v1/chat/completions"
+  }
+}
