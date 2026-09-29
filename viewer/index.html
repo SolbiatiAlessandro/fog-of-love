@@ -26,6 +26,7 @@
       <button id="reveal" aria-pressed="false" class="reveal-btn">Reveal: off</button>
     </div>
     <div class="loader">
+      <label class="runs-label small muted">Run <select id="runs" hidden aria-label="Pick a run"></select></label>
       <span id="load-status" class="status">Loading…</span>
       <label class="file">Open events.jsonl <input id="file" type="file" accept=".jsonl,.json,.txt"></label>
       <button id="load-fixture" hidden>Load sample fixture</button>
@@ -44,6 +45,12 @@
       <h2>Market <span class="muted small">clearing prices by round · hover for values</span></h2>
       <div class="market-wrap"><canvas id="market"></canvas></div>
       <div id="orders" class="orders"></div>
+    </section>
+
+    <section class="panel standings-panel" id="standings-section" aria-label="Standings" hidden>
+      <h2>Standings <span class="muted small">author-level Σ U</span></h2>
+      <div id="standings"></div>
+      <p id="standings-note" class="muted small"></p>
     </section>
     </div>
 
@@ -71,11 +78,6 @@
       <ul id="gossip" class="gossip"></ul>
     </section>
 
-    <section class="panel standings-panel" id="standings-section" aria-label="Standings" hidden>
-      <h2>Standings <span class="muted small">author-level Σ U</span></h2>
-      <div id="standings"></div>
-      <p id="standings-note" class="muted small"></p>
-    </section>
     </div>
   </main>
 

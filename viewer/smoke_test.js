@@ -19,10 +19,18 @@ assert.ok(events.length > 0, 'no events');
 core.assignTimes(events);
 const sum = core.summarize(events);
 
-// every spec event type present (fixture must exercise all of them; real runs may lack some)
+// Event types. The fixture (no path argument) must exercise all 18. A real run may legitimately
+// never emit the social ones (visit.invite, gossip.post, relationship.change, app.match, date.*):
+// STRICT=1 warns about those and fails only on the required set (setup.*, morning.allocation,
+// market.*, app.profile, app.swipe, night.state, run.cost, run.end).
 const missing = core.EVENT_TYPES.filter((t) => !sum.counts[t]);
-const strict = !process.argv[2] || process.env.STRICT === '1';
-if (strict) assert.deepStrictEqual(missing, [], `missing event types: ${missing.join(', ')}`);
+const fixtureMode = !process.argv[2];
+const strict = fixtureMode || process.env.STRICT === '1';
+const requiredMissing = missing.filter((t) => !core.OPTIONAL_EVENT_TYPES.includes(t));
+const optionalMissing = missing.filter((t) => core.OPTIONAL_EVENT_TYPES.includes(t));
+if (fixtureMode) assert.deepStrictEqual(missing, [], `fixture must contain every event type; missing: ${missing.join(', ')}`);
+if (strict) assert.deepStrictEqual(requiredMissing, [], `missing required event types: ${requiredMissing.join(', ')}`);
+if (optionalMissing.length) console.warn(`warning: no ${optionalMissing.join(', ')} events in this run (allowed; the panels that depend on them stay empty)`);
 
 // times are monotone and inside the run
 let prev = -1;
@@ -45,11 +53,23 @@ for (const name of s.agentOrder) {
   assert.strictEqual(a.nights.length, sum.days, `${name} nights != days`);
   assert.ok(typeof a.cash === 'number', `${name} cash`);
   assert.ok(a.wearing, `${name} wearing`);
+  assert.ok(a.inventory && typeof a.inventory === 'object' && !Array.isArray(a.inventory), `${name} inventory is {item: qty}`);
   if (strict) {
     assert.ok(a.needs && a.needs.shadow, `${name} needs`);
     const wsum = core.NEEDS.reduce((acc, k) => acc + (a.needs.w[k] || 0), 0);
     assert.ok(Math.abs(wsum - 1) < 1e-6, `${name} weights sum ${wsum}`);
   }
+}
+// goods are normalised to one vocabulary whatever the producer wrote
+for (const g of s.goods) {
+  assert.ok(['clothing', 'game', 'food', 'other'].includes(g.category), `good ${g.id} category ${g.category}`);
+  assert.ok(g.tier === null || g.tier === g.tier.toLowerCase(), `good ${g.id} tier ${g.tier}`);
+  assert.ok(typeof s.trades[g.id] === 'number', `trade count for ${g.id}`);
+}
+// profile texts: a string (today's or an earlier one, flagged) or null, never ''
+for (const p of Object.values(s.app.profiles)) {
+  assert.ok(p.text === null || (typeof p.text === 'string' && p.text.length > 0), `profile text for ${p.name}`);
+  assert.ok(typeof p.fallback === 'boolean', `profile fallback flag for ${p.name}`);
 }
 // price history: every good has days*rounds points
 const rounds = Math.max(...Object.values(s.priceHistory).map((h) => h.length));
@@ -76,5 +96,7 @@ assert.strictEqual(st.length, s.agentOrder.length);
 for (let i = 1; i < st.length; i++) assert.ok(st[i - 1].sumU >= st[i].sumU);
 if (strict) assert.ok(s.end, 'run.end present');
 
-console.log(`OK ${path.relative(process.cwd(), file)}: ${sum.total} events, ${sum.agents.length} agents, ${sum.days} days, ${allDates.length} dates, ${s.gossip.length} gossip posts, ${Object.keys(sum.counts).length} event types`);
+const soldUnits = Object.values(s.trades).reduce((acc, n) => acc + n, 0);
+const untraded = s.goods.filter((g) => !s.trades[g.id]).map((g) => g.id);
+console.log(`OK ${path.relative(process.cwd(), file)}: ${sum.total} events, ${sum.agents.length} agents, ${sum.days} days, ${allDates.length} dates, ${s.gossip.length} gossip posts, ${s.visitLog.length} visit invites, ${soldUnits} units sold (${untraded.length} goods never traded), ${Object.keys(sum.counts).length}/${core.EVENT_TYPES.length} event types`);
 if (missing.length) console.log(`note: types absent in this file: ${missing.join(', ')}`);

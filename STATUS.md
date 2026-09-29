@@ -29,6 +29,40 @@ Repo created, BUILD_SPEC.md written. Engine and viewer agents launched.
 - Not done: no real run bundled yet (engine agent's job); the viewer has only been checked
   against the fixture.
 
+### 2026-09-28 21:47 PDT — viewer on the real run, run picker, real screenshots
+
+- Checked the viewer in headless Chrome against `runs/dev-12x7-s1` (12 × 7, Gemma 27B). What broke or looked wrong,
+  now fixed in `viewer/viewer.js`: goods `category`/`tier` are capitalised (`"Clothing"`, `"Mid"`) where the fixture
+  used lowercase, so all market groups were empty and badges grey (normalised on load); market rounds start at 0
+  (fixture: 1), which pushed the first price point off-axis (points placed by offset from the first round seen);
+  `night.state.inventory` is `{item: qty}`, not a list (was ignored, and meals leaked into inventory); two
+  `app.profile.text: null` (Victoria Walker) now fall back to the agent's last text, marked, or "no profile text";
+  12 houses laid out 10 + 2 (now balanced 6 + 6); long personas (415 chars) clamp to four lines with a toggle.
+- Market: every clearing price in the run equals the list price, so the lines are flat; the chart now draws volume
+  dots (area ∝ units sold) and labels each good with units sold, and a good that never traded (both High garments,
+  Thrift Hoodie, Dungeon Delve, Tasting Menu) is faint, dotted and labelled "no trades". Right padding fits the labels.
+- Also: standing dates (couples already dating, no match) listed under the matches; date outcomes show the stated
+  reason; gossip board lists visit invites (Fiona's four declined ones) instead of being blank; agent card shows
+  shopping bids, accepted invite/move-in, and a `fallback` chip; camera opens on the followed agent instead of
+  flying in; entry animations off under `prefers-reduced-motion`; Standings panel moved under the market.
+- `viewer/smoke_test.js`: `STRICT=1` now fails only on the always-required types (setup.*, morning.allocation,
+  market.*, app.profile, app.swipe, night.state, run.cost, run.end) and warns on the optional ones (gossip.post,
+  visit.invite, relationship.change, app.match, date.*); the fixture (no path) still requires all 18. New asserts:
+  inventory shape, goods normalised, profile texts. Passes on the fixture, `dev-12x7-s1` (17/18, warns gossip.post)
+  and `dev-4x2-gemma-s1` (16/18). No mock run is checked in under `runs/`.
+- Run picker in the header: reads `runs/index.json` (`{name, path, agents, days, model, usd, note}`), lists the
+  fixture too, rewrites `?events=`. `viewer/make_runs_index.py` (stdlib) scans `runs/*/run.json`; generated
+  `runs/index.json` with the two real runs, largest first, so the viewer defaults to `dev-12x7-s1`.
+- Screenshots of the real run in `docs/`: `viewer-real-day1-app.png` (six matches), `viewer-real-day1-date.png`
+  (Hannah Ito and Jack Kim at the table, transcript at turn 7), `viewer-real-day7-market-standings.png` (market
+  with volume, Standings, Reveal). Fixture screenshots removed; `docs/VIEWER.md` and a README "Watch a replay"
+  section use the new ones.
+- `viewer/publish_docs.sh` now regenerates the index and bundles every indexed run under `docs/replay/runs/`
+  (RUN_ROOT rewritten to `./`), defaulting to the real run with the fixture in the picker. GitHub Pages remains
+  refused on this plan (HTTP 422); local viewing documented in `docs/VIEWER.md`.
+- Not done: mock run not bundled (none under `runs/`); no cohabiting or gossip in the real run, so those map hearts
+  and board posts are only exercised by the fixture.
+
 ## Engine
 
 ### 2026-09-28 21:55 PDT — engine on main, mock certified, tiny real run

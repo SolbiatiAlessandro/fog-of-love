@@ -1,0 +1,20 @@
+[
+  {
+    "name": "dev-12x7-s1",
+    "path": "runs/dev-12x7-s1/events.jsonl",
+    "agents": 12,
+    "days": 7,
+    "model": "google/gemma-3-27b-it",
+    "usd": 0.1285,
+    "note": "seed 1 \u00b7 468 calls \u00b7 528 s"
+  },
+  {
+    "name": "dev-4x2-gemma-s1",
+    "path": "runs/dev-4x2-gemma-s1/events.jsonl",
+    "agents": 4,
+    "days": 2,
+    "model": "google/gemma-3-27b-it",
+    "usd": 0.0085,
+    "note": "seed 1 \u00b7 52 calls \u00b7 42 s"
+  }
+]

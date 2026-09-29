@@ -28,6 +28,25 @@
     'run.cost', 'run.end',
   ];
 
+  // Event types that a real run may legitimately never emit (no visits, no gossip, no
+  // relationship changes); the strict smoke test warns instead of failing on these.
+  const OPTIONAL_EVENT_TYPES = [
+    'app.match', 'date.scene', 'date.turn', 'date.outcome', 'relationship.change', 'visit.invite', 'gossip.post',
+  ];
+
+  // The engine writes goods as {category: "Clothing"|"Games"|"Food", tier: "Low"|"Mid"|"High"|"Standard"};
+  // the fixture used lowercase singulars. Normalise both to one vocabulary.
+  const CATEGORY_ALIAS = { clothing: 'clothing', clothes: 'clothing', game: 'game', games: 'game', food: 'food', meal: 'food', meals: 'food', restaurant: 'food' };
+  function normCategory(c) { const k = String(c == null ? '' : c).toLowerCase(); return CATEGORY_ALIAS[k] || k || 'other'; }
+  function normTier(t) { const k = String(t == null ? '' : t).toLowerCase(); return k || null; }
+  /** Inventory arrives as a list (fixture) or {item: qty} (engine); keep {item: qty}. */
+  function normInventory(inv) {
+    const out = {};
+    if (Array.isArray(inv)) inv.forEach((id) => { out[id] = (out[id] || 0) + 1; });
+    else if (inv && typeof inv === 'object') Object.entries(inv).forEach(([id, q]) => { if (Number(q) > 0) out[id] = Number(q); });
+    return out;
+  }
+
   /** Parse events.jsonl text. Bad lines are reported, not fatal. */
   function parseEvents(text) {
     const events = [];
@@ -99,7 +118,8 @@
       persona_summary: a.persona_summary || '',
       cash: typeof a.cash === 'number' ? a.cash : 0,
       wearing: a.wearing || null,
-      inventory: a.wearing ? [a.wearing] : [],
+      inventory: a.wearing ? { [a.wearing]: 1 } : {},
+      profileText: null, // last non-empty profile text, reused when a day's text is null
       partner: null,
       status: 'single',
       sentence: null,
@@ -128,11 +148,11 @@
         day: 0, phase: 'setup', days: 0, seed: null,
         agents: {}, agentOrder: [],
         goods: [], goodById: {},
-        priceHistory: {}, book: {}, lastClear: {},
+        priceHistory: {}, book: {}, lastClear: {}, trades: {}, tradeLog: {},
         app: { day: 0, profiles: {}, profileOrder: [], swipes: [], matches: [] },
         dates: [], dateIndex: {}, lastDates: [],
-        gossip: [], relationships: [], allocs: {}, visits: [],
-        cost: null, end: null, counts: {},
+        gossip: [], relationships: [], allocs: {}, visits: [], visitLog: [],
+        cost: null, end: null, counts: {}, marketSeq: 0,
       };
     }
 
@@ -167,6 +187,7 @@
       s.dateIndex = {};
       s.allocs = {};
       s.visits = [];
+      s.marketSeq = 0;
     }
 
     apply(ev) {
@@ -180,8 +201,8 @@
             s.agents[a.name] = newAgent(a);
             s.agentOrder.push(a.name);
           });
-          s.goods = (ev.goods || []).map((g) => Object.assign({}, g));
-          s.goods.forEach((g) => { s.goodById[g.id] = g; s.priceHistory[g.id] = []; });
+          s.goods = (ev.goods || []).map((g) => Object.assign({}, g, { category: normCategory(g.category), tier: normTier(g.tier) }));
+          s.goods.forEach((g) => { s.goodById[g.id] = g; s.priceHistory[g.id] = []; s.trades[g.id] = 0; s.tradeLog[g.id] = []; });
           s.days = ev.days || 0;
           s.seed = ev.seed;
           break;
@@ -207,14 +228,20 @@
           s.lastClear[ev.good] = { day: ev.day, price: ev.price, filled: ev.filled || [] };
           if (s.book[ev.good]) s.book[ev.good] = { bids: [], asks: [] };
           const good = s.goodById[ev.good];
+          let sold = 0;
           (ev.filled || []).forEach((f) => {
+            const qty = Number(f.qty) > 0 ? Number(f.qty) : 1;
+            sold += qty;
             const buyer = s.agents[f.buyer];
             if (!buyer) return;
-            buyer.cash -= (ev.price || 0) * (f.qty || 1);
-            if (good && good.category !== 'food') {
-              for (let i = 0; i < (f.qty || 1); i++) buyer.inventory.push(ev.good);
-            }
+            buyer.cash -= (typeof f.price === 'number' ? f.price : ev.price || 0) * qty;
+            if (good && good.category !== 'food') buyer.inventory[ev.good] = (buyer.inventory[ev.good] || 0) + qty;
           });
+          if (sold > 0) {
+            s.trades[ev.good] = (s.trades[ev.good] || 0) + sold;
+            if (!s.tradeLog[ev.good]) s.tradeLog[ev.good] = [];
+            s.tradeLog[ev.good].push({ day: ev.day, round: typeof ev.round === 'number' ? ev.round : null, seq: s.marketSeq, qty: sold, price: ev.price });
+          }
           break;
         }
         case 'market.prices': {
@@ -223,13 +250,18 @@
             s.priceHistory[gid].push({ day: ev.day, round: ev.round, price });
           });
           s.book = {};
+          s.marketSeq += 1;
           break;
         }
         case 'app.profile': {
           if (!s.app.profiles[ev.name]) s.app.profileOrder.push(ev.name);
-          s.app.profiles[ev.name] = { name: ev.name, picture: ev.picture || {}, text: ev.text || '', t: ev.t };
           const a = this.agent(ev.name);
-          if (ev.picture && ev.picture.item) a.wearing = ev.picture.item;
+          const text = typeof ev.text === 'string' && ev.text.trim() ? ev.text.trim() : null;
+          if (text) a.profileText = text;
+          const pic = ev.picture || {};
+          // text: today's, else the last non-empty one this agent wrote (fallback: true), else null
+          s.app.profiles[ev.name] = { name: ev.name, picture: { item: pic.item || null, tier: normTier(pic.tier) }, text: text || a.profileText || null, fallback: !text, t: ev.t };
+          if (pic.item) a.wearing = pic.item;
           break;
         }
         case 'app.swipe': {
@@ -256,7 +288,7 @@
         }
         case 'date.outcome': {
           const d = this.findDate(ev.name, ev.partner, ev.day);
-          d.outcomes.push({ name: ev.name, partner: ev.partner, rating: ev.rating, choice: ev.choice, t: ev.t });
+          d.outcomes.push({ name: ev.name, partner: ev.partner, rating: ev.rating, choice: ev.choice, reason: ev.reason || '', t: ev.t });
           break;
         }
         case 'relationship.change': {
@@ -272,7 +304,9 @@
           break;
         }
         case 'visit.invite': {
-          s.visits.push({ name: ev.name, target: ev.target, accepted: !!ev.accepted, t: ev.t });
+          const v = { name: ev.name, target: ev.target, accepted: !!ev.accepted, day: ev.day, t: ev.t };
+          s.visits.push(v);
+          s.visitLog.unshift(v);
           break;
         }
         case 'gossip.post': {
@@ -282,7 +316,7 @@
         case 'night.state': {
           const a = this.agent(ev.name);
           if (typeof ev.cash === 'number') a.cash = ev.cash;
-          if (Array.isArray(ev.inventory)) a.inventory = ev.inventory.slice();
+          if (ev.inventory && typeof ev.inventory === 'object') a.inventory = normInventory(ev.inventory);
           if (ev.wearing) a.wearing = ev.wearing;
           a.partner = ev.partner || null;
           if (ev.status) a.status = ev.status;
@@ -318,7 +352,7 @@
     }
   }
 
-  const core = { DAY_SECONDS, PHASE_WINDOW, PHASE_ORDER, NEEDS, EVENT_TYPES, parseEvents, assignTimes, summarize, Replay };
+  const core = { DAY_SECONDS, PHASE_WINDOW, PHASE_ORDER, NEEDS, EVENT_TYPES, OPTIONAL_EVENT_TYPES, normCategory, normTier, normInventory, parseEvents, assignTimes, summarize, Replay };
   if (typeof module !== 'undefined' && module.exports) module.exports = core;
   root.FogOfLove = core;
   if (typeof document === 'undefined') return;
@@ -335,8 +369,14 @@
   const AGENT_HUES = [212, 25, 160, 45, 330, 120, 260, 0, 190, 70, 290, 100];
   const agentColor = (i) => `hsl(${AGENT_HUES[i % AGENT_HUES.length]} 55% 55%)`;
 
+  // Where the repo root is relative to this page. publish_docs.sh rewrites it to './' for docs/replay/,
+  // where the runs are bundled next to the page. runs/index.json (see make_runs_index.py) feeds the picker.
+  const RUN_ROOT = './';
+  const RUNS_INDEX = RUN_ROOT + 'runs/index.json';
+  const FIXTURE_URL = 'fixtures/sample-events.jsonl';
+
   const ui = {
-    events: [], replay: null, loaded: false,
+    events: [], replay: null, loaded: false, runs: [], personaOpen: false, camSnap: false,
     playing: true, speed: 1, playhead: 0, runSeconds: 0,
     follow: null, autoFollow: true, autoTimer: 0, followIndex: -1,
     reveal: false,
@@ -406,6 +446,7 @@
     ui.marketDirty = true;
     ui.followIndex = -1;
     ui.follow = null;
+    ui.camSnap = true; // open directly on the followed agent, no fly-in
     $('#seek').max = String(ui.runSeconds);
     $('#seek').value = '0';
     buildDayButtons(sum.days);
@@ -426,6 +467,60 @@
       setStatus(`Could not load ${url} (${e.message}). Pick a file or load the sample fixture.`, true);
       $('#load-fixture').hidden = false;
     }
+  }
+
+  // ---- runs picker
+  async function loadRunsIndex() {
+    try {
+      const res = await fetch(RUNS_INDEX, { cache: 'no-store' });
+      if (!res.ok) return [];
+      const list = await res.json();
+      return Array.isArray(list) ? list.filter((r) => r && typeof r.path === 'string') : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  const runUrl = (r) => RUN_ROOT + String(r.path).replace(/^\.?\//, '');
+  function renderRunsPicker(current) {
+    const sel = $('#runs');
+    if (!sel) return;
+    const opts = ui.runs.map((r) => {
+      const meta = [
+        r.agents && r.days ? `${r.agents}×${r.days}` : null,
+        r.model ? String(r.model).replace(/^.*\//, '') : null,
+        typeof r.usd === 'number' ? `USD ${r.usd.toFixed(2)}` : null,
+      ].filter(Boolean).join(' · ');
+      return `<option value="${esc(runUrl(r))}" title="${esc(r.note || '')}">${esc(r.name)}${meta ? ' — ' + esc(meta) : ''}</option>`;
+    });
+    opts.push(`<option value="${esc(FIXTURE_URL)}">sample fixture — 6×3 synthetic</option>`);
+    sel.innerHTML = opts.join('');
+    sel.hidden = false;
+    sel.value = current;
+    if (sel.value !== current) {
+      const o = document.createElement('option');
+      o.value = current; o.textContent = current;
+      sel.appendChild(o);
+      sel.value = current;
+    }
+  }
+  /** Load another run: rewrite ?events= (dropping day/t/follow) and reload from t=0. */
+  function switchRun(url) {
+    const p = new URLSearchParams(location.search);
+    ['day', 't', 'follow'].forEach((k) => p.delete(k));
+    p.set('events', url);
+    history.replaceState(null, '', location.pathname + '?' + p.toString());
+    const sel = $('#runs');
+    if (sel && !sel.hidden) { sel.value = url; if (sel.value !== url) renderRunsPicker(url); }
+    loadUrl(url);
+  }
+  async function boot() {
+    const p = new URLSearchParams(location.search);
+    ui.runs = await loadRunsIndex();
+    let url = p.get('events');
+    // no ?events=: the first indexed run (largest real run), else the engine's runs/latest
+    if (!url) url = ui.runs.length ? runUrl(ui.runs[0]) : RUN_ROOT + 'runs/latest/events.jsonl';
+    if (ui.runs.length) renderRunsPicker(url);
+    loadUrl(url);
   }
 
   function applyUrlState(sum) {
@@ -496,8 +591,9 @@
     };
     map.tables = [{ x: 710, y: 340 }, { x: 870, y: 340 }];
     map.houses = {};
-    const perRow = Math.min(names.length, 10) || 1;
-    const rows = Math.ceil(names.length / perRow);
+    // balanced rows: 12 agents → 6 + 6, not 10 + 2
+    const rows = Math.ceil(names.length / 10) || 1;
+    const perRow = Math.ceil(names.length / rows) || 1;
     const step = 920 / perRow;
     const hw = Math.min(88, step - 14);
     names.forEach((n, i) => {
@@ -615,7 +711,8 @@
       tx = Math.max(vw / 2, Math.min(map.w - vw / 2, tx));
       ty = Math.max(vh / 2, Math.min(map.h - vh / 2, ty));
     }
-    const k = Math.min(1, dt * 4);
+    const k = ui.camSnap ? 1 : Math.min(1, dt * 4);
+    ui.camSnap = false;
     ui.cam.x += (tx - ui.cam.x) * k;
     ui.cam.y += (ty - ui.cam.y) * k;
     ui.cam.z += (tz - ui.cam.z) * k;
@@ -773,12 +870,16 @@
       const sw = swipesByTarget[name] || [];
       const chips = sw.map((x) => `<span class="swipe-chip ${x.yes ? 'yes' : 'no'}" title="${esc(x.name)} swiped ${x.yes ? 'yes' : 'no'}">${esc(initials(x.name))} ${x.yes ? '✓' : '✗'}</span>`).join('');
       const statusTxt = a.status === 'dating' ? ` · dating ${esc(firstName(a.partner || ''))}` : '';
+      // null text (the model returned none): reuse the agent's last text, marked, else a placeholder
+      const textHtml = p.text
+        ? `${esc(p.text)}${p.fallback ? ' <span class="muted small">(earlier text)</span>' : ''}`
+        : '<span class="muted"><i>no profile text</i></span>';
       return `<article class="card ${matchedNames.has(name) ? 'matched' : ''} ${name === ui.follow ? 'selected' : ''}" data-name="${esc(name)}">
         <div class="card-pic">${garmentSVG(tier, 72, goodLabel(p.picture.item))}${tierBadge(tier)}</div>
         <div class="card-body">
           <h4>${esc(name)}<span class="muted">${statusTxt}</span></h4>
           <div class="muted small">wearing ${esc(goodLabel(p.picture.item))}</div>
-          <p class="profile-text">${esc(p.text)}</p>
+          <p class="profile-text">${textHtml}</p>
           <div class="chips">${chips}</div>
         </div>
         ${matchedNames.has(name) ? '<span class="heart" aria-label="matched">♥</span>' : ''}
@@ -795,21 +896,28 @@
     $('#swipes').innerHTML = feed || '<li class="muted">No swipes yet.</li>';
 
     // matches + tonight's dates
+    const dateStatus = (d, fallback) => {
+      if (!d) return fallback;
+      if (d.outcomes.length >= 2) {
+        const oc = d.outcomes.map((o) => `${esc(firstName(o.name))}: ${esc(o.choice)} (${esc(o.rating)}/10)`).join(' · ');
+        return oc + (d.change ? ` → <b>${esc(d.change.to)}</b>` : ' → no change');
+      }
+      if (d.turns.length) return `at the restaurant · turn ${d.turns.length}`;
+      return 'arriving at the restaurant';
+    };
+    const pairKey = (a, b) => [a, b].sort().join('|');
+    const matchedPairs = new Set();
     const tonight = app.matches.map((m) => {
       const fresh = !ui.seenMatches.has(m.t);
       ui.seenMatches.add(m.t);
-      const d = s.dates.find((x) => (x.a === m.a && x.b === m.b) || (x.a === m.b && x.b === m.a));
-      let status = 'matched, date tonight';
-      if (d) {
-        if (d.outcomes.length >= 2) {
-          const oc = d.outcomes.map((o) => `${esc(firstName(o.name))}: ${esc(o.choice)} (${esc(o.rating)}/10)`).join(' · ');
-          status = oc + (d.change ? ` → <b>${esc(d.change.to)}</b>` : ' → no change');
-        } else if (d.turns.length) status = `at the restaurant · turn ${d.turns.length}`;
-        else status = 'arriving at the restaurant';
-      }
-      return `<li class="match ${fresh ? 'fresh' : ''}"><span class="heart">♥</span><b>${esc(m.a)}</b> &amp; <b>${esc(m.b)}</b><div class="small muted">${status}</div></li>`;
+      matchedPairs.add(pairKey(m.a, m.b));
+      const d = s.dates.find((x) => pairKey(x.a, x.b) === pairKey(m.a, m.b));
+      return `<li class="match ${fresh ? 'fresh' : ''}"><span class="heart">♥</span><b>${esc(m.a)}</b> &amp; <b>${esc(m.b)}</b><div class="small muted">${dateStatus(d, 'matched, date tonight')}</div></li>`;
     }).join('');
-    $('#matches').innerHTML = tonight || '<li class="muted">No matches yet today.</li>';
+    // couples already dating get a standing date without a match; list those too
+    const standing = s.dates.filter((d) => !matchedPairs.has(pairKey(d.a, d.b))).map((d) =>
+      `<li class="match standing"><span class="heart">♡</span><b>${esc(d.a)}</b> &amp; <b>${esc(d.b)}</b><div class="small muted">standing date (already dating) · ${dateStatus(d, '')}</div></li>`).join('');
+    $('#matches').innerHTML = (tonight + standing) || '<li class="muted">No matches yet today.</li>';
   }
 
   // ---- market chart (three small multiples: clothing, games, food)
@@ -835,11 +943,23 @@
     const ctx = canvas.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, cw, ch);
-    const font = (px, w) => `${w || 400} ${px}px system-ui, -apple-system, "Segoe UI", sans-serif`;
     const days = Math.max(1, s.days || s.day);
+    // the engine numbers rounds from 0, the fixture from 1: place points by offset from the first round seen
+    const allRounds = Object.values(s.priceHistory).flatMap((h) => h.map((p) => p.round));
+    const roundBase = allRounds.length ? Math.min(...allRounds) : 1;
     const roundsPerDay = Math.max(1, ...Object.values(s.priceHistory).map((h) => h.filter((p) => p.day === 1).length));
     const nx = days * roundsPerDay;
-    const padL = 44, padR = 128, padT = 18, padB = 14;
+    const xi = (p) => (p.day - 1) * roundsPerDay + (typeof p.round === 'number' ? p.round - roundBase : Math.min(p.seq || 0, roundsPerDay - 1));
+    const font = (px, w) => `${w || 400} ${px}px system-ui, -apple-system, "Segoe UI", sans-serif`;
+    // right padding fits the longest direct label ("Designer Coat 1500 · no trades"), up to half the width
+    const labelOf = (g) => {
+      const h = s.priceHistory[g.id] || [];
+      const last = h[h.length - 1];
+      return `${g.label || g.id}${last ? ' ' + fmtPrice(last.price) : ''} · ${s.trades[g.id] ? `${s.trades[g.id]} sold` : 'no trades'}`;
+    };
+    ctx.font = font(10);
+    const labelW = Math.max(60, ...s.goods.map((g) => ctx.measureText(labelOf(g)).width));
+    const padL = 44, padR = Math.min(Math.ceil(labelW) + 20, Math.floor(cw * 0.5)), padT = 18, padB = 14;
     const gameColors = [css('--series-1'), css('--series-2'), css('--series-3')];
     const tiers = TIER_COLOR();
     ui.marketSeries = [];
@@ -850,8 +970,10 @@
       const series = grp.goods.map((g, i) => {
         const hist = s.priceHistory[g.id] || [];
         const color = g.category === 'game' ? gameColors[i % gameColors.length] : (tiers[g.tier] || tiers.none);
-        const dash = g.category !== 'game' && /2$/.test(g.id) ? [5, 4] : null;
-        return { good: g, hist, color, dash };
+        // second good of a tier is dashed (by id suffix in the fixture, by position in the engine's goods list)
+        const twin = grp.goods.filter((x) => x.tier === g.tier);
+        const dash = g.category !== 'game' && (/2$/.test(g.id) || (twin.length > 1 && twin.indexOf(g) === 1)) ? [5, 4] : null;
+        return { good: g, hist, color, dash, trades: s.trades[g.id] || 0, log: s.tradeLog[g.id] || [] };
       });
       const all = series.flatMap((sr) => sr.hist.map((p) => p.price)).concat(grp.goods.map((g) => g.list_price)).filter((v) => v > 0);
       let lo = Math.min(...all), hi = Math.max(...all);
@@ -884,35 +1006,46 @@
         ctx.strokeStyle = css('--axis'); ctx.beginPath(); ctx.moveTo(x, top + padT + plotH); ctx.lineTo(x, top + padT + plotH + 3); ctx.stroke();
         ctx.fillText(`D${d}`, x, top + padT + plotH + 3);
       }
-      // series
+      // series. A good that never traded is faint and dotted: its "price" is only the list price
+      // carried through the clearing house. Dots mark rounds with fills, area ∝ units sold.
       series.forEach((sr) => {
-        ctx.strokeStyle = sr.color; ctx.lineWidth = 2; ctx.setLineDash(sr.dash || []);
+        const dead = sr.trades === 0;
+        ctx.save();
+        if (dead) ctx.globalAlpha = 0.4;
+        ctx.strokeStyle = sr.color; ctx.lineWidth = dead ? 1.5 : 2; ctx.setLineDash(dead ? [2, 4] : (sr.dash || []));
         ctx.beginPath();
         sr.hist.forEach((p, i) => {
-          const x = xOf((p.day - 1) * roundsPerDay + (p.round - 1));
+          const x = xOf(xi(p));
           const y = yOf(p.price);
           if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
         });
         ctx.stroke();
         ctx.setLineDash([]);
+        ctx.globalAlpha = 0.65;
+        ctx.fillStyle = sr.color;
+        sr.log.forEach((tr) => {
+          const x = xOf(xi(tr));
+          const y = yOf(typeof tr.price === 'number' && tr.price > 0 ? tr.price : (sr.good.list_price || lo));
+          ctx.beginPath(); ctx.arc(x, y, 2 + Math.sqrt(tr.qty) * 1.6, 0, Math.PI * 2); ctx.fill();
+        });
+        ctx.restore();
         const last = sr.hist[sr.hist.length - 1];
-        const lx = last ? xOf((last.day - 1) * roundsPerDay + (last.round - 1)) : padL;
+        const lx = last ? xOf(xi(last)) : padL;
         const ly = last ? yOf(last.price) : yOf(sr.good.list_price);
         ctx.fillStyle = sr.color; ctx.beginPath(); ctx.arc(lx, ly, 3.5, 0, Math.PI * 2); ctx.fill();
         ctx.strokeStyle = css('--surface-1'); ctx.lineWidth = 2; ctx.stroke();
         sr.labelY = ly;
       });
-      // direct labels at line ends, de-collided
+      // direct labels at line ends, de-collided; "(no trades)" for goods that never cleared a unit
       const ordered = series.slice().sort((a, b) => a.labelY - b.labelY);
       let prev = -1e9;
       ordered.forEach((sr) => {
         let y = Math.max(sr.labelY, prev + 11);
         prev = y;
-        const last = sr.hist[sr.hist.length - 1];
-        ctx.fillStyle = css('--text-secondary'); ctx.font = font(10); ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+        ctx.font = font(10); ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
         ctx.fillStyle = sr.color; ctx.fillRect(padL + plotW + 6, y - 3, 6, 6);
-        ctx.fillStyle = css('--text-secondary');
-        ctx.fillText(`${sr.good.label || sr.good.id}${last ? ' ' + fmtPrice(last.price) : ''}`, padL + plotW + 16, y);
+        ctx.fillStyle = sr.trades ? css('--text-secondary') : css('--text-muted');
+        ctx.fillText(labelOf(sr.good), padL + plotW + 16, y);
       });
       ui.marketSeries.push({ grp, series, top, xOf, yOf, plotW, padL, roundsPerDay });
     });
@@ -923,13 +1056,16 @@
       const x = padL + (nx <= 1 ? 0 : (plotW * i) / (nx - 1));
       ctx.strokeStyle = css('--axis'); ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, ch); ctx.stroke(); ctx.setLineDash([]);
-      const day = Math.floor(i / roundsPerDay) + 1, round = (i % roundsPerDay) + 1;
-      const lines = [`Day ${day} · round ${round}`];
+      const day = Math.floor(i / roundsPerDay) + 1, round = (i % roundsPerDay) + roundBase;
+      const lines = [`Day ${day} · round ${round - roundBase + 1}`];
       s.goods.forEach((g) => {
         const p = (s.priceHistory[g.id] || []).find((q) => q.day === day && q.round === round);
-        if (p) lines.push(`${g.label || g.id}: ${fmtPrice(p.price)}`);
+        if (!p) return;
+        const tr = (s.tradeLog[g.id] || []).find((q) => q.day === day && (typeof q.round === 'number' ? q.round === round : q.seq === round - roundBase));
+        const vol = tr ? ` · ${tr.qty} sold` : ((s.trades[g.id] || 0) ? '' : ' · no trades');
+        lines.push(`${g.label || g.id}: ${fmtPrice(p.price)}${vol}`);
       });
-      const tw = 150, th = 12 * lines.length + 8;
+      const tw = 190, th = 12 * lines.length + 8;
       const bx = Math.min(cw - tw - 4, x + 8), by = 4;
       ctx.fillStyle = css('--surface-2'); ctx.strokeStyle = css('--axis');
       roundRect(ctx, bx, by, tw, th, 4); ctx.fill(); ctx.stroke();
@@ -961,7 +1097,7 @@
       const bids = b.bids.map((o) => `<span class="order bid" title="${esc(o.name)}">${esc(firstName(o.name))} ${fmtPrice(o.price)}</span>`).join('');
       const asks = b.asks.map((o) => `<span class="order ask" title="${esc(o.name)}">${fmtPrice(o.price)}×${esc(o.qty)}</span>`).join('');
       if (!bids && !asks && !lc) return '';
-      return `<tr><td>${esc(g.label || g.id)}${g.tier ? ' ' + tierBadge(g.tier) : ''}</td><td>${bids || '<span class="muted">—</span>'}</td><td>${asks || '<span class="muted">—</span>'}</td><td class="num">${lc ? fmtPrice(lc.price) : '—'}<span class="muted small">${lc && lc.filled.length ? ` (${lc.filled.length} filled)` : ''}</span></td></tr>`;
+      return `<tr><td>${esc(g.label || g.id)}${['low', 'mid', 'high'].includes(g.tier) ? ' ' + tierBadge(g.tier) : ''}</td><td>${bids || '<span class="muted">—</span>'}</td><td>${asks || '<span class="muted">—</span>'}</td><td class="num">${lc ? fmtPrice(lc.price) : '—'}<span class="muted small">${lc && lc.filled.length ? ` (${lc.filled.length} filled)` : ''}</span></td></tr>`;
     }).join('');
     $('#orders').innerHTML = rows ? `<table><thead><tr><th>Good</th><th>Bids</th><th>Asks</th><th class="num">Last clear</th></tr></thead><tbody>${rows}</tbody></table>` : '<p class="muted">No orders yet.</p>';
   }
@@ -969,7 +1105,11 @@
   // ---- gossip
   function renderGossip() {
     const s = ui.replay.state;
-    $('#gossip').innerHTML = s.gossip.map((g) => `<li><span class="muted small">Day ${esc(g.day)}</span> ${esc(g.text)}</li>`).join('') || '<li class="muted">The board is empty.</li>';
+    // posts plus the visit invites that produced (or failed to produce) them, newest first
+    const items = s.gossip.map((g) => ({ t: g.t, html: `<li><span class="muted small">Day ${esc(g.day)}</span> ${esc(g.text)}</li>` }))
+      .concat(s.visitLog.map((v) => ({ t: v.t, html: `<li class="muted"><span class="small">Day ${esc(v.day)}</span> ${esc(firstName(v.name))} invited ${esc(firstName(v.target))} home — ${v.accepted ? 'accepted' : 'declined'}</li>` })))
+      .sort((x, y) => y.t - x.t);
+    $('#gossip').innerHTML = items.map((i) => i.html).join('') || '<li class="muted">The board is empty: no visits, no posts yet.</li>';
   }
 
   // ---- selected agent card
@@ -982,9 +1122,12 @@
     const a = s.agents[name];
     const idx = s.agentOrder.indexOf(name);
     const tier = goodTier(a.wearing) || 'none';
-    const inv = a.inventory.map((gid) => `<span class="chip">${esc(goodLabel(gid))}</span>`).join('') || '<span class="muted">nothing</span>';
+    const inv = Object.entries(a.inventory).map(([gid, n]) => `<span class="chip">${esc(goodLabel(gid))}${n > 1 ? ` ×${n}` : ''}</span>`).join('') || '<span class="muted">nothing</span>';
     const alloc = s.allocs[name];
-    const allocHtml = alloc ? `<div class="alloc">${['work', 'games', 'home', 'eat'].map((k) => `<span><b>${esc(alloc.hours[k] ?? 0)}h</b> ${k}</span>`).join('')}${alloc.therapy ? '<span class="chip">therapy</span>' : ''}${alloc.meditation ? '<span class="chip">meditation</span>' : ''}${alloc.invite ? `<span class="chip">invites ${esc(firstName(alloc.invite))}</span>` : ''}${alloc.breakup ? '<span class="chip warn">breakup</span>' : ''}</div>` : '<span class="muted">no allocation yet today</span>';
+    const bids = alloc && Array.isArray(alloc.shopping) && alloc.shopping.length
+      ? `<div class="alloc small muted">bids: ${alloc.shopping.map((o) => `${esc(goodLabel(o.good))} ${fmtPrice(o.price)}${o.qty > 1 ? `×${esc(o.qty)}` : ''}`).join(', ')}</div>` : '';
+    const allocHtml = alloc ? `<div class="alloc">${['work', 'games', 'home', 'eat'].map((k) => `<span><b>${esc((alloc.hours || {})[k] ?? 0)}h</b> ${k}</span>`).join('')}${alloc.therapy ? '<span class="chip">therapy</span>' : ''}${alloc.meditation ? '<span class="chip">meditation</span>' : ''}${alloc.invite ? `<span class="chip">invites ${esc(firstName(alloc.invite))}</span>` : ''}${alloc.accept_invite ? `<span class="chip">visits ${esc(firstName(alloc.accept_invite))}</span>` : ''}${alloc.accept_move_in ? '<span class="chip">accepts move-in</span>' : ''}${alloc.breakup ? '<span class="chip warn">breakup</span>' : ''}${alloc.fallback ? '<span class="chip warn" title="the model\'s JSON could not be parsed; default allocation">fallback</span>' : ''}</div>${bids}` : '<span class="muted">no allocation yet today</span>';
+    const longPersona = a.persona_summary.length > 260;
     const partner = a.partner ? `${esc(a.status)} with <b>${esc(a.partner)}</b>` : esc(a.status);
     const d = s.dateIndex[name] || null;
     const last = !d && a.lastDate ? a.lastDate : null;
@@ -1004,7 +1147,8 @@
         <div><h3>${esc(name)}</h3><div class="small muted">${partner}</div></div>
         <div class="agent-pic">${garmentSVG(tier, 44, goodLabel(a.wearing))}${tierBadge(tier)}</div>
       </header>
-      <p class="persona">${esc(a.persona_summary)}</p>
+      <p class="persona ${longPersona && !ui.personaOpen ? 'clamp' : ''}" ${longPersona ? 'title="click to expand or collapse"' : ''}>${esc(a.persona_summary)}</p>
+      ${longPersona ? `<button type="button" class="linkish persona-toggle">${ui.personaOpen ? 'less ▴' : 'more ▾'}</button>` : ''}
       <dl class="facts">
         <dt>Cash</dt><dd>${fmtCash(a.cash)}</dd>
         <dt>Wearing</dt><dd>${esc(goodLabel(a.wearing))}</dd>
@@ -1020,10 +1164,10 @@
     if (!d) return '';
     const other = d.a === name ? d.b : d.a;
     const turns = d.turns.map((t) => `<li class="${t.speaker === name ? 'me' : 'them'}"><b>${esc(firstName(t.speaker))}:</b> ${esc(t.text)}</li>`).join('');
-    const oc = d.outcomes.map((o) => `<span class="chip">${esc(firstName(o.name))}: ${esc(o.choice)} · ${esc(o.rating)}/10</span>`).join('');
+    const oc = d.outcomes.map((o) => `<li><span class="chip">${esc(firstName(o.name))}: ${esc(o.choice)} · ${esc(o.rating)}/10</span>${o.reason ? ` <span class="muted">${esc(o.reason)}</span>` : ''}</li>`).join('');
     return `<section class="transcript"><h5>${esc(title)} with ${esc(other)}${d.day ? ` <span class="muted small">(day ${d.day})</span>` : ''}</h5>
       ${d.scene ? `<p class="scene small muted">${esc(d.scene)}</p>` : ''}
-      <ol>${turns}</ol>${oc ? `<div class="chips">${oc}</div>` : ''}${d.change ? `<div class="small">→ <b>${esc(d.change.to)}</b></div>` : ''}</section>`;
+      <ol>${turns}</ol>${oc ? `<ul class="outcomes small">${oc}</ul>` : ''}${d.change ? `<div class="small">→ <b>${esc(d.change.to)}</b></div>` : ''}</section>`;
   }
   function renderAgentPicker() {
     const s = ui.replay.state;
@@ -1117,7 +1261,9 @@
       if (!f) return;
       f.text().then((txt) => loadText(txt, f.name));
     });
-    $('#load-fixture').addEventListener('click', () => loadUrl('fixtures/sample-events.jsonl'));
+    $('#load-fixture').addEventListener('click', () => switchRun(FIXTURE_URL));
+    $('#runs').addEventListener('change', (e) => { if (e.target.value) switchRun(e.target.value); });
+    $('#agent').addEventListener('click', (e) => { if (e.target.closest('.persona, .persona-toggle')) { ui.personaOpen = !ui.personaOpen; renderAgentCard(); } });
     const mk = $('#market');
     mk.addEventListener('mousemove', (e) => { const r = mk.getBoundingClientRect(); ui.hoverX = e.clientX - r.left; renderMarket(); });
     mk.addEventListener('mouseleave', () => { ui.hoverX = null; renderMarket(); });
@@ -1132,9 +1278,7 @@
     setSpeed(1);
     setPlaying(true);
     setAuto(true);
-    const p = new URLSearchParams(location.search);
-    const url = p.get('events') || 'fixtures/sample-events.jsonl';
-    loadUrl(url);
+    boot();
     requestAnimationFrame(frame);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
