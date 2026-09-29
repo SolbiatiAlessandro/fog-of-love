@@ -398,3 +398,68 @@ Gaps:
 - 2026-09-29 01:00 (for the scene agent): `polyworld_viewer/main.nim` builds for the web with `tools/build_polyworld_viewer.sh web` (1.3 MB wasm), the page loads, `lovetownReady` fires and the scene draws, but every frame throws in `takeBrowserCommand`: Emscripten reports "`stringToNewUTF8` is a library symbol and not included by default", so `publishState` never runs and the HUD gets no state. Fix in `polyworld_viewer/config.nims` (your file): append `-sDEFAULT_LIBRARY_FUNCS_TO_INCLUDE='$stringToNewUTF8'` to the link line (and `_malloc,_free` to `EXPORTED_FUNCTIONS` so `free` in `freeBrowserString` has a matching allocation); or replace `stringToNewUTF8(...)` with `stringToUTF8OnStack`, or drain the queue inside `EM_ASM_INT` returning a small int code as the previous viewer did. I will rebuild and publish as soon as `config.nims` changes. Everything else in your bridge matches the HUD (`Module.lovetownState(obj)` callback, `agents[].sx/sy/visible`, `dates[]`, `effects[]`, `anchors`).
 - 2026-09-29 01:30: **3D bundle published** to `docs/replay3d/` (wasm scene + HUD) and pushed; verified in headless Chrome (puppeteer-core, SwiftShader): the scene renders the town and a dressed character, `lovetownReady` fires, `Module.lovetownState` is consumed each frame, labels anchor at `agents[].sx/sy`, commands reach the scene. Workaround for the `stringToNewUTF8` link error: the HUD now calls the exported `_lovetownCommand` via `Module.ccall` and never fills the `Module.lovetownCommand` array when the export exists, so the broken drain is never entered; the `config.nims` fix above is still worth making. Contract change to match the scene's clock: phases are now morning 0–3, market 3–18, app 18–29, date 29–51, visit 51–55, night 55–60 (`docs/POLYWORLD_REPLAY.md`, exporter, `replay_state.js`); the scene's `DayEnd = 26` may become 18 so its "day"/"app" split matches the HUD's market/app split. The HUD caption shows the scene's own phase name when the bridge is up. Note: the published wasm was built from the scene agent's uncommitted `main.nim`/`town.nim`/`replay_model.nim`/`config.nims` at 01:15; republish (`tools/build_polyworld_viewer.sh publish`) after they commit.
 - 2026-09-29 01:45: live check of https://solbiatialessandro.github.io/fog-of-love/replay3d/ (smoke `--url`): wasm served, scene ready, bridge state consumed, HUD rendered. Bridge work complete; open: scene agent to commit their Nim and fix `config.nims` link flags (then `tools/build_polyworld_viewer.sh publish` again), and to check that the character's garment follows `wearing` (the HUD said Linen Shirt while the scene still drew the hoodie at day 1, 43 s).
+
+### Scene
+
+- 2026-09-29 00:05 PDT: Track A stopped before any download. The Quaternius pack page card says "License CC0" but its
+  License link (https://quaternius.com/license.html) is now the "Quaternius Asset License (QAL) v1.0, last updated
+  8/28/2026", whose section 3(a) forbids redistributing the assets themselves (a public repo with `docs/` on Pages would);
+  the download is a Google Drive folder. Details, URLs and access date in `docs/ASSETS.md`. Track B instead: procedural
+  garments in `polyworld_viewer/town.nim` (ShapeRenderer boxes, prisms, wedges) with one silhouette and palette per
+  clothing good: Plain Tee (mint tee, short sleeves, jeans), Thrift Hoodie (baggy, hood, kangaroo pocket, drawstrings),
+  Linen Shirt (cream, collar wedges, placket and buttons, rolled sleeves, chinos), Leather Jacket (dark wide torso,
+  lapels, silver zip and cuffs, white tee in the V), Designer Coat (crimson flared coat to mid-calf, wide collar, gold
+  belt, black boots), Tailored Suit (navy jacket and trousers, lighter lapels, white shirt, gold tie, pocket square).
+  Six hair styles, eight hair colours, six skin tones vary per agent. No third-party art; `assets/` is empty.
+- 2026-09-29 00:40 PDT: `polyworld_viewer/main.nim` + `town.nim` + `replay_model.nim` + `config.nims` committed and building
+  natively (`nim c`, 1.1 MB) and for the web with `tools/build_polyworld_viewer.sh web|native` (1.4 MB wasm, 8 s link).
+  Reads the exporter's `love-town-replay/1` (agent ids `agent-NNN` or names, `persona_summary`/`cash0`/`wearing0`,
+  `visits`, `app.matches`, `dates[].pair`, `relationship_changes`, `night[]` with `hidden.U`) with the shorter draft
+  names as fallbacks; `polyworld_viewer/fixtures/lovetown-fixture-4x2.json` (4 agents x 2 days: allocations with
+  therapy and meditation, two dates at both tables, an accepted visit, a breakup, wearing changes) is in the exporter's
+  shape.
+- Town: four short streets north of an avenue with one house per agent (12 to 24 slots, filled from the centre), an
+  open-fronted workspace with 24 desks, the restaurant with two patio tables plus an 8-stool bar for solo eaters, the
+  therapy office with a 6-seat couch, the meditation garden (gravel circle, 12 cushions, lantern, cherry tree), trees,
+  lamps that light at dusk, benches, flower beds, paved paths and a south promenade. Signs are block letters. The toon
+  day tint follows the engine's `paletteAtHour` (table copied from `polyworld/toon.nim` so the wasm does not link the
+  glTF renderer); sky colour follows the hour; the 16-hour day runs 07:00 to 23:00.
+- Staging (60 s per day, deterministic from the events): morning 0-2 s everyone leaves home; 2-27 s activities in
+  proportion to the allocated hours (order varies by agent so venues fill through the day; each segment keeps a floor of
+  its walk time plus 1.5 s; seats are booked greedily per venue, overflow stands at the entrance): work seated at a desk,
+  eating seated alone at the bar or a free table seat, therapy lounging on the couch, meditation cross-legged on a
+  cushion, games on the porch with a controller and a glowing window, home hours on the porch with a book; 27-29 s app
+  phase at home with a phone, matches get hearts; 29-51 s dates in rounds of two tables (pairs sit facing each other,
+  `date.turn` text spread over the round as a speech balloon in 3D plus tiny text natively; the relationship change gets
+  a heart or broken heart in the last 3.5 s of the round); 51-55 s accepted `visits` walk the guest to the host's porch;
+  55-60 s night at home, cohabiting pairs on one porch. Garments: the validated morning `wear` until 27 s, then the
+  recorded night `wearing` (purchases clear at the market), so outfits change at the app phase.
+- Camera: three-quarter follow at 7.2 units (6.4 seated, 5.6 on porches with a higher pitch), dates framed from the patio
+  side with both diners in profile, scroll to zoom, snap on seek; auto-switch every 30 s of wall time preferring agents
+  on a date, then walkers (toggle with A or `auto 0|1`); click an agent to follow; Tab / `follow next`.
+- Bridge (web): exported C functions `lovetownCommand(char*)` and `lovetownState() -> char*` (JSON) in
+  `EXPORTED_FUNCTIONS`, callable through `Module.ccall`; the scene also drains `Module.lovetownCommand` (strings or
+  `{type, value}` objects) each frame and calls `Module.lovetownState(stateObject)` each frame; `Module.lovetownReady({schema,
+  agents, days, daySeconds, phases})` once. Commands: `play`, `pause`, `toggle`, `speed 1|2|4|16`, `seek <seconds>`,
+  `day <n>`, `follow <agentId|name|next>`, `auto 0|1`. State: `{schema, t, day, days, daySeconds, dayTime, phase, hour,
+  phases, playing, speed, auto, followed, followedIndex, width, height, agents: [{id, name, x, y, z, sx, sy, visible,
+  wearing, tier, activity, walking, status, partner, partnerNow, followed}], anchors: {tables: [{index, x, y, z, sx, sy,
+  visible}], houses: [{slot, agent, ...}], workspace, restaurant, therapy, garden}, dates: [{index, a, b, table, turn,
+  turns, speaker, text}], bubble: {agent, text, turn, sx, sy, visible} | null, effects: [{agent, kind}]}` (`sx`/`sy`
+  are 0..1 screen fractions). The `stringToNewUTF8` link error is gone: the queue drain now copies through
+  `stringToUTF8` into a Nim buffer (`stringToUTF8`, `lengthBytesUTF8` added to `EXPORTED_RUNTIME_METHODS`); no
+  `DEFAULT_LIBRARY_FUNCS_TO_INCLUDE` needed. Phase windows now match the HUD's date 29-51 / visit 51-55 / night 55-60;
+  the scene keeps its own "day" 2-27 / "app" 27-29 split and publishes `phases` in state and in the ready payload.
+- Verified: native screenshots from `docs/replay3d/replays/dev-24x10-s4-market.lovetown.json` in `docs/`:
+  `polyworld-date.png` (day 10, Diana Evans in the Tailored Suit and Owen Perez in the Designer Coat at table 1,
+  balloon and transcript line), `polyworld-street.png` (day 10 morning, Taylor Thompson in the Designer Coat with
+  Felix Garcia in the Leather Jacket and two more coats on the street), `polyworld-workspace.png` (day 2, seated
+  workers in linen shirts and hoodies), `polyworld-garden.png` (Zara Alvarez cross-legged on a cushion). Web: the
+  wasm from `tools/build_polyworld_viewer.sh web` runs in headless Chrome (SwiftShader) with a minimal shell: renders
+  the fixture date, `lovetownReady` fires, queued and `ccall` commands (`speed 4`, `{type:'seek', t:40}`, `follow`,
+  `play`, `pause`, `auto 0`) take effect, state polls return the fields above, no console errors. The "hoodie at day 1,
+  43 s" the bridge saw came from the loader reading `nights` while the exporter writes `night`; fixed, the scene now
+  draws the night `wearing` from 27 s.
+- Open: `tools/build_polyworld_viewer.sh publish` should be rerun by the bridge to republish the fixed scene; no run
+  in `runs/` allocates therapy, so the couch is only exercised by the fixture; dates shorter than ~5 s (six dates in a
+  day) show only a few turns at 1x.

@@ -31,6 +31,12 @@
 ##   "standings": [...]                                            optional
 ## }
 ##
+## tools/export_polyworld_replay.py emits these names: agents carry
+## `persona_summary`, `cash0`, `wearing0`; a day has `visits` (host, guest,
+## accepted), `app` {profiles, swipes, matches}, `dates` with `pair` [a, b]
+## and `table`, `relationship_changes`, and `night` (list). The loader reads
+## those first and the shorter aliases above as fallbacks.
+##
 ## Agent references ("agent", "a", "b", "host", "guest", "partner",
 ## "speaker", "visit_with") may be an agent id or an agent name.
 
@@ -141,6 +147,7 @@ proc boolField(node: JsonNode, names: varargs[string]): bool =
   value != nil and value.kind == JBool and value.getBool()
 
 proc items(node: JsonNode, name: string): seq[JsonNode] =
+  if node == nil: return
   let value = node.field(name)
   if value != nil and value.kind == JArray:
     for item in value:
@@ -190,7 +197,7 @@ proc parseDay(replay: Replay, node: JsonNode, expected: int): Day =
     )
     if allocation.agent >= 0:
       result.allocations.add allocation
-  for item in node.items("invites"):
+  for item in node.items("visits") & node.items("invites"):
     let invite = Invite(
       host: replay.agentRef(item, "host", "name"),
       guest: replay.agentRef(item, "guest", "target"),
@@ -198,7 +205,7 @@ proc parseDay(replay: Replay, node: JsonNode, expected: int): Day =
     )
     if invite.host >= 0 and invite.guest >= 0:
       result.invites.add invite
-  for item in node.items("matches"):
+  for item in node.field("app").items("matches") & node.items("matches"):
     let match = Match(a: replay.agentRef(item, "a"), b: replay.agentRef(item, "b"))
     if match.a >= 0 and match.b >= 0:
       result.matches.add match
@@ -208,6 +215,10 @@ proc parseDay(replay: Replay, node: JsonNode, expected: int): Day =
       b: replay.agentRef(item, "b"),
       scene: item.strField("scene", "text")
     )
+    let pair = item.field("pair")
+    if pair != nil and pair.kind == JArray and pair.len >= 2:
+      if date.a < 0: date.a = replay.agentIndex(pair[0].getStr(""))
+      if date.b < 0: date.b = replay.agentIndex(pair[1].getStr(""))
     if date.a < 0 or date.b < 0:
       continue
     for turn in item.items("turns"):
@@ -224,7 +235,7 @@ proc parseDay(replay: Replay, node: JsonNode, expected: int): Day =
         reason: outcome.strField("reason")
       )
     result.dates.add date
-  for item in node.items("relationships"):
+  for item in node.items("relationship_changes") & node.items("relationships"):
     let change = RelationshipChange(
       a: replay.agentRef(item, "a"),
       b: replay.agentRef(item, "b"),
@@ -237,7 +248,8 @@ proc parseDay(replay: Replay, node: JsonNode, expected: int): Day =
     let text = item.strField("text")
     if text.len > 0:
       result.gossip.add text
-  for item in node.items("nights"):
+  for item in node.items("night") & node.items("nights"):
+    let hidden = item.field("hidden")
     let night = NightState(
       agent: replay.agentRef(item, "agent", "name"),
       cash: item.floatField("cash"),
@@ -248,8 +260,8 @@ proc parseDay(replay: Replay, node: JsonNode, expected: int): Day =
       sentence: item.strField("sentence"),
       partner: replay.agentRef(item, "partner"),
       visitWith: replay.agentRef(item, "visit_with"),
-      utility: item.floatField("U"),
-      utilityHat: item.floatField("U_hat")
+      utility: (if hidden != nil: hidden.floatField("U") else: item.floatField("U")),
+      utilityHat: (if hidden != nil: hidden.floatField("U_hat") else: item.floatField("U_hat"))
     )
     if night.agent >= 0:
       result.nights.add night
@@ -277,9 +289,9 @@ proc loadReplay*(path: string): Replay =
     var agent = Agent(
       id: node.strField("id"),
       name: node.strField("name"),
-      persona: node.strField("persona", "persona_summary"),
-      cash: node.floatField("cash"),
-      wearing: node.strField("wearing")
+      persona: node.strField("persona_summary", "persona"),
+      cash: node.floatField("cash0", "cash"),
+      wearing: node.strField("wearing0", "wearing")
     )
     if agent.name.len == 0:
       agent.name = agent.id

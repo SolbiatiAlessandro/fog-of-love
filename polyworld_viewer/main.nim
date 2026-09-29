@@ -18,11 +18,13 @@ const
   WindowTitle = "Fog of Love — Love Town (Polyworld)"
   UiHeight = 150.0'f32
   DaySeconds = 60.0'f32
+  # Phase windows shared with the HTML layer (replay_state.js DEFAULT_PHASES
+  # uses date 29-51, visit 51-55, night 55-60); also published in state.phases.
   MorningEnd = 2.0'f32
-  DayEnd = 29.0'f32
-  AppEnd = 31.0'f32
-  DateEnd = 50.0'f32
-  VisitEnd = 54.0'f32
+  DayEnd = 27.0'f32
+  AppEnd = 29.0'f32
+  DateEnd = 51.0'f32
+  VisitEnd = 55.0'f32
   DateWalkAllowance = 2.4'f32
   AutoSwitchSeconds = 30.0
   SceneHalf = 90.0'f32
@@ -554,6 +556,10 @@ proc hourAt(s: float32): float32 =
   elif s < VisitEnd: 21.5'f32 + (s - DateEnd) / (VisitEnd - DateEnd) * 1.5'f32
   else: 23'f32 + (s - VisitEnd) / (DaySeconds - VisitEnd)
 
+proc phaseWindows(): JsonNode =
+  %* {"morning": [0, MorningEnd], "day": [MorningEnd, DayEnd], "app": [DayEnd, AppEnd],
+      "date": [AppEnd, DateEnd], "visit": [DateEnd, VisitEnd], "night": [VisitEnd, DaySeconds]}
+
 proc phaseAt(s: float32): string =
   if s < MorningEnd: "morning"
   elif s < DayEnd: "day"
@@ -626,9 +632,9 @@ when defined(emscripten):
     if length < 0: return ""
     result = browserCommandBuffer[0 ..< min(length.int, browserCommandBuffer.len - 1)]
     if result.len == 0: result = " "
-  proc publishReady(agentCount, days: int32) =
+  proc publishReady(agentCount, days: int32, phases: cstring) =
     {.emit: """
-    EM_ASM({ if (Module.lovetownReady) Module.lovetownReady({schema: 'love-town-replay/1', agents: $0, days: $1, daySeconds: 60}); }, `agentCount`, `days`);
+    EM_ASM({ if (Module.lovetownReady) Module.lovetownReady({schema: 'love-town-replay/1', agents: $0, days: $1, daySeconds: 60, phases: JSON.parse(UTF8ToString($2))}); }, `agentCount`, `days`, `phases`);
     """.}
   proc publishState(payload: cstring) =
     {.emit: """
@@ -766,7 +772,8 @@ proc main() =
     else: discard
 
   when defined(emscripten):
-    publishReady(n.int32, replay.numDays.int32)
+    let phasesText = $phaseWindows()
+    publishReady(n.int32, replay.numDays.int32, phasesText.cstring)
 
   if options.trace:
     let d0 = dayIndexAt(clock)
@@ -1073,6 +1080,7 @@ proc main() =
           "sx": anchor.x, "sy": anchor.y, "visible": anchor.visible}
       let state = %* {"schema": ReplaySchema, "t": clock, "day": d + 1, "days": replay.numDays,
         "daySeconds": DaySeconds, "dayTime": s, "phase": phase, "hour": hour,
+        "phases": phaseWindows(),
         "playing": playing, "speed": speed, "auto": autoFollow,
         "followed": replay.agents[followed].id, "followedIndex": followed,
         "width": window.size.x, "height": window.size.y,

@@ -9,36 +9,69 @@
   "days": 2,
   "seed": 1,
   "model": "hand-written fixture",
-  "agents": 4
+  "agent_count": 4
+ },
+ "timeline": {
+  "day_seconds": 60,
+  "phases": {
+   "morning": [
+    0,
+    2
+   ],
+   "day": [
+    2,
+    27
+   ],
+   "app": [
+    27,
+    29
+   ],
+   "date": [
+    29,
+    51
+   ],
+   "visit": [
+    51,
+    55
+   ],
+   "night": [
+    55,
+    60
+   ]
+  }
  },
  "agents": [
   {
-   "id": "tara-vance",
+   "id": "agent-000",
    "name": "Tara Vance",
-   "persona": "Tara is a 27-year-old writer, creative and introspective.",
-   "cash": 5523.57,
-   "wearing": "Thrift Hoodie"
+   "persona_summary": "Tara is a 27-year-old writer, creative and introspective.",
+   "cash0": 5523.57,
+   "wearing0": "Thrift Hoodie",
+   "house": 0
   },
   {
-   "id": "mason-nguyen",
+   "id": "agent-001",
    "name": "Mason Nguyen",
-   "persona": "Mason is a 31-year-old chef, passionate and energetic.",
-   "cash": 140069.47,
-   "wearing": "Thrift Hoodie"
+   "persona_summary": "Mason is a 31-year-old chef, passionate and energetic.",
+   "cash0": 140069.47,
+   "wearing0": "Thrift Hoodie",
+   "house": 1
   },
   {
-   "id": "yara-alvarez",
+   "id": "agent-002",
    "name": "Yara Alvarez",
-   "persona": "Yara is a 32-year-old doctor, dedicated and compassionate.",
-   "cash": 16895.98,
-   "wearing": "Plain Tee"
+   "persona_summary": "Yara is a 32-year-old doctor, dedicated and compassionate.",
+   "cash0": 16895.98,
+   "wearing0": "Plain Tee",
+   "house": 2
   },
   {
-   "id": "liam-martin",
+   "id": "agent-003",
    "name": "Liam Martin",
-   "persona": "Liam is a 30-year-old chef, creative and passionate.",
-   "cash": 18210.03,
-   "wearing": "Thrift Hoodie"
+   "persona_summary": "Liam is a 30-year-old chef, creative and passionate.",
+   "cash0": 18210.03,
+   "wearing0": "Thrift Hoodie",
+   "house": 3
   }
  ],
  "goods": [
@@ -120,7 +153,7 @@
    "day": 1,
    "allocations": [
     {
-     "agent": "tara-vance",
+     "agent": "agent-000",
      "hours": {
       "work": 8,
       "games": 0,
@@ -144,7 +177,7 @@
      "profile_text": "Writer. Introverted. Seeking connection, not a performance."
     },
     {
-     "agent": "mason-nguyen",
+     "agent": "agent-001",
      "hours": {
       "work": 10,
       "games": 0,
@@ -161,14 +194,14 @@
        "qty": 1
       }
      ],
-     "invite": "yara-alvarez",
+     "invite": "agent-002",
      "accept_invite": null,
      "accept_move_in": false,
      "breakup": false,
      "profile_text": "Chef who never stops moving. Come taste something new."
     },
     {
-     "agent": "yara-alvarez",
+     "agent": "agent-002",
      "hours": {
       "work": 9,
       "games": 2,
@@ -192,7 +225,7 @@
      "profile_text": "Doctor by day, reader by night."
     },
     {
-     "agent": "liam-martin",
+     "agent": "agent-003",
      "hours": {
       "work": 6,
       "games": 4,
@@ -216,270 +249,307 @@
      "profile_text": "Creative chef, loud laugh, open heart."
     }
    ],
-   "invites": [
+   "visits": [
     {
-     "host": "mason-nguyen",
-     "guest": "yara-alvarez",
+     "host": "agent-001",
+     "guest": "agent-002",
      "accepted": false
     }
    ],
    "market": {
-    "clears": [
+    "rounds": [
      {
-      "good": "Linen Shirt",
-      "price": 90.0,
-      "filled": [
-       "tara-vance"
+      "round": 0,
+      "clears": [
+       {
+        "good": "Linen Shirt",
+        "price": 90.0,
+        "filled": [
+         "agent-000"
+        ],
+        "round": 0
+       },
+       {
+        "good": "Designer Coat",
+        "price": 1500.0,
+        "filled": [
+         "agent-001"
+        ],
+        "round": 0
+       },
+       {
+        "good": "Leather Jacket",
+        "price": 90.0,
+        "filled": [
+         "agent-002"
+        ],
+        "round": 0
+       },
+       {
+        "good": "Tailored Suit",
+        "price": 1500.0,
+        "filled": [
+         "agent-003"
+        ],
+        "round": 0
+       }
       ],
-      "round": 0
+      "prices": {
+       "Thrift Hoodie": 6.0,
+       "Plain Tee": 6.0,
+       "Linen Shirt": 90.0,
+       "Leather Jacket": 90.0,
+       "Designer Coat": 1500.0,
+       "Tailored Suit": 1500.0
+      }
+     }
+    ]
+   },
+   "app": {
+    "profiles": [
+     {
+      "agent": "agent-000",
+      "picture": {
+       "item": "Linen Shirt",
+       "tier": "Mid"
+      },
+      "text": "Writer. Introverted. Seeking connection, not a performance."
      },
      {
-      "good": "Designer Coat",
-      "price": 1500.0,
-      "filled": [
-       "mason-nguyen"
-      ],
-      "round": 0
+      "agent": "agent-001",
+      "picture": {
+       "item": "Designer Coat",
+       "tier": "High"
+      },
+      "text": "Chef who never stops moving. Come taste something new."
      },
      {
-      "good": "Leather Jacket",
-      "price": 90.0,
-      "filled": [
-       "yara-alvarez"
-      ],
-      "round": 0
+      "agent": "agent-002",
+      "picture": {
+       "item": "Leather Jacket",
+       "tier": "Mid"
+      },
+      "text": "Doctor by day, reader by night."
      },
      {
-      "good": "Tailored Suit",
-      "price": 1500.0,
-      "filled": [
-       "liam-martin"
-      ],
-      "round": 0
+      "agent": "agent-003",
+      "picture": {
+       "item": "Tailored Suit",
+       "tier": "High"
+      },
+      "text": "Creative chef, loud laugh, open heart."
      }
     ],
-    "prices": {
-     "Thrift Hoodie": 6.0,
-     "Plain Tee": 6.0,
-     "Linen Shirt": 90.0,
-     "Leather Jacket": 90.0,
-     "Designer Coat": 1500.0,
-     "Tailored Suit": 1500.0
-    }
+    "swipes": [
+     {
+      "agent": "agent-000",
+      "target": "agent-001",
+      "yes": false
+     },
+     {
+      "agent": "agent-000",
+      "target": "agent-003",
+      "yes": true
+     },
+     {
+      "agent": "agent-001",
+      "target": "agent-002",
+      "yes": true
+     },
+     {
+      "agent": "agent-002",
+      "target": "agent-001",
+      "yes": true
+     },
+     {
+      "agent": "agent-003",
+      "target": "agent-000",
+      "yes": true
+     }
+    ],
+    "matches": [
+     {
+      "a": "agent-001",
+      "b": "agent-002"
+     },
+     {
+      "a": "agent-000",
+      "b": "agent-003"
+     }
+    ]
    },
-   "profiles": [
-    {
-     "agent": "tara-vance",
-     "item": "Linen Shirt",
-     "tier": "Mid",
-     "text": "Writer. Introverted. Seeking connection, not a performance."
-    },
-    {
-     "agent": "mason-nguyen",
-     "item": "Designer Coat",
-     "tier": "High",
-     "text": "Chef who never stops moving. Come taste something new."
-    },
-    {
-     "agent": "yara-alvarez",
-     "item": "Leather Jacket",
-     "tier": "Mid",
-     "text": "Doctor by day, reader by night."
-    },
-    {
-     "agent": "liam-martin",
-     "item": "Tailored Suit",
-     "tier": "High",
-     "text": "Creative chef, loud laugh, open heart."
-    }
-   ],
-   "swipes": [
-    {
-     "agent": "tara-vance",
-     "target": "mason-nguyen",
-     "yes": false
-    },
-    {
-     "agent": "tara-vance",
-     "target": "liam-martin",
-     "yes": true
-    },
-    {
-     "agent": "mason-nguyen",
-     "target": "yara-alvarez",
-     "yes": true
-    },
-    {
-     "agent": "yara-alvarez",
-     "target": "mason-nguyen",
-     "yes": true
-    },
-    {
-     "agent": "liam-martin",
-     "target": "tara-vance",
-     "yes": true
-    }
-   ],
-   "matches": [
-    {
-     "a": "mason-nguyen",
-     "b": "yara-alvarez"
-    },
-    {
-     "a": "tara-vance",
-     "b": "liam-martin"
-    }
-   ],
    "dates": [
     {
-     "a": "mason-nguyen",
-     "b": "yara-alvarez",
+     "pair": [
+      "agent-001",
+      "agent-002"
+     ],
+     "table": 0,
      "scene": "Mason Nguyen and Yara Alvarez meet for a date at the Love Town restaurant.",
      "turns": [
       {
-       "speaker": "mason-nguyen",
+       "speaker": "agent-001",
        "text": "So, you work long hours too? I thought I was the only one who practically lived at the restaurant."
       },
       {
-       "speaker": "yara-alvarez",
+       "speaker": "agent-002",
        "text": "Twelve-hour shifts. But I still read every night. What do you do to switch off?"
       },
       {
-       "speaker": "mason-nguyen",
+       "speaker": "agent-001",
        "text": "I cook for people I like. That coat, by the way, is new. Too much?"
       },
       {
-       "speaker": "yara-alvarez",
+       "speaker": "agent-002",
        "text": "It suits you. Cook for me next time and we will call it even."
       }
      ],
      "outcomes": [
       {
-       "agent": "mason-nguyen",
-       "partner": "yara-alvarez",
+       "agent": "agent-001",
+       "partner": "agent-002",
        "rating": 7.0,
        "choice": "ask_again",
        "reason": "Shares a similar work ethic."
       },
       {
-       "agent": "yara-alvarez",
-       "partner": "mason-nguyen",
+       "agent": "agent-002",
+       "partner": "agent-001",
        "rating": 8.0,
        "choice": "ask_again",
        "reason": "Warm and funny."
       }
-     ]
+     ],
+     "change": {
+      "from": "single",
+      "to": "dating"
+     }
     },
     {
-     "a": "tara-vance",
-     "b": "liam-martin",
+     "pair": [
+      "agent-000",
+      "agent-003"
+     ],
+     "table": 1,
      "scene": "Tara Vance and Liam Martin meet for a date at the Love Town restaurant.",
      "turns": [
       {
-       "speaker": "liam-martin",
+       "speaker": "agent-003",
        "text": "I have never seen anyone read a menu like a novel before."
       },
       {
-       "speaker": "tara-vance",
+       "speaker": "agent-000",
        "text": "Every menu is a short story. Yours would be loud and generous."
       },
       {
-       "speaker": "liam-martin",
+       "speaker": "agent-003",
        "text": "Loud I will accept. Generous, you will have to test."
       }
      ],
      "outcomes": [
       {
-       "agent": "tara-vance",
-       "partner": "liam-martin",
+       "agent": "agent-000",
+       "partner": "agent-003",
        "rating": 6.0,
        "choice": "ask_again",
        "reason": "Kind, if a little loud."
       },
       {
-       "agent": "liam-martin",
-       "partner": "tara-vance",
+       "agent": "agent-003",
+       "partner": "agent-000",
        "rating": 7.0,
        "choice": "ask_again",
        "reason": "Sharp and curious."
       }
-     ]
+     ],
+     "change": {
+      "from": "single",
+      "to": "dating"
+     }
     }
    ],
-   "relationships": [
+   "relationship_changes": [
     {
-     "a": "mason-nguyen",
-     "b": "yara-alvarez",
+     "a": "agent-001",
+     "b": "agent-002",
      "from": "single",
      "to": "dating"
     },
     {
-     "a": "tara-vance",
-     "b": "liam-martin",
+     "a": "agent-000",
+     "b": "agent-003",
      "from": "single",
      "to": "dating"
     }
    ],
    "gossip": [],
-   "nights": [
+   "night": [
     {
-     "agent": "tara-vance",
+     "agent": "agent-000",
      "cash": 5529.57,
      "inventory": {
       "Thrift Hoodie": 1,
       "Linen Shirt": 1
      },
      "wearing": "Linen Shirt",
-     "partner": "liam-martin",
+     "partner": "agent-003",
      "status": "dating",
      "sentence": "Last night you felt 75% content.",
-     "U": 0.7546,
-     "U_hat": 0.7446,
+     "hidden": {
+      "U": 0.7546,
+      "U_hat": 0.7446
+     },
      "visit_with": null
     },
     {
-     "agent": "mason-nguyen",
+     "agent": "agent-001",
      "cash": 138589.47,
      "inventory": {
       "Thrift Hoodie": 1,
       "Designer Coat": 1
      },
      "wearing": "Designer Coat",
-     "partner": "yara-alvarez",
+     "partner": "agent-002",
      "status": "dating",
      "sentence": "Last night you felt 62% content.",
-     "U": 0.62,
-     "U_hat": 0.61,
+     "hidden": {
+      "U": 0.62,
+      "U_hat": 0.61
+     },
      "visit_with": null
     },
     {
-     "agent": "yara-alvarez",
+     "agent": "agent-002",
      "cash": 16823.98,
      "inventory": {
       "Plain Tee": 1,
       "Leather Jacket": 1
      },
      "wearing": "Leather Jacket",
-     "partner": "mason-nguyen",
+     "partner": "agent-001",
      "status": "dating",
      "sentence": "Last night you felt 70% content.",
-     "U": 0.7,
-     "U_hat": 0.69,
+     "hidden": {
+      "U": 0.7,
+      "U_hat": 0.69
+     },
      "visit_with": null
     },
     {
-     "agent": "liam-martin",
+     "agent": "agent-003",
      "cash": 16728.03,
      "inventory": {
       "Thrift Hoodie": 1,
       "Tailored Suit": 1
      },
      "wearing": "Tailored Suit",
-     "partner": "tara-vance",
+     "partner": "agent-000",
      "status": "dating",
      "sentence": "Last night you felt 66% content.",
-     "U": 0.66,
-     "U_hat": 0.65,
+     "hidden": {
+      "U": 0.66,
+      "U_hat": 0.65
+     },
      "visit_with": null
     }
    ],
@@ -492,7 +562,7 @@
    "day": 2,
    "allocations": [
     {
-     "agent": "tara-vance",
+     "agent": "agent-000",
      "hours": {
       "work": 7,
       "games": 2,
@@ -510,7 +580,7 @@
      "profile_text": "Writer. Still introverted."
     },
     {
-     "agent": "mason-nguyen",
+     "agent": "agent-001",
      "hours": {
       "work": 9,
       "games": 0,
@@ -521,14 +591,14 @@
      "meditation": true,
      "wear": "Designer Coat",
      "shopping": [],
-     "invite": "yara-alvarez",
+     "invite": "agent-002",
      "accept_invite": null,
      "accept_move_in": false,
      "breakup": false,
      "profile_text": "Chef. Cooking for one, hoping for two."
     },
     {
-     "agent": "yara-alvarez",
+     "agent": "agent-002",
      "hours": {
       "work": 8,
       "games": 1,
@@ -540,13 +610,13 @@
      "wear": "Leather Jacket",
      "shopping": [],
      "invite": null,
-     "accept_invite": "mason-nguyen",
+     "accept_invite": "agent-001",
      "accept_move_in": false,
      "breakup": false,
      "profile_text": "Doctor. Off shift tonight."
     },
     {
-     "agent": "liam-martin",
+     "agent": "agent-003",
      "hours": {
       "work": 5,
       "games": 4,
@@ -570,87 +640,103 @@
      "profile_text": "Back in a tee. Suit is for Sundays."
     }
    ],
-   "invites": [
+   "visits": [
     {
-     "host": "mason-nguyen",
-     "guest": "yara-alvarez",
+     "host": "agent-001",
+     "guest": "agent-002",
      "accepted": true
     }
    ],
    "market": {
-    "clears": [
+    "rounds": [
      {
-      "good": "Plain Tee",
-      "price": 6.0,
-      "filled": [
-       "liam-martin"
+      "round": 0,
+      "clears": [
+       {
+        "good": "Plain Tee",
+        "price": 6.0,
+        "filled": [
+         "agent-003"
+        ],
+        "round": 0
+       }
       ],
-      "round": 0
+      "prices": {
+       "Thrift Hoodie": 6.0,
+       "Plain Tee": 6.0,
+       "Linen Shirt": 90.0,
+       "Leather Jacket": 90.0,
+       "Designer Coat": 1500.0,
+       "Tailored Suit": 1500.0
+      }
      }
-    ],
-    "prices": {
-     "Thrift Hoodie": 6.0,
-     "Plain Tee": 6.0,
-     "Linen Shirt": 90.0,
-     "Leather Jacket": 90.0,
-     "Designer Coat": 1500.0,
-     "Tailored Suit": 1500.0
-    }
+    ]
    },
-   "profiles": [],
-   "swipes": [],
-   "matches": [],
+   "app": {
+    "profiles": [],
+    "swipes": [],
+    "matches": []
+   },
    "dates": [
     {
-     "a": "tara-vance",
-     "b": "liam-martin",
+     "pair": [
+      "agent-000",
+      "agent-003"
+     ],
+     "table": 0,
      "scene": "Tara Vance and Liam Martin meet again at the Love Town restaurant.",
      "turns": [
       {
-       "speaker": "tara-vance",
+       "speaker": "agent-000",
        "text": "You changed out of the suit."
       },
       {
-       "speaker": "liam-martin",
+       "speaker": "agent-003",
        "text": "The suit was a costume. This is me. Still generous?"
       },
       {
-       "speaker": "tara-vance",
+       "speaker": "agent-000",
        "text": "I will let you know after dessert."
       }
      ],
      "outcomes": [
       {
-       "agent": "tara-vance",
-       "partner": "liam-martin",
+       "agent": "agent-000",
+       "partner": "agent-003",
        "rating": 5.0,
        "choice": "end",
        "reason": "Sweet, but we want different evenings."
       },
       {
-       "agent": "liam-martin",
-       "partner": "tara-vance",
+       "agent": "agent-003",
+       "partner": "agent-000",
        "rating": 6.0,
        "choice": "ask_again",
        "reason": "Still curious."
       }
-     ]
+     ],
+     "change": {
+      "from": "dating",
+      "to": "single"
+     }
     }
    ],
-   "relationships": [
+   "relationship_changes": [
     {
-     "a": "tara-vance",
-     "b": "liam-martin",
+     "a": "agent-000",
+     "b": "agent-003",
      "from": "dating",
      "to": "single"
     }
    ],
    "gossip": [
-    "Yara Alvarez was seen leaving Mason Nguyen's place late."
-   ],
-   "nights": [
     {
-     "agent": "tara-vance",
+     "text": "Yara Alvarez was seen leaving Mason Nguyen's place late."
+    }
+   ],
+   "night": [
+    {
+     "agent": "agent-000",
      "cash": 5535.57,
      "inventory": {
       "Thrift Hoodie": 1,
@@ -660,42 +746,48 @@
      "partner": null,
      "status": "single",
      "sentence": "Last night you felt 58% content.",
-     "U": 0.58,
-     "U_hat": 0.57,
+     "hidden": {
+      "U": 0.58,
+      "U_hat": 0.57
+     },
      "visit_with": null
     },
     {
-     "agent": "mason-nguyen",
+     "agent": "agent-001",
      "cash": 138595.47,
      "inventory": {
       "Thrift Hoodie": 1,
       "Designer Coat": 1
      },
      "wearing": "Designer Coat",
-     "partner": "yara-alvarez",
+     "partner": "agent-002",
      "status": "dating",
      "sentence": "Last night you felt 81% content.",
-     "U": 0.81,
-     "U_hat": 0.8,
-     "visit_with": "yara-alvarez"
+     "hidden": {
+      "U": 0.81,
+      "U_hat": 0.8
+     },
+     "visit_with": "agent-002"
     },
     {
-     "agent": "yara-alvarez",
+     "agent": "agent-002",
      "cash": 16829.98,
      "inventory": {
       "Plain Tee": 1,
       "Leather Jacket": 1
      },
      "wearing": "Leather Jacket",
-     "partner": "mason-nguyen",
+     "partner": "agent-001",
      "status": "dating",
      "sentence": "Last night you felt 79% content.",
-     "U": 0.79,
-     "U_hat": 0.78,
-     "visit_with": "mason-nguyen"
+     "hidden": {
+      "U": 0.79,
+      "U_hat": 0.78
+     },
+     "visit_with": "agent-001"
     },
     {
-     "agent": "liam-martin",
+     "agent": "agent-003",
      "cash": 16728.03,
      "inventory": {
       "Thrift Hoodie": 1,
@@ -706,8 +798,10 @@
      "partner": null,
      "status": "single",
      "sentence": "Last night you felt 60% content.",
-     "U": 0.6,
-     "U_hat": 0.59,
+     "hidden": {
+      "U": 0.6,
+      "U_hat": 0.59
+     },
      "visit_with": null
     }
    ],
@@ -719,19 +813,19 @@
  ],
  "standings": [
   {
-   "agent": "mason-nguyen",
+   "agent": "agent-001",
    "sum_U": 1.43
   },
   {
-   "agent": "yara-alvarez",
+   "agent": "agent-002",
    "sum_U": 1.49
   },
   {
-   "agent": "tara-vance",
+   "agent": "agent-000",
    "sum_U": 1.33
   },
   {
-   "agent": "liam-martin",
+   "agent": "agent-003",
    "sum_U": 1.26
   }
  ]
