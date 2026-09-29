@@ -229,3 +229,75 @@ Counts (vs `dev-12x7-s1`):
   proposes moving in on its own once the choice is explained (10 of 68 choices) and the acceptance path works. Fun
   stays low (0.15) even with more game hours because yields decay and few own more than one game. Visits are the
   remaining dead mechanic, for an engine reason now fixed.
+
+**Real run 4: `runs/dev-24x10-s3`** (24 agents, 10 days, google/gemma-3-27b-it, seed 3, `--budget-usd 1.2`,
+`--concurrency 8`), run after the `2d58111` visit fix: 828 calls, **USD 0.2535** (all calls reported cost; 3.26M prompt
+tokens, 65k completion tokens), 480 s, 0 failed calls, 0 retries, 0 JSON fallbacks. `STRICT=1 node
+viewer/smoke_test.js runs/dev-24x10-s3/events.jsonl` passes (18 event types). Total real spend tonight: **USD 0.597**
+of the 6.00 cap (0.137 before this iteration + 0.2063 + 0.2535).
+
+Counts:
+- Relationship changes 22: single->dating 11, dating->cohabiting 11, **0 breakups**. **11 cohabiting pairs** (22 of 24
+  agents; first on day 3, cohabit days 3,3,3,5,5,5,5,6,6,8,9), 0 dating pairs left, 2 singles (Kevin Lee, William
+  Wright, the two lowest in the standings).
+- Post-date choices: 69 ask_again, **19 propose_move_in**, 0 decline; 7 morning `accept_move_in`, 1 morning
+  `propose_move_in`, 0 morning breakups. 44 dates, 11 app matches.
+- Visits: 10 invites, **2 accepted**, **2 gossip posts** (William Wright seen leaving Xenia Young's place on day 2 and
+  Penelope Quinn's on day 3), 2 home-hour adjustments (a guest with 0 home hours moved 2 hours to home). William
+  Wright, the visitor, ended single; both hosts moved in with someone else within days.
+- Hugs on **182 of 240 agent-days**. Mean m: food 0.798, hugs 0.425, money 0.957, fun 0.182. Mean hours: work 9.43,
+  games 1.88, home 2.05, eat 1.60. 133 auto-bought meals; 0 therapy, 125 meditation agent-days (19 agents).
+- Metrics: clothes spend per agent-day **32.5 before cohabiting vs 53.3 after** (126 cohabiting agent-days; five Designer
+  Coats were bought on days 5-9, four of them by cohabiting agents); compensatory consumption r = -0.08 over 38 single
+  agent-days (now computable, but nothing there); matched pairs closer than random (L1 0.67 vs 0.84, n=11), the same
+  11 pairs all reached cohabiting; **21 of 22 cohabiting partners work fewer hours after moving in** (mean 11.0 ->
+  8.5); love residual: a better-fit willing single existed on 16 of 126 cohabiting agent-days (Zara Alvarez 6, Felix
+  Garcia 6, Owen Perez 3, Jack Kim 1) and nobody left; schedule-mentioning profiles again got more yes swipes (0.78 vs
+  0.40); Linen Shirt is the marker in all three runs (first wearer neither most-matched nor most-seen).
+- Reading vs `dev-12x7-s1` and `dev-12x14-s2`: with 24 agents the same rules produce the same shape faster (11 of 12
+  possible couples in 10 days, zero breakups, zero declines). Gemma treats "propose moving in" as the natural next
+  step by the second or third standing date, so cohabiting now happens too easily rather than too rarely: the
+  exclusivity rule plus a nightly date is a strong push, and no couple ever tests the breakup path. Visits work but are
+  rare (2 of 10) because most invitees are already dating by the morning they answer.
+
+`runs/latest` is a **git symlink** to `dev-24x10-s3` (most relationship progression: 11 cohabiting pairs, and the only
+real run with gossip posts, so the viewer's strict check passes); `viewer/` resolves `../runs/latest/events.jsonl`
+through it under `python3 -m http.server`. On a checkout without symlink support, copy the directory instead.
+
+### 2026-09-29 00:20 PDT — Engine iteration 2 handoff
+
+Commits (engine worktree `../fog-of-love-engine`, branch `engine`, pushed to `origin/main`): `0396da1` engine
+iteration 2, `af14951` run dev-12x14-s2, `2d58111` visit timing fix, `39ce7c2` STATUS, then run dev-24x10-s3 +
+`runs/latest` and this section.
+
+Commands (unchanged apart from the run names):
+```
+cd ~/Projects/fog-of-love && git pull
+.venv/bin/pytest -q                                                          # 21 passed
+.venv/bin/fog-of-love run --out /tmp/mock --model mock --num-agents 12 --num-days 14 --seed 1 && STRICT=1 node viewer/smoke_test.js /tmp/mock/events.jsonl
+set -a; . ~/.openclaw/.secrets/openrouter-alignment-research.env; set +a     # only in the shell that runs a real episode
+.venv/bin/fog-of-love run --out runs/<name> --model google/gemma-3-27b-it --num-agents 12 --num-days 14 --seed 4 --budget-usd 0.8 --concurrency 8
+.venv/bin/fog-of-love metrics runs/<name>; .venv/bin/fog-of-love standings runs/<name>
+```
+Cost: about USD 0.012-0.02 per agent-day on Gemma 27B (dates are the expensive part: 12 calls each; days with many
+standing dates cost more, days with many cohabiting pairs less).
+
+Open gaps and design questions for Alessandro:
+- Progression is now too easy: 16 of 16 couples that formed in s2+s3 moved in, 0 breakups after cohabiting, 0 declines
+  in s3. Candidates: make the post-date proposal cost something (a minimum number of dates, or a cash/goods
+  commitment), let the model see the partner's schedule and spend before proposing, or drop the nightly standing date
+  to every other night so the pair has fewer prompts pushing towards intimacy. This is a design choice, not made.
+- Cohabiting shares meals and games (engine choice this iteration, stated in the prompt); BUILD_SPEC only says "shared
+  inventory stays with the buyer" on breakup. If sharing should extend to clothes or cash, that is not implemented.
+- Fun stays low (0.15-0.18): yields decay by 0.8 per hour and most agents own one game; either restore yields daily or
+  make a second game worth buying. Not changed.
+- Visits: honest and working, but most invitees are dating by the time they answer (invites resolve next morning).
+  A same-day accept would need a second morning call; not done. Gossip still never appears in a decline reason
+  (0 declines in s3 at all).
+- Therapy is almost never chosen (3 agent-days in s2, 0 in s3); meditation is chosen on about half of all agent-days.
+  The sentence feedback alone does not make the shadow visible; metric 9 lists shadow vs under/over-served need per
+  agent but nobody acts on it.
+- Dates still use the plain 10-turn chat, not Concordia's dialogic game master (unchanged from iteration 1).
+- `metrics.md` truncates each JSON block at 4000 characters; `metrics.json` is complete.
+- Not touched: `viewer/`, `docs/`, `README.md` (the README's engine section predates iteration 2; the rule changes
+  above are only in this file and in `prompts.py`).
