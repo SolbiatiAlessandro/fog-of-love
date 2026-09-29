@@ -376,3 +376,13 @@ Gaps:
   prices off the floor long enough to measure anything.
 - Elasticity as specified (quantity bid vs ask across days) is confounded by ownership; see above.
 - `runs/latest` still points at `dev-24x10-s3`; `runs/index.json` regenerated with `dev-24x10-s4-market` second.
+
+## 2026-09-29 morning summary
+
+**Deliverable.** Private repo `SolbiatiAlessandro/fog-of-love`: the `fog_of_love` engine (needs utility with hidden Dirichlet weights, per-agent bias as the shadow and daily jitter; 16-hour day; Concordia entities and clearing-house market; dating app; dates; cohabitation and breakups; visits and a public gossip board; auto meals; adaptive sellers with finite stock), 27 tests, a mock model that certifies the whole loop in seconds, eleven metrics, author-level standings, and a self-contained replay viewer (`viewer/`, `docs/replay/`) with a run picker. GitHub Pages is refused on this plan (HTTP 422); view locally with `python3 -m http.server 8000` and open `http://localhost:8000/viewer/`.
+
+**Runs.** Four real runs on Gemma 3 27B, USD 0.94 total (cap was 6.00): see the README results table. `runs/latest` -> `dev-24x10-s4-market`; `runs/index.json` lists the four real runs plus the tiny 4x2 check.
+
+**Iterations.** 1: engine and viewer. 2: dating pairs share home hours, app hidden while dating, explicit progression choices, honest invites, auto meals (cohabitation and visits appeared). 3: finite stock and adaptive sellers (prices moved, High clothing traded).
+
+**Open for Alessandro.** Progression difficulty (every couple moves in; no post-cohabiting breakups); bids do not haggle (all price movement is the seller rule) so elasticity is not yet interpretable; fun yield decay too harsh; therapy rarely chosen; dates as plain chat rather than the dialogic game master; gender-blind personas with gendered text; the name "Fog of Love" collides with a published board game if this ever goes public.

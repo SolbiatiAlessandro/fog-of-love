@@ -29,6 +29,19 @@ five seconds, no network); a real run needs `OPENROUTER_API_KEY` in the environm
 A run directory holds `events.jsonl` (the viewer reads this), `run.json` (config, calls, cost), `standings.md`,
 `metrics.md`, `metrics.json`, and for real runs `calls.jsonl` (per-call usage and text; gitignored).
 
+## Results so far (overnight build, 2026-09-28/29)
+
+All runs on `google/gemma-3-27b-it` via OpenRouter. Total spend USD 0.94. Full readings in `STATUS.md`; per-run `metrics.md` and `standings.md` under `runs/`.
+
+| run | agents x days | USD | what it showed |
+| --- | --- | --- | --- |
+| `dev-12x7-s1` | 12 x 7 | 0.13 | hugs zero for everyone, no cohabiting, dating pairs churned through the app |
+| `dev-12x14-s2` | 12 x 14 | 0.21 | after fixes: 5 cohabiting pairs, hugs on 110/168 agent-days, every cohabiting partner works less |
+| `dev-24x10-s3` | 24 x 10 | 0.25 | 11 cohabiting pairs, first home visits and gossip posts, clothes spend up after cohabiting |
+| `dev-24x10-s4-market` | 24 x 10 | 0.34 | finite stock and adaptive sellers: 9 of 12 goods move off list price, first High clothing trades (8 units, 900 to 1093.50) |
+
+Consistent across runs: matched pairs are closer in hidden need weights than random pairs, and breakups are farther apart than couples that stay; one Mid item (Linen Shirt, then Leather Jacket) becomes the near-universal app picture within two days, and neither the most-matched nor the most-seen agent wore it first; the "love residual" (staying with a partner when a better-fit willing single exists) is small and non-zero and nobody left. Not yet evidence of a Veblen effect: bids sit at the shown ask, so all price movement comes from the seller rule, and price and time are confounded. Known knobs: progression is too easy (every dating couple moves in), fun stays low, therapy is rarely chosen, dates are a plain 10-turn chat.
+
 ## Watch a replay
 
 The viewer (`viewer/`, vanilla HTML/JS, no build) replays an `events.jsonl`: town map with the agents moving

@@ -19,12 +19,12 @@
   },
   {
     "name": "latest",
-    "path": "runs/dev-24x10-s3/events.jsonl",
+    "path": "runs/dev-24x10-s4-market/events.jsonl",
     "agents": 24,
     "days": 10,
     "model": "google/gemma-3-27b-it",
-    "usd": 0.2535,
-    "note": "seed 3 \u00b7 828 calls \u00b7 480 s"
+    "usd": 0.3354,
+    "note": "seed 4 \u00b7 922 calls \u00b7 521 s"
   },
   {
     "name": "dev-12x14-s2",
