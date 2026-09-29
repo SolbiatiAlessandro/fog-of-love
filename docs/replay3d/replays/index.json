@@ -1,0 +1,47 @@
+[
+  {
+    "name": "dev-24x10-s3",
+    "path": "replays/dev-24x10-s3.lovetown.json",
+    "agents": 24,
+    "days": 10,
+    "model": "google/gemma-3-27b-it",
+    "usd": 0.2535,
+    "note": "seed 3 \u00b7 828 calls \u00b7 480 s"
+  },
+  {
+    "name": "dev-24x10-s4-market",
+    "path": "replays/dev-24x10-s4-market.lovetown.json",
+    "agents": 24,
+    "days": 10,
+    "model": "google/gemma-3-27b-it",
+    "usd": 0.3354,
+    "note": "seed 4 \u00b7 922 calls \u00b7 521 s"
+  },
+  {
+    "name": "dev-12x14-s2",
+    "path": "replays/dev-12x14-s2.lovetown.json",
+    "agents": 12,
+    "days": 14,
+    "model": "google/gemma-3-27b-it",
+    "usd": 0.2063,
+    "note": "seed 2 \u00b7 618 calls \u00b7 798 s"
+  },
+  {
+    "name": "dev-12x7-s1",
+    "path": "replays/dev-12x7-s1.lovetown.json",
+    "agents": 12,
+    "days": 7,
+    "model": "google/gemma-3-27b-it",
+    "usd": 0.1285,
+    "note": "seed 1 \u00b7 468 calls \u00b7 528 s"
+  },
+  {
+    "name": "dev-4x2-gemma-s1",
+    "path": "replays/dev-4x2-gemma-s1.lovetown.json",
+    "agents": 4,
+    "days": 2,
+    "model": "google/gemma-3-27b-it",
+    "usd": 0.0085,
+    "note": "seed 1 \u00b7 52 calls \u00b7 42 s"
+  }
+]

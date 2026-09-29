@@ -162,7 +162,7 @@ default to `false`. The model's raw text is not copied.
   "round": 0,
   "asks": [{"t": 50, "good": "Thrift Hoodie", "price": 6.0, "qty": 20, "stock": 20}],
   "bids": [{"t": 62, "agent": "agent-000", "good": "Linen Shirt", "price": 90.0, "qty": 1, "auto": false}],
-  "clears": [{"t": 85, "good": "Thrift Hoodie", "price": 6.0, "ask": 6.0, "remaining": 20, "volume": 0,
+  "clears": [{"t": 85, "good": "Thrift Hoodie", "price": 6.0, "ask": 6.0, "remaining": 20, "volume": 0, "auto": false,
               "fills": [{"buyer": "agent-004", "qty": 1, "price": 6.0}]}],
   "prices": {"Thrift Hoodie": 6.0, "Linen Shirt": 90.0},
   "asks_after": {"Thrift Hoodie": 6.0},
@@ -172,10 +172,12 @@ default to `false`. The model's raw text is not copied.
 
 Orders and clears are grouped into the round they were recorded with (`round` field; when
 an order has no `round`, it belongs to the next `market.prices` that follows it). `volume`
-is the sum of `fills[].qty`. `auto` marks auto-bought meals (default `false`); `stock`,
+is the sum of `fills[].qty`. `auto` (on bids and clears) marks the automatic meal purchases the engine
+records after the last clearing round of the day, `round: 3` in the real runs (default `false`); `stock`,
 `ask`, `remaining`, `asks_after`, `stock_after` are `null`/`{}` when the run did not record
-them. A fill's `price` defaults to the clear price when unrecorded. Orders left after the
-last `market.prices` of a day form a final round with `prices: {}`.
+them. A fill's `price` defaults to the clear price when unrecorded. Orders and clears whose
+`round` has no `market.prices` event (the auto-meal round) form a trailing round with
+`prices: {}`, `asks_after: {}`, `stock_after: {}`.
 
 **`app.profiles[]`** — from `app.profile`, in recorded order (only the agents who used
 the app that day; cohabiting and dating agents skip it):
