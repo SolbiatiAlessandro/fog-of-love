@@ -75,3 +75,50 @@ Real run 1: `runs/dev-4x2-gemma-s1` (4 agents, 2 days, google/gemma-3-27b-it, bu
 dates (~2.4k prompt tokens per call). Finding: agents scheduled eating hours but bought no meals, so food was 0
 for everyone; the morning observation now states that eating consumes a bought meal. Projected 12x7 cost:
 about USD 0.15, so the full 7-day run goes ahead under `--budget-usd 4.0`.
+
+### 2026-09-28 22:15 PDT — Engine handoff
+
+Real run 2: `runs/dev-12x7-s1` (12 agents, 7 days, google/gemma-3-27b-it, seed 1, `--budget-usd 4.0`): 468 calls,
+**USD 0.1285** (all calls reported cost; 1.64M prompt tokens, 30k completion tokens), 528 s, 0 failed calls, 0
+retries, 0 JSON fallbacks (morning or post-date). Total real spend tonight: USD 0.137 of the 6.00 cap.
+
+Committed: `runs/dev-12x7-s1/{events.jsonl,metrics.md,metrics.json,standings.md,run.json}` and the same for
+`runs/dev-4x2-gemma-s1`. `calls.jsonl` stays local (gitignored).
+
+Exact commands:
+```
+cd ~/Projects/fog-of-love
+uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -e '.[test]'
+.venv/bin/pytest -q                                                   # 15 passed
+.venv/bin/fog-of-love run --out runs/mock-12x7 --model mock --num-agents 12 --num-days 7 --seed 1   # ~5 s
+STRICT=1 node viewer/smoke_test.js runs/mock-12x7/events.jsonl        # OK, 18 event types
+set -a; . ~/.openclaw/.secrets/openrouter-alignment-research.env; set +a   # only in the shell that runs a real episode
+.venv/bin/fog-of-love run --out runs/dev-12x7-s1 --model google/gemma-3-27b-it --num-agents 12 --num-days 7 --seed 1 --budget-usd 4.0
+.venv/bin/fog-of-love metrics runs/dev-12x7-s1 ; .venv/bin/fog-of-love standings runs/dev-12x7-s1
+```
+
+What passed: pytest (needs math, loop, schema, metrics, budget guard); mock 12x7 under 2 minutes (5 s) with a
+schema-valid events.jsonl; viewer strict smoke test on the mock run; the real 12x7 run end to end under budget;
+viewer smoke test on the real run in non-strict mode.
+
+What did not / known gaps:
+- Viewer `STRICT=1` on the real run fails only because `gossip.post` never occurred: Fiona Garcia sent 6 invites
+  and every invitee answered `accept_invite: null`, so there were 0 visits and 0 posts. The inbox line was in
+  the invitee's morning observation; Gemma just declines. Metrics 3 and 6 are therefore not computable on this run.
+- No `propose_move_in` in 50 post-date choices (42 ask_again, 8 decline), so no cohabiting couple in 7 days;
+  metrics 1, 7 and 10 report "not computable" on this run. Relationships churn instead (25 changes, all
+  single<->dating). Likely fixes for the next run: more days, or a nudge in the post-date prompt naming the
+  move-in option's effect (hugs at home), which is a design decision for Alessandro.
+- No agent chose therapy (10 chose meditation, 55 agent-days); the sentence feedback alone did not drive it.
+- Marker: Linen Shirt (Mid) was bought by 9 of 12 agents on day 1 and worn on 100% of Mid/High pictures; the
+  first wearer was neither the most-matched nor the most-seen agent, so neither prestige nor conformity is
+  supported at this scale. Three Leather Jackets appeared on days 4-7; nobody bought High clothing.
+- Pairing: matched pairs are closer in need weights than random pairs (L1 0.84 vs 0.94, n=33); couples that
+  broke up were farther apart (0.88, n=10) than those still together (0.69, n=3). Small n.
+- Food: several agents still eat 0 meals on day 7 (they schedule eat hours without buying meals). The
+  observation states the rule; a cheaper fix is to auto-bid a Low meal per scheduled eat hour, not done.
+- Dates use the plain 10-turn chat, not the dialogic game master (see the design notes above).
+- Metric 4's mention regexes are crude string matches; metric 6's "cites gossip" is a name/keyword match on the
+  decline reason.
+- The shared checkout `~/Projects/fog-of-love` may still be on the viewer agent's state; the engine lives in the
+  same `main` (pushed from the `engine` worktree). `git pull` there.
