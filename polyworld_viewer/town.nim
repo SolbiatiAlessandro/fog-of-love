@@ -8,7 +8,7 @@ import chroma, vmath
 import polyworld/shapes
 
 const
-  WalkSpeed* = 8.5'f32
+  WalkSpeed* = 10.0'f32
   CharacterHeight* = 1.95'f32
 
 var dayTint* = vec3(1, 1, 1)

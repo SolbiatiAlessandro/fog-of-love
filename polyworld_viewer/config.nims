@@ -62,6 +62,6 @@ when defined(emscripten):
     " -s ASYNCIFY -s FETCH -s EXIT_RUNTIME=1 -s USE_WEBGL2=1" &
     " -s MAX_WEBGL_VERSION=2 -s MIN_WEBGL_VERSION=1 -s FULL_ES3=1" &
     " -s EXPORTED_FUNCTIONS=_main,_lovetownCommand,_lovetownState" &
-    " -s EXPORTED_RUNTIME_METHODS=FS,addRunDependency,removeRunDependency,ccall,cwrap,UTF8ToString" &
+    " -s EXPORTED_RUNTIME_METHODS=FS,addRunDependency,removeRunDependency,ccall,cwrap,UTF8ToString,stringToUTF8,lengthBytesUTF8" &
     " -s GL_ENABLE_GET_PROC_ADDRESS=1 -s ALLOW_MEMORY_GROWTH --profiling"
   switch("passL", link)

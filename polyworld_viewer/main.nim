@@ -18,11 +18,11 @@ const
   WindowTitle = "Fog of Love — Love Town (Polyworld)"
   UiHeight = 150.0'f32
   DaySeconds = 60.0'f32
-  MorningEnd = 3.0'f32
-  DayEnd = 26.0'f32
-  AppEnd = 29.0'f32
-  DateEnd = 51.0'f32
-  VisitEnd = 55.0'f32
+  MorningEnd = 2.0'f32
+  DayEnd = 29.0'f32
+  AppEnd = 31.0'f32
+  DateEnd = 50.0'f32
+  VisitEnd = 54.0'f32
   DateWalkAllowance = 2.4'f32
   AutoSwitchSeconds = 30.0
   SceneHalf = 90.0'f32
@@ -598,11 +598,17 @@ proc lovetownState(): cstring {.exportc: "lovetownState", cdecl.} =
   latestState.cstring
 
 when defined(emscripten):
-  proc takeBrowserCommand(): cstring =
+  var browserCommandBuffer = newString(4096)
+  proc takeBrowserCommand(): string =
+    ## Pops one entry from Module.lovetownCommand (a string, or an object
+    ## such as {type: "seek", t: 40}) into a Nim-owned buffer.
+    let buffer = browserCommandBuffer[0].addr
+    let capacity = browserCommandBuffer.len.int32
+    var length: int32
     {.emit: """
-    `result` = (char*)EM_ASM_PTR({
+    `length` = EM_ASM_INT({
       var q = Module.lovetownCommand;
-      if (!Array.isArray(q) || !q.length) return 0;
+      if (!Array.isArray(q) || !q.length) return -1;
       var c = q.shift();
       if (c && typeof c === 'object') {
         var t = c.type || c.cmd || '';
@@ -612,11 +618,14 @@ when defined(emscripten):
           c.day !== undefined ? c.day : c.enabled !== undefined ? (c.enabled ? 1 : 0) : '');
         c = (t + ' ' + v).trim();
       }
-      return stringToNewUTF8(String(c));
-    });
+      var text = String(c);
+      stringToUTF8(text, $0, $1);
+      return lengthBytesUTF8(text);
+    }, `buffer`, `capacity`);
     """.}
-  proc freeBrowserString(p: cstring) =
-    {.emit: "free((void*)`p`);".}
+    if length < 0: return ""
+    result = browserCommandBuffer[0 ..< min(length.int, browserCommandBuffer.len - 1)]
+    if result.len == 0: result = " "
   proc publishReady(agentCount, days: int32) =
     {.emit: """
     EM_ASM({ if (Module.lovetownReady) Module.lovetownReady({schema: 'love-town-replay/1', agents: $0, days: $1, daySeconds: 60}); }, `agentCount`, `days`);
@@ -773,10 +782,8 @@ proc main() =
     wallClock += dt
     when defined(emscripten):
       for _ in 0 ..< 16:
-        let raw = takeBrowserCommand()
-        if raw == nil: break
-        let command = $raw
-        freeBrowserString(raw)
+        let command = takeBrowserCommand()
+        if command.len == 0: break
         applyCommand(command)
     for command in commandQueue: applyCommand(command)
     commandQueue.setLen(0)
@@ -993,7 +1000,7 @@ proc main() =
       let state = states[i]
       var ch = Character(frame: frame(smoothed[i], smoothedYaw[i]), garment: garmentOf(wearing[i]),
         look: looks[i], pose: state.pose, prop: state.prop, highlight: i == followed)
-      ch.phase = if state.walking: wallClock.float32 * 9 + i.float32 else: wallClock.float32 + i.float32
+      ch.phase = if state.walking: wallClock.float32 * 11 + i.float32 else: wallClock.float32 + i.float32
       ch.talking = i == bubbleAgent
       if state.walking: ch.prop = propNone
       renderer.addCharacter(ch)
