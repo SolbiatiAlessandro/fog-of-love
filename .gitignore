@@ -5,3 +5,7 @@ __pycache__/
 .env
 *.env
 out/
+
+# Polyworld viewer build output
+build/
+polyworld_viewer/emscripten/
