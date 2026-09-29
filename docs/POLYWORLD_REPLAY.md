@@ -34,22 +34,29 @@ run name derived from the parent directory.
 ## Presentation clock
 
 The JSON carries no seconds. Both the Nim viewer and the HTML layer share this convention
-(`timeline` block, also copied from the 2D viewer): one day plays over **60 s at 1x**, so
-replay time `t` (seconds) maps to `day = floor(t / 60) + 1` and the offset within the day
-picks the phase:
+(`timeline` block): one day plays over **60 s at 1x**, so replay time `t` (seconds) maps to
+`day = floor(t / 60) + 1` and the offset within the day picks the phase:
 
 | phase   | seconds in day | staged content                                              |
 | ------- | -------------- | ----------------------------------------------------------- |
-| morning | 0 – 10         | agents leave home, `allocations` (work, games, home, eat, therapy, meditation) |
-| market  | 10 – 20        | `market.rounds` in order (asks, bids, clears)               |
-| app     | 20 – 34        | `app.profiles`, `app.swipes`, `app.matches`                 |
-| visit   | 34 – 38        | accepted `visits` (guest walks to host's house)             |
-| date    | 38 – 55        | `dates` in order, each turn evenly spaced inside the window |
-| night   | 55 – 60        | `night` states, `relationship_changes` effects, everyone home |
+| morning | 0 – 6          | agents leave home, `allocations` (work, games, home, eat, therapy, meditation) |
+| market  | 6 – 14         | `market.rounds` in order (asks, bids, clears)               |
+| app     | 14 – 24        | `app.profiles`, `app.swipes`, `app.matches`                 |
+| visit   | 24 – 28        | accepted `visits` (guest walks to host's house)             |
+| date    | 28 – 56        | `dates`: the two tables run in parallel, see below          |
+| night   | 56 – 60        | `night` states, `relationship_changes` effects, everyone home |
 
-Within one phase the items are staged in list order, spread evenly across the window
-(`date` turns: the window is split evenly among the day's dates, then among each date's
-turns). `run.days * 60` is the total length; `t` beyond the end is clamped.
+Within one phase the items of a list are revealed in list order, spread evenly across the
+window: with `n` items and `f` the fraction of the window elapsed, items `0 .. floor(f * n)`
+are visible (the first one as soon as the phase starts). The HTML layer uses this rule for
+its panels; the Nim scene should use it for what it stages so both agree.
+
+Dates run on two tables at once. Dates with `table: 0` play sequentially at table 0 and
+dates with `table: 1` at table 1, and each table splits the date window evenly among its
+dates. Inside one date's slot the steps are: the pair walks to the table (the `scene`
+text), one step per turn, then the outcomes (`outcomes` and `change`); the slot is split
+evenly among those `2 + turns.length` steps. A day with no dates leaves the restaurant
+empty. `run.days * 60` is the total length; `t` beyond the end is clamped.
 
 ## Top-level object
 
@@ -71,7 +78,7 @@ turns). `run.days * 60` is the total length; `t` beyond the end is clamped.
     "calls": 922,
     "total_usd": 0.3354
   },
-  "timeline": {"day_seconds": 60, "phases": {"morning": [0, 10], "market": [10, 20], "app": [20, 34], "visit": [34, 38], "date": [38, 55], "night": [55, 60]}},
+  "timeline": {"day_seconds": 60, "phases": {"morning": [0, 6], "market": [6, 14], "app": [14, 24], "visit": [24, 28], "date": [28, 56], "night": [56, 60]}},
   "agents": [],
   "goods": [],
   "days": [],
@@ -208,7 +215,7 @@ staged as a walk to the host's house.
 ```
 
 `table` is `index % 2` of the date within the day (the restaurant has exactly two tables;
-dates are sequential, so a table is reused across dates). `change` is the
+the dates of a table play one after another, see the presentation clock). `change` is the
 `relationship.change` recorded for that pair on that day, or `null`. A `date.turn` or
 `date.outcome` without a preceding `date.scene` for the pair creates a date with
 `scene: ""`. `rating` is a number or `null`; `choice` is `ask_again`, `propose_move_in`,
