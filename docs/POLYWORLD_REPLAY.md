@@ -279,10 +279,11 @@ applies each command in order:
 | `follow <agentId>`  | camera follows that agent and disables auto-switching     |
 | `auto <0\|1>`       | disable / enable the 30 s auto-switch of the followed agent |
 
-**`Module.lovetownState`** is written by the Nim side once per frame (assign the parsed
-object: `Module.lovetownState = JSON.parse(payload)`); the HTML layer polls it in its own
-`requestAnimationFrame` loop. If the Nim side instead exposes a function, the HTML calls
-it without arguments and uses the return value. The object:
+**`Module.lovetownState`** is the state callback, as `concordiaState` was: the Nim side
+calls `Module.lovetownState(JSON.parse(payload))` once per frame with the object below.
+The HTML layer defines that function so that it stores the object and returns the latest
+one when called without arguments, and polls it in its own `requestAnimationFrame` loop
+(it also accepts a plain object assigned to the slot). The object:
 
 ```json
 {
@@ -311,9 +312,9 @@ HTML falls back to a transcript column instead of bubbles. `place` is one of `ho
 `street`, `work`, `restaurant`, `table`, `therapy`, `garden`, `visit`. `phase` is one of
 the six phase names above (or `setup` before the first day).
 
-Optional: `Module.lovetownReady` — set to `true` (or called, if the HTML made it a
-function) once the replay is loaded and the first frame rendered; the HTML enables the
-controls then.
+`Module.lovetownReady(info)` — the HTML defines it as a function; the Nim side calls it
+once the replay is loaded and the scene is ready (`info` is free-form, for example
+`{schema, agents, days, daySeconds}`); the HTML enables the controls then.
 
 **Loading.** Native: the replay path is the first CLI argument. Web: the shell fetches
 `replays/<run>.lovetown.json` for `?run=<name>` (default `dev-24x10-s4-market`, list from

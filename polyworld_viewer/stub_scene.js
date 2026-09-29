@@ -38,8 +38,9 @@
       if (date) { const tb = tables[date.table]; sx = tb.sx + (date.pair[0] === a.id ? -0.06 : 0.06); sy = tb.sy; place = 'table'; }
       return { id: a.id, name: a.name, x: (sx - 0.5) * 100, y: 0, z: (sy - 0.5) * 100, wearing: st.wearing, status: st.status, place, sx, sy, visible: true };
     });
-    M.lovetownState = { t, day: snap.clock.day, phase: snap.clock.phase, playing, speed, auto, followed, agents,
+    const state = { t, day: snap.clock.day, phase: snap.clock.phase, playing, speed, auto, followed, agents,
       anchors: { tables, houses: doc.agents.map((a, i) => ({ agent: a.id, x: 0, y: 0, z: 0, sx: agents[i].sx, sy: agents[i].sy })), workspace: { x: 0, y: 0, z: -30 }, restaurant: { x: 32, y: 0, z: 4 }, therapy: { x: 40, y: 0, z: -20 }, garden: { x: -40, y: 0, z: -20 } } };
+    if (typeof M.lovetownState === 'function') M.lovetownState(state); else M.lovetownState = state;
     requestAnimationFrame(frame);
   }
   ready();

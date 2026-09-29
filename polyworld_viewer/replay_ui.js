@@ -9,7 +9,10 @@ var Module = {
   canvas: document.getElementById('canvas'),
   arguments: ['/replay.json'],
   lovetownCommand: [],
-  lovetownState: null,
+  // The Nim side calls lovetownState(stateObject) once per frame (or assigns an object to it);
+  // the HUD reads the latest value back by calling it without arguments.
+  lovetownState: function (state) { if (state && typeof state === 'object') Module.lovetownLatest = state; return Module.lovetownLatest || null; },
+  lovetownLatest: null,
   lovetownReady: false,
   lovetownDocument: null,
 };
