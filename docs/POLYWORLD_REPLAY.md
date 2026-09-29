@@ -266,9 +266,12 @@ The HTML layer (`polyworld_viewer/replay_ui.js`) owns the HUD; the Nim scene own
 canvas. They talk through two `Module` members, mirroring the previous viewer's
 `concordiaCommand` / `concordiaState`:
 
-**`Module.lovetownCommand`** is a JavaScript array of command strings that the HTML layer
-pushes onto. The Nim side drains it every frame (`Module.lovetownCommand.shift()`) and
-applies each command in order:
+**Commands** are strings. The Nim side exports `lovetownCommand(cmd: cstring)`
+(`EXPORTED_FUNCTIONS=_lovetownCommand`), and the HTML layer calls it through
+`Module.ccall('lovetownCommand', null, ['string'], [cmd])` once the scene has reported
+ready; before that, and when the export is missing (the stub), it pushes onto the
+**`Module.lovetownCommand`** array, which the Nim side may drain every frame
+(`Module.lovetownCommand.shift()`). Commands apply in order:
 
 | command             | meaning                                                   |
 | ------------------- | --------------------------------------------------------- |

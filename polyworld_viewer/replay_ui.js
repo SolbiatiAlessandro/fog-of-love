@@ -40,12 +40,21 @@ Module.canvas.focus = function (options) { HTMLElement.prototype.focus.call(this
     t: 0, playing: true, speed: 1, auto: true, reveal: false, follow: null, autoTimer: 0, followIndex: -1,
     scene: !window.LOVETOWN_NO_SCENE, sceneReady: false, bridgeSeen: false, state: null,
     seenSwipes: new Set(), seenMatches: new Set(), shownTurns: new Set(), shownChanges: new Set(),
-    personaOpen: false, hoverX: null, labels: new Map(), bubbles: new Map(), lastTs: 0,
+    personaOpen: false, hoverX: null, labels: new Map(), bubbles: new Map(), lastTs: 0, pending: [],
   };
 
   // ------------------------------------------------------------------ bridge
+  // Commands go to the exported Nim entry point when the wasm has one (Module.ccall), else onto the
+  // Module.lovetownCommand queue that the scene drains. Before the scene is ready they wait in ui.pending.
+  function deliver(text) {
+    if (typeof Module.ccall === 'function' && Module._lovetownCommand) {
+      try { Module.ccall('lovetownCommand', null, ['string'], [text]); return; } catch (e) { console.warn('lovetownCommand ccall failed', e); }
+    }
+    Module.lovetownCommand.push(text);
+  }
   function command(text) {
-    if (ui.scene) Module.lovetownCommand.push(text);
+    if (!ui.scene) return;
+    if (ui.sceneReady) deliver(text); else ui.pending.push(text);
   }
   function setPlaying(v) {
     ui.playing = v; command(v ? 'play' : 'pause');
@@ -154,6 +163,7 @@ Module.canvas.focus = function (options) { HTMLElement.prototype.focus.call(this
   Module.lovetownReady = () => sceneReady();
   function sceneReady() {
     ui.sceneReady = true; $('status').hidden = true; $('play').disabled = false;
+    ui.pending = [];
     // the scene starts from the HUD's current settings (URL state applied before the scene was ready)
     command(ui.playing ? 'play' : 'pause'); command(`speed ${ui.speed}`); command(`auto ${ui.auto ? 1 : 0}`);
     if (ui.t > 0) command(`seek ${ui.t.toFixed(2)}`);
