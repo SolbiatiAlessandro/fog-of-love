@@ -18,15 +18,6 @@
     "note": "seed 4 \u00b7 922 calls \u00b7 521 s"
   },
   {
-    "name": "latest",
-    "path": "runs/dev-24x10-s4-market/events.jsonl",
-    "agents": 24,
-    "days": 10,
-    "model": "google/gemma-3-27b-it",
-    "usd": 0.3354,
-    "note": "seed 4 \u00b7 922 calls \u00b7 521 s"
-  },
-  {
     "name": "dev-12x14-s2",
     "path": "runs/dev-12x14-s2/events.jsonl",
     "agents": 12,

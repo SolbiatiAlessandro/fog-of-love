@@ -19,7 +19,7 @@ def scan(runs_dir: pathlib.Path) -> list:
     entries = []
     for d in sorted(runs_dir.iterdir()):
         run_json, events = d / "run.json", d / "events.jsonl"
-        if not (d.is_dir() and run_json.is_file() and events.is_file()):
+        if d.is_symlink() or d.name == "latest" or not (d.is_dir() and run_json.is_file() and events.is_file()):
             continue
         try:
             cfg = json.loads(run_json.read_text())
