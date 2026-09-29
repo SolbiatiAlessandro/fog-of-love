@@ -21,13 +21,14 @@ python3 -m http.server 8000
   `python3 viewer/make_runs_index.py` (stdlib; scans `runs/*/run.json`, skips
   directories without an `events.jsonl`, sorts the largest run first).
 - With no `?events=` parameter the viewer loads the first entry of `runs/index.json`
-  (the largest run, currently `dev-12x7-s1`); without an index it tries
+  (the largest run, currently `dev-12x14-s2`, 12 agents × 14 days); without an index it tries
   `../runs/latest/events.jsonl`. If that fails it shows the error and offers a
   **Load sample fixture** button plus an **Open events.jsonl** file picker (the picker
   also works when the page is opened as a plain `file://` URL).
 - `docs/replay/` is a static copy with the indexed runs bundled next to it
-  (`docs/replay/runs/<name>/events.jsonl`); it defaults to the real run and keeps the
-  fixture in the picker. Regenerate with `sh viewer/publish_docs.sh`.
+  (`docs/replay/runs/<name>/events.jsonl`, all three real runs); it defaults to the
+  largest real run and keeps the fixture in the picker. Regenerate with
+  `sh viewer/publish_docs.sh`.
 
 ## URL parameters
 

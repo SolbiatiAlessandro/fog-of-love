@@ -1001,10 +1001,11 @@
       });
       // day ticks
       ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      const labelStep = days > 8 ? Math.ceil(days / 7) : 1; // 14 days: D1, D3, ... so labels do not overlap
       for (let d = 1; d <= days; d++) {
         const x = xOf((d - 1) * roundsPerDay);
         ctx.strokeStyle = css('--axis'); ctx.beginPath(); ctx.moveTo(x, top + padT + plotH); ctx.lineTo(x, top + padT + plotH + 3); ctx.stroke();
-        ctx.fillText(`D${d}`, x, top + padT + plotH + 3);
+        if ((d - 1) % labelStep === 0) ctx.fillText(`D${d}`, x, top + padT + plotH + 3);
       }
       // series. A good that never traded is faint and dotted: its "price" is only the list price
       // carried through the clearing house. Dots mark rounds with fills, area ∝ units sold.
@@ -1126,7 +1127,7 @@
     const alloc = s.allocs[name];
     const bids = alloc && Array.isArray(alloc.shopping) && alloc.shopping.length
       ? `<div class="alloc small muted">bids: ${alloc.shopping.map((o) => `${esc(goodLabel(o.good))} ${fmtPrice(o.price)}${o.qty > 1 ? `×${esc(o.qty)}` : ''}`).join(', ')}</div>` : '';
-    const allocHtml = alloc ? `<div class="alloc">${['work', 'games', 'home', 'eat'].map((k) => `<span><b>${esc((alloc.hours || {})[k] ?? 0)}h</b> ${k}</span>`).join('')}${alloc.therapy ? '<span class="chip">therapy</span>' : ''}${alloc.meditation ? '<span class="chip">meditation</span>' : ''}${alloc.invite ? `<span class="chip">invites ${esc(firstName(alloc.invite))}</span>` : ''}${alloc.accept_invite ? `<span class="chip">visits ${esc(firstName(alloc.accept_invite))}</span>` : ''}${alloc.accept_move_in ? '<span class="chip">accepts move-in</span>' : ''}${alloc.breakup ? '<span class="chip warn">breakup</span>' : ''}${alloc.fallback ? '<span class="chip warn" title="the model\'s JSON could not be parsed; default allocation">fallback</span>' : ''}</div>${bids}` : '<span class="muted">no allocation yet today</span>';
+    const allocHtml = alloc ? `<div class="alloc">${['work', 'games', 'home', 'eat'].map((k) => `<span><b>${esc((alloc.hours || {})[k] ?? 0)}h</b> ${k}</span>`).join('')}${alloc.therapy ? '<span class="chip">therapy</span>' : ''}${alloc.meditation ? '<span class="chip">meditation</span>' : ''}${alloc.invite ? `<span class="chip">invites ${esc(firstName(alloc.invite))}</span>` : ''}${alloc.accept_invite ? `<span class="chip">visits ${esc(firstName(alloc.accept_invite))}</span>` : ''}${alloc.propose_move_in ? '<span class="chip">proposes move-in</span>' : ''}${alloc.accept_move_in ? '<span class="chip">accepts move-in</span>' : ''}${alloc.breakup ? '<span class="chip warn">breakup</span>' : ''}${alloc.fallback ? '<span class="chip warn" title="the model\'s JSON could not be parsed; default allocation">fallback</span>' : ''}</div>${bids}` : '<span class="muted">no allocation yet today</span>';
     const longPersona = a.persona_summary.length > 260;
     const partner = a.partner ? `${esc(a.status)} with <b>${esc(a.partner)}</b>` : esc(a.status);
     const d = s.dateIndex[name] || null;

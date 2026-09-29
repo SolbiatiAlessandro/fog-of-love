@@ -60,8 +60,15 @@ Repo created, BUILD_SPEC.md written. Engine and viewer agents launched.
 - `viewer/publish_docs.sh` now regenerates the index and bundles every indexed run under `docs/replay/runs/`
   (RUN_ROOT rewritten to `./`), defaulting to the real run with the fixture in the picker. GitHub Pages remains
   refused on this plan (HTTP 422); local viewing documented in `docs/VIEWER.md`.
-- Not done: mock run not bundled (none under `runs/`); no cohabiting or gossip in the real run, so those map hearts
-  and board posts are only exercised by the fixture.
+- Not done: mock run not bundled (none under `runs/`); no gossip in any real run yet, so board posts are only
+  exercised by the fixture.
+- Addendum 21:50 PDT: the rebase brought in `runs/dev-12x14-s2` (12 × 14, USD 0.2063). `STRICT=1 node
+  viewer/smoke_test.js` passes on it (2375 events, 17/18 types, warns on `gossip.post` only; 376 units sold, 3 goods
+  never traded; 15 null profile texts use the fallback). Regenerated `runs/index.json` (three runs, 12x14 first, so
+  `viewer/` and `docs/replay/` now open on it) and republished the bundle (761 + 466 + 64 KB). Checked in headless
+  Chrome at day 14 night: cohabiting hearts on the houses, the app shows only the two singles, Designer Coat "2 sold"
+  on the High line, both `propose_move_in` outcomes in the transcript. Added a "proposes move-in" chip for the new
+  morning key; x-axis day labels thin out beyond 8 days (the 14 day buttons wrap to a second header row).
 
 ## Engine
 

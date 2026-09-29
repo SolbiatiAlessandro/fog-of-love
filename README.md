@@ -40,8 +40,9 @@ need weights and standings. From the repo root:
 python3 -m http.server 8000
 ```
 
-then open <http://localhost:8000/viewer/?events=../runs/dev-12x7-s1/events.jsonl>, or just
-<http://localhost:8000/viewer/> and pick a run from the **Run** menu in the header (it reads `runs/index.json`;
+then open <http://localhost:8000/viewer/?events=../runs/dev-12x7-s1/events.jsonl> (the first 7-day run), or just
+<http://localhost:8000/viewer/>, which opens the largest checked-in run (`dev-12x14-s2`, 14 days, five couples move
+in together) and lets you pick another from the **Run** menu in the header (it reads `runs/index.json`;
 regenerate that with `python3 viewer/make_runs_index.py` after a new run). Useful URL parameters: `day`, `t`,
 `follow=<agent name>`, `reveal=1`, `play=0`. Details, screenshots and the smoke test: `docs/VIEWER.md`.
 
