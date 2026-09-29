@@ -27,7 +27,7 @@ var ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIR
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmp2yf9s9e6.js
+// include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmp81c4ycg7.js
 
   Module['expectedDataFileDownloads'] ??= 0;
   Module['expectedDataFileDownloads']++;
@@ -159,21 +159,21 @@ var ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIR
 
   })();
 
-// end include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmp2yf9s9e6.js
-// include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpk960e296.js
+// end include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmp81c4ycg7.js
+// include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpswf7t7zf.js
 
     // All the pre-js content up to here must remain later on, we need to run
     // it.
     if ((typeof ENVIRONMENT_IS_WASM_WORKER != 'undefined' && ENVIRONMENT_IS_WASM_WORKER) || (typeof ENVIRONMENT_IS_PTHREAD != 'undefined' && ENVIRONMENT_IS_PTHREAD) || (typeof ENVIRONMENT_IS_AUDIO_WORKLET != 'undefined' && ENVIRONMENT_IS_AUDIO_WORKLET)) Module['preRun'] = [];
     var necessaryPreJSTasks = Module['preRun'].slice();
-  // end include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpk960e296.js
-// include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpzknc_z0y.js
+  // end include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpswf7t7zf.js
+// include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmp04easxzn.js
 
     if (!Module['preRun']) throw 'Module.preRun should exist because file support used it; did a pre-js delete it?';
     necessaryPreJSTasks.forEach((task) => {
       if (Module['preRun'].indexOf(task) < 0) throw 'All preRun tasks that exist before user pre-js code should remain after; did you replace Module or modify Module.preRun?';
     });
-  // end include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmpzknc_z0y.js
+  // end include: /var/folders/2g/12cxjw6s19gc_yjgr2mswh8m0000gn/T/tmp04easxzn.js
 
 
 var arguments_ = [];
@@ -4172,10 +4172,6 @@ async function createWasm() {
       return runEmAsmFunction(code, sigPtr, argbuf);
     };
 
-  var _emscripten_asm_const_ptr = (code, sigPtr, argbuf) => {
-      return runEmAsmFunction(code, sigPtr, argbuf);
-    };
-
   function _emscripten_fetch_free(id) {
     if (Fetch.xhrs.has(id)) {
       var xhr = Fetch.xhrs.get(id);
@@ -5253,6 +5249,65 @@ async function createWasm() {
       return success ? 0 : -5;
     };
 
+  var ENV = {
+  };
+  
+  var getExecutableName = () => thisProgram || './this.program';
+  var getEnvStrings = () => {
+      if (!getEnvStrings.strings) {
+        // Default values.
+        // Browser language detection #8751
+        var lang = ((typeof navigator == 'object' && navigator.language) || 'C').replace('-', '_') + '.UTF-8';
+        var env = {
+          'USER': 'web_user',
+          'LOGNAME': 'web_user',
+          'PATH': '/',
+          'PWD': '/',
+          'HOME': '/home/web_user',
+          'LANG': lang,
+          '_': getExecutableName()
+        };
+        // Apply the user-provided values, if any.
+        for (var x in ENV) {
+          // x is a key in ENV; if ENV[x] is undefined, that means it was
+          // explicitly set to be so. We allow user code to do that to
+          // force variables with default values to remain unset.
+          if (ENV[x] === undefined) delete env[x];
+          else env[x] = ENV[x];
+        }
+        var strings = [];
+        for (var x in env) {
+          strings.push(`${x}=${env[x]}`);
+        }
+        getEnvStrings.strings = strings;
+      }
+      return getEnvStrings.strings;
+    };
+  
+  var _environ_get = (__environ, environ_buf) => {
+      var bufSize = 0;
+      var envp = 0;
+      for (var string of getEnvStrings()) {
+        var ptr = environ_buf + bufSize;
+        HEAPU32[(((__environ)+(envp))>>2)] = ptr;
+        bufSize += stringToUTF8(string, ptr, Infinity) + 1;
+        envp += 4;
+      }
+      return 0;
+    };
+
+  
+  var _environ_sizes_get = (penviron_count, penviron_buf_size) => {
+      var strings = getEnvStrings();
+      HEAPU32[((penviron_count)>>2)] = strings.length;
+      var bufSize = 0;
+      for (var string of strings) {
+        bufSize += lengthBytesUTF8(string) + 1;
+      }
+      HEAPU32[((penviron_buf_size)>>2)] = bufSize;
+      return 0;
+    };
+
 
   function _fd_close(fd) {
   try {
@@ -6287,6 +6342,8 @@ async function createWasm() {
     };
 
 
+
+
   var FS_createPath = (...args) => FS.createPath(...args);
 
 
@@ -6362,6 +6419,8 @@ if (Module['wasmBinary']) wasmBinary = Module['wasmBinary'];
   Module['ccall'] = ccall;
   Module['cwrap'] = cwrap;
   Module['UTF8ToString'] = UTF8ToString;
+  Module['stringToUTF8'] = stringToUTF8;
+  Module['lengthBytesUTF8'] = lengthBytesUTF8;
   Module['FS_preloadFile'] = FS_preloadFile;
   Module['FS_unlink'] = FS_unlink;
   Module['FS_createPath'] = FS_createPath;
@@ -6390,7 +6449,6 @@ if (Module['wasmBinary']) wasmBinary = Module['wasmBinary'];
   'readSockaddr',
   'writeSockaddr',
   'runMainThreadEmAsm',
-  'getExecutableName',
   'autoResumeAudioContext',
   'getDynCaller',
   'asmjsMangle',
@@ -6453,7 +6511,6 @@ if (Module['wasmBinary']) wasmBinary = Module['wasmBinary'];
   'jsStackTrace',
   'getCallstack',
   'convertPCtoSourceLocation',
-  'getEnvStrings',
   'wasiRightsToMuslOFlags',
   'wasiOFlagsToMuslOFlags',
   'setImmediateWrapped',
@@ -6541,6 +6598,7 @@ missingLibrarySymbols.forEach(missingLibrarySymbol)
   'readEmAsmArgs',
   'runEmAsmFunction',
   'jstoi_q',
+  'getExecutableName',
   'dynCallLegacy',
   'dynCall',
   'handleException',
@@ -6567,8 +6625,6 @@ missingLibrarySymbols.forEach(missingLibrarySymbol)
   'UTF8Decoder',
   'UTF8ArrayToString',
   'stringToUTF8Array',
-  'stringToUTF8',
-  'lengthBytesUTF8',
   'intArrayFromString',
   'UTF16Decoder',
   'stringToUTF8OnStack',
@@ -6589,6 +6645,7 @@ missingLibrarySymbols.forEach(missingLibrarySymbol)
   'restoreOldWindowedStyle',
   'UNWIND_CACHE',
   'ExitStatus',
+  'getEnvStrings',
   'checkWasiClock',
   'doReadv',
   'doWritev',
@@ -6787,10 +6844,10 @@ function checkIncomingModuleAPI() {
   ignoredModuleProp('fetchSettings');
 }
 var ASM_CONSTS = {
-  118103: ($0, $1) => { if (Module.polyworldFrame) Module.polyworldFrame($0, $1); },  
- 118165: ($0, $1) => { if (Module.lovetownReady) Module.lovetownReady({schema: 'love-town-replay/1', agents: $0, days: $1, daySeconds: 60}); },  
- 118287: () => { var q = Module.lovetownCommand; if (!Array.isArray(q) || !q.length) return 0; var c = q.shift(); if (c && typeof c === 'object') { var t = c.type || c.cmd || ''; var v = c.value !== undefined ? c.value : (c.speed !== undefined ? c.speed : c.t !== undefined ? c.t : c.seconds !== undefined ? c.seconds : c.agentId !== undefined ? c.agentId : c.agent !== undefined ? c.agent : c.day !== undefined ? c.day : c.enabled !== undefined ? (c.enabled ? 1 : 0) : ''); c = (t + ' ' + v).trim(); } return stringToNewUTF8(String(c)); },  
- 118812: ($0) => { if (typeof Module.lovetownState === 'function') { try { Module.lovetownState(JSON.parse(UTF8ToString($0))); } catch (error) { if (!Module.lovetownBridgeError) { Module.lovetownBridgeError = true; console.error('Love Town bridge callback failed', error); } } } }
+  119503: ($0, $1) => { if (Module.polyworldFrame) Module.polyworldFrame($0, $1); },  
+ 119565: ($0, $1, $2) => { if (Module.lovetownReady) Module.lovetownReady({schema: 'love-town-replay/1', agents: $0, days: $1, daySeconds: 60, phases: JSON.parse(UTF8ToString($2))}); },  
+ 119725: ($0, $1) => { var q = Module.lovetownCommand; if (!Array.isArray(q) || !q.length) return -1; var c = q.shift(); if (c && typeof c === 'object') { var t = c.type || c.cmd || ''; var v = c.value !== undefined ? c.value : (c.speed !== undefined ? c.speed : c.t !== undefined ? c.t : c.seconds !== undefined ? c.seconds : c.agentId !== undefined ? c.agentId : c.agent !== undefined ? c.agent : c.day !== undefined ? c.day : c.enabled !== undefined ? (c.enabled ? 1 : 0) : ''); c = (t + ' ' + v).trim(); } var text = String(c); stringToUTF8(text, $0, $1); return lengthBytesUTF8(text); },  
+ 120296: ($0) => { if (typeof Module.lovetownState === 'function') { try { Module.lovetownState(JSON.parse(UTF8ToString($0))); } catch (error) { if (!Module.lovetownBridgeError) { Module.lovetownBridgeError = true; console.error('Love Town bridge callback failed', error); } } } }
 };
 function get_window_width() { var canvas = (typeof Module !== 'undefined' && Module.canvas) ? Module.canvas : document.getElementById('canvas'); if (canvas && canvas.clientWidth > 0) { return canvas.clientWidth; } return window.innerWidth; }
 function get_window_height() { var canvas = (typeof Module !== 'undefined' && Module.canvas) ? Module.canvas : document.getElementById('canvas'); if (canvas && canvas.clientHeight > 0) { return canvas.clientHeight; } return window.innerHeight; }
@@ -6821,9 +6878,9 @@ var _fflush = makeInvalidEarlyAccess('_fflush');
 var _windy_file_drop_callback = Module['_windy_file_drop_callback'] = makeInvalidEarlyAccess('_windy_file_drop_callback');
 var _lovetownCommand = Module['_lovetownCommand'] = makeInvalidEarlyAccess('_lovetownCommand');
 var _lovetownState = Module['_lovetownState'] = makeInvalidEarlyAccess('_lovetownState');
-var _free = makeInvalidEarlyAccess('_free');
 var _main = Module['_main'] = makeInvalidEarlyAccess('_main');
 var _malloc = makeInvalidEarlyAccess('_malloc');
+var _free = makeInvalidEarlyAccess('_free');
 var ___funcs_on_exit = makeInvalidEarlyAccess('___funcs_on_exit');
 var _emscripten_builtin_memalign = makeInvalidEarlyAccess('_emscripten_builtin_memalign');
 var _emscripten_stack_get_end = makeInvalidEarlyAccess('_emscripten_stack_get_end');
@@ -6840,6 +6897,7 @@ var dynCall_vii = makeInvalidEarlyAccess('dynCall_vii');
 var dynCall_viii = makeInvalidEarlyAccess('dynCall_viii');
 var dynCall_iii = makeInvalidEarlyAccess('dynCall_iii');
 var dynCall_jiji = makeInvalidEarlyAccess('dynCall_jiji');
+var dynCall_iidiiii = makeInvalidEarlyAccess('dynCall_iidiiii');
 var _asyncify_start_unwind = makeInvalidEarlyAccess('_asyncify_start_unwind');
 var _asyncify_stop_unwind = makeInvalidEarlyAccess('_asyncify_stop_unwind');
 var _asyncify_start_rewind = makeInvalidEarlyAccess('_asyncify_start_rewind');
@@ -6851,9 +6909,9 @@ function assignWasmExports(wasmExports) {
   Module['_windy_file_drop_callback'] = _windy_file_drop_callback = createExportWrapper('windy_file_drop_callback', 4);
   Module['_lovetownCommand'] = _lovetownCommand = createExportWrapper('lovetownCommand', 1);
   Module['_lovetownState'] = _lovetownState = createExportWrapper('lovetownState', 0);
-  _free = createExportWrapper('free', 1);
   Module['_main'] = _main = createExportWrapper('main', 3);
   _malloc = createExportWrapper('malloc', 1);
+  _free = createExportWrapper('free', 1);
   ___funcs_on_exit = createExportWrapper('__funcs_on_exit', 0);
   _emscripten_builtin_memalign = createExportWrapper('emscripten_builtin_memalign', 2);
   _emscripten_stack_get_end = wasmExports['emscripten_stack_get_end'];
@@ -6870,6 +6928,7 @@ function assignWasmExports(wasmExports) {
   dynCalls['viii'] = dynCall_viii = createExportWrapper('dynCall_viii', 4);
   dynCalls['iii'] = dynCall_iii = createExportWrapper('dynCall_iii', 3);
   dynCalls['jiji'] = dynCall_jiji = createExportWrapper('dynCall_jiji', 4);
+  dynCalls['iidiiii'] = dynCall_iidiiii = createExportWrapper('dynCall_iidiiii', 7);
   _asyncify_start_unwind = createExportWrapper('asyncify_start_unwind', 1);
   _asyncify_stop_unwind = createExportWrapper('asyncify_stop_unwind', 0);
   _asyncify_start_rewind = createExportWrapper('asyncify_start_rewind', 1);
@@ -6900,8 +6959,6 @@ var wasmImports = {
   clock_time_get: _clock_time_get,
   /** @export */
   emscripten_asm_const_int: _emscripten_asm_const_int,
-  /** @export */
-  emscripten_asm_const_ptr: _emscripten_asm_const_ptr,
   /** @export */
   emscripten_fetch_free: _emscripten_fetch_free,
   /** @export */
@@ -6938,6 +6995,10 @@ var wasmImports = {
   emscripten_webgl_create_context: _emscripten_webgl_create_context,
   /** @export */
   emscripten_webgl_make_context_current: _emscripten_webgl_make_context_current,
+  /** @export */
+  environ_get: _environ_get,
+  /** @export */
+  environ_sizes_get: _environ_sizes_get,
   /** @export */
   exit: _exit,
   /** @export */

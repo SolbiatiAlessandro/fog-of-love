@@ -54,6 +54,10 @@ standings. Pick a run in the header (default `dev-24x10-s4-market`); `?run=<name
 `follow=<agent id>`, `reveal=1`, `play=0`, `auto=0` work in the URL. Build, convert and verify:
 `docs/POLYWORLD_BUILD.md`; data contract: `docs/POLYWORLD_REPLAY.md`.
 
+![Date at the Love Town restaurant (Polyworld 3D viewer)](docs/polyworld-date.png)
+
+![Morning street with dressed agents](docs/polyworld-street.png)
+
 **Fallback (2D):** https://solbiatialessandro.github.io/fog-of-love/replay/ — the vanilla HTML/JS viewer
 (`viewer/`, no build) with the same panels over a 2D town map. Locally, from the repo root:
 

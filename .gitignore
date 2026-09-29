@@ -9,3 +9,4 @@ out/
 # Polyworld viewer build output
 build/
 polyworld_viewer/emscripten/
+node_modules/
