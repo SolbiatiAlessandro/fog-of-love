@@ -163,3 +163,35 @@ def test_invite_accepted_with_zero_home_hours_gets_two_hug_hours(tmp_path):
     assert night[guest.name]["m"]["hugs"] == 0.5
     world.log.close()
     assert all(e["type"] for e in read_events(world.out / "events.jsonl"))
+
+
+def test_invite_survives_a_date_in_between_and_partner_visits_are_not_gossip(tmp_path):
+    world = World(out_dir=tmp_path / "d", model_name="mock", num_agents=4, num_days=3, seed=12)
+    guest, host, third, _ = (world.agents[n] for n in names(world))
+    # the host invited the guest (both single), then started dating a third agent that evening
+    guest.pending_invites = [host.name]
+    world.set_relationship(1, host, third, "dating", "date")
+    for x in world.agents.values():
+        x.hours, x.visit_with = hours(8, 2, 4, 2), None
+    world.resolve_visits(2, {guest.name: decision(accept_invite=host.name)})
+    assert guest.visit_with == host.name and host.visit_with == guest.name
+    posts = [e for e in world.log.events if e["type"] == "gossip.post"]
+    assert len(posts) == 1 and posts[0]["about"] == [guest.name, host.name]
+    # a visit between two agents who are now each other's partner happens without a gossip post
+    world.end_relationship(2, host, third, "morning")
+    world.set_relationship(2, guest, host, "dating", "date")
+    guest.pending_invites = [host.name]
+    for x in world.agents.values():
+        x.visit_with = None
+    world.resolve_visits(3, {guest.name: decision(accept_invite=host.name)})
+    assert guest.visit_with == host.name
+    assert len([e for e in world.log.events if e["type"] == "gossip.post"]) == 1
+    # cohabiting agents never visit
+    world.set_relationship(3, guest, host, "cohabiting", "morning")
+    third.pending_invites = [guest.name]
+    for x in world.agents.values():
+        x.visit_with = None
+    world.resolve_visits(3, {third.name: decision(accept_invite=guest.name)})
+    assert third.visit_with is None
+    invites = [e for e in world.log.events if e["type"] == "visit.invite"]
+    assert [e["accepted"] for e in invites] == [True, True, False]

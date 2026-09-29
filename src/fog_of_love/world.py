@@ -191,7 +191,9 @@ class World:
         parts.append(self.gossip.render(day))
         inbox = []
         for inviter in a.pending_invites:
-            inbox.append(f"{inviter} invited you to their home today (set accept_invite to \"{inviter}\" to go).")
+            inbox.append(f"{inviter} invited you to their home today (set accept_invite to \"{inviter}\" to go: you "
+                         f"spend your home hours there and get hug time; a visit to anyone but your partner is posted "
+                         f"on the gossip board).")
         if a.pending_move_in:
             inbox.append(f"{a.pending_move_in} proposed that you move in together (set accept_move_in to true to accept).")
         parts.append("Inbox: " + (" ".join(inbox) if inbox else "empty."))
@@ -287,8 +289,11 @@ class World:
 
     @staticmethod
     def _visit_ok(guest: AgentState, host: AgentState | None, accepted: str | None) -> bool:
-        return (host is not None and accepted is not None and _same(accepted, host.name) and guest.status == "single"
-                and host.status == "single" and guest.visit_with is None and host.visit_with is None)
+        """An accepted invite is honoured unless either side now lives with someone (invites are sent by singles
+        to singles, but a date on the evening in between may have made one of them a dating couple: the visit
+        still happens, and if they are not each other's partner it is posted on the gossip board)."""
+        return (host is not None and accepted is not None and _same(accepted, host.name) and guest.status != "cohabiting"
+                and host.status != "cohabiting" and guest.visit_with is None and host.visit_with is None)
 
     def resolve_breakups(self, day: int, decisions: dict[str, dict[str, Any]]) -> None:
         for name, d in decisions.items():
@@ -334,9 +339,10 @@ class World:
                 self.log.emit("visit", "visit.invite", day, name=inviter, target=a.name, accepted=bool(ok))
                 if ok:
                     a.visit_with, host.visit_with = host.name, a.name
-                    text = f"{a.name} was seen leaving {host.name}'s place late."
-                    self.gossip.post(day, text, [a.name, host.name])
-                    self.log.emit("visit", "gossip.post", day, text=text, about=[a.name, host.name])
+                    if a.partner != host.name:  # every non-partner visit is public; partners' evenings are not
+                        text = f"{a.name} was seen leaving {host.name}'s place late."
+                        self.gossip.post(day, text, [a.name, host.name])
+                        self.log.emit("visit", "gossip.post", day, text=text, about=[a.name, host.name])
                     self.entities[a.name].observe(f"[visit] {a.name} spends the home hours of day {day} at {host.name}'s place.")
                     self.entities[host.name].observe(f"[visit] {a.name} comes over to {host.name}'s place for the home hours of day {day}.")
             a.pending_invites = []
