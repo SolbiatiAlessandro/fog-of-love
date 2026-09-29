@@ -386,3 +386,9 @@ Gaps:
 **Iterations.** 1: engine and viewer. 2: dating pairs share home hours, app hidden while dating, explicit progression choices, honest invites, auto meals (cohabitation and visits appeared). 3: finite stock and adaptive sellers (prices moved, High clothing traded).
 
 **Open for Alessandro.** Progression difficulty (every couple moves in; no post-cohabiting breakups); bids do not haggle (all price movement is the seller rule) so elasticity is not yet interpretable; fun yield decay too harsh; therapy rarely chosen; dates as plain chat rather than the dialogic game master; gender-blind personas with gendered text; the name "Fog of Love" collides with a published board game if this ever goes public.
+
+## Polyworld viewer
+
+### Bridge
+
+- 2026-09-29: `docs/POLYWORLD_REPLAY.md` written first: schema `love-town-replay/1` (agents with `agent-NNN` ids, goods, per-day allocations / market rounds / app / visits / dates / gossip / relationship changes / night states with a `hidden` key, standings), the 60 s-per-day presentation clock with phase windows, and the `Module.lovetownCommand` (string queue) / `Module.lovetownState` (object written per frame, polled by the HTML) bridge. Exporter, tests, build script and HTML layer follow.
