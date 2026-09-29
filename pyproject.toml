@@ -1,0 +1,36 @@
+[project]
+name = "fog-of-love"
+version = "0.1.0"
+description = "Fog of Love: a needs-based dating simulation for LLM agents in Love Town, on Google DeepMind Concordia."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "Apache-2.0" }
+dependencies = [
+  "openai>=1.40",
+  "pandas>=2.2",
+  "numpy>=1.26",
+  "gdm-concordia @ git+https://github.com/google-deepmind/concordia.git@3e30a207bb2b75f9cf837fa6b657c466ca450765",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "jsonschema>=4.20"]
+
+[project.scripts]
+fog-of-love = "fog_of_love.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+fog_of_love = ["vendor/*.py"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
